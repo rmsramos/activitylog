@@ -2,18 +2,22 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "vite",
-        "build": "vite build"
+        "dev:styles": "npx tailwindcss -i resources/css/plugin.css -o resources/dist/activitylog.css --postcss --watch",
+        "build:styles": "npx tailwindcss -i resources/css/plugin.css -o resources/dist/activitylog.css --postcss --minify && npm run purge",
+        "purge": "filament-purge -i resources/dist/activitylog.css -o resources/dist/activitylog.css -v 3.x",
+        "dev": "npm-run-all --parallel dev:*",
+        "build": "npm-run-all build:*"
     },
     "devDependencies": {
-        "autoprefixer": "^10.4.15",
-        "axios": "^1.1.2",
-        "laravel-vite-plugin": "^0.8.0",
-        "postcss": "^8.4.29",
-        "tailwindcss": "^3.3.3",
-        "vite": "^4.0.0"
-    },
-    "dependencies": {
-        "@awcodes/filament-plugin-purge": "^1.1.1"
+        "@awcodes/filament-plugin-purge": "^1.1.0",
+        "@tailwindcss/forms": "^0.5.3",
+        "@tailwindcss/typography": "^0.5.9",
+        "alpinejs": "^3.10.5",
+        "autoprefixer": "^10.4.7",
+        "esbuild": "^0.17.0",
+        "npm-run-all": "^4.1.5",
+        "postcss": "^8.4.14",
+        "postcss-import": "^15.1.0",
+        "tailwindcss": "^3.1.6"
     }
 }

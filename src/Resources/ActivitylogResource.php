@@ -4,6 +4,8 @@ namespace Rmsramos\Activitylog\Resources;
 
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Rmsramos\Activitylog\ActivitylogPlugin;
@@ -65,7 +67,16 @@ class ActivitylogResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('log_name'),
+                TextColumn::make('description'),
+                TextColumn::make('subject_type'),
+                TextColumn::make('subject_id'),
+                TextColumn::make('causer_type'),
+                TextColumn::make('causer_id'),
+                ViewColumn::make('properties')
+                    ->view('activitylog::filament.tables.columns.activity-logs-properties'),
+                TextColumn::make('created_at')
+                    ->dateTime(),
             ]);
     }
 

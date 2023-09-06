@@ -21,8 +21,11 @@ class ActivitylogServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        FilamentAsset::register([
-            Css::make('activitylog', __DIR__.'/../resources/dist/activitylog.css')->loadedOnRequest(),
-        ], 'rmsramos/activitylog');
+        FilamentAsset::register(
+            [
+                Css::make('activitylog-styles', __DIR__.'/../resources/dist/activitylog.css'),
+            ],
+            'rmsramos/activitylog'
+        );
     }
 }

@@ -57,7 +57,7 @@ class ActivitylogResource extends Resource
     {
         return $form
             ->schema([
-
+                //
             ]);
     }
 
@@ -65,7 +65,7 @@ class ActivitylogResource extends Resource
     {
         return $table
             ->columns([
-
+                //
             ]);
     }
 

@@ -9,7 +9,6 @@
         @else
             <span class="divide-x whitespace-normal divide-solid divide-gray-200 dark:divide-gray-700">
                 @foreach ($value as $nestedKey => $nestedValue)
-                    @php(ds($nestedKey))
                     {{$nestedKey}} {{$nestedValue}}
                 @endforeach
             </span>

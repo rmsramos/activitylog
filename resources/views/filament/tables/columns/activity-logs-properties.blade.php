@@ -9,7 +9,7 @@
         @else
             <span class="divide-x whitespace-normal divide-solid divide-gray-200 dark:divide-gray-700">
                 @foreach ($value as $nestedKey => $nestedValue)
-                    {{$nestedKey}} {{$nestedValue}}
+                    {{$nestedKey}}: {{$nestedValue}}
                 @endforeach
             </span>
         @endunless

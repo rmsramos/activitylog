@@ -2,6 +2,7 @@
 
 namespace Rmsramos\Activitylog\Resources;
 
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Placeholder;
@@ -13,8 +14,12 @@ use Filament\Resources\Resource;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Rmsramos\Activitylog\ActivitylogPlugin;
@@ -157,6 +162,10 @@ class ActivitylogResource extends Resource
                 static::getCauserNameColumnCompoment(),
                 static::getPropertiesColumnCompoment(),
                 static::getCreatedAtColumnCompoment(),
+            ])
+            ->filters([
+                static::getDateFilterComponent(),
+                static::getEventFilterCompoment(),
             ]);
     }
 
@@ -226,6 +235,45 @@ class ActivitylogResource extends Resource
             ->label(__('Logged At'))
             ->dateTime()
             ->sortable();
+    }
+
+    public static function getDateFilterComponent(): Filter
+    {
+        return Filter::make('created_at')
+            ->indicateUsing(function (array $data): array {
+                $indicators = [];
+
+                if ($data['created_from'] ?? null) {
+                    $indicators['created_from'] = 'Created from '.Carbon::parse($data['created_from'])->toFormattedDateString();
+                }
+
+                if ($data['created_until'] ?? null) {
+                    $indicators['created_until'] = 'Created until '.Carbon::parse($data['created_until'])->toFormattedDateString();
+                }
+
+                return $indicators;
+            })
+            ->form([
+                DatePicker::make('created_from'),
+                DatePicker::make('created_until'),
+            ])
+            ->query(function (Builder $query, array $data): Builder {
+                return $query
+                    ->when(
+                        $data['created_from'],
+                        fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                    )
+                    ->when(
+                        $data['created_until'],
+                        fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                    );
+            });
+    }
+
+    public static function getEventFilterCompoment(): SelectFilter
+    {
+        return SelectFilter::make('event')
+            ->options(static::getModel()::distinct()->pluck('event', 'event'));
     }
 
     public static function getPages(): array

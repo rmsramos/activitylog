@@ -65,6 +65,7 @@ class ActivitylogResource extends Resource
                 self::getSubjectTypeColumnCompoment(),
                 self::getCauserNameColumnCompoment(),
                 self::getPropertiesColumnCompoment(),
+                self::getCreatedAtColumnCompoment(),
             ]);
     }
 
@@ -108,8 +109,15 @@ class ActivitylogResource extends Resource
     {
         return ViewColumn::make('properties')
             ->view('activitylog::filament.tables.columns.activity-logs-properties')
-            ->toggleable()
-            ->toggledHiddenByDefault();
+            ->toggleable(isToggledHiddenByDefault: true);
+    }
+
+    public static function getCreatedAtColumnCompoment(): Column
+    {
+        return TextColumn::make('created_at')
+            ->label(__('Logged At'))
+            ->dateTime()
+            ->sortable();
     }
 
     public static function getPages(): array

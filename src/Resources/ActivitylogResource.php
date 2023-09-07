@@ -59,6 +59,7 @@ class ActivitylogResource extends Resource
         return $table
             ->columns([
                 self::getLogNameColumnCompoment(),
+                self::getEventColumnCompoment(),
             ]);
     }
 
@@ -68,6 +69,13 @@ class ActivitylogResource extends Resource
             ->badge()
             ->label(__('Type'))
             ->formatStateUsing(fn ($state) => ucwords($state))
+            ->sortable();
+    }
+
+    public static function getEventColumnCompoment(): Column
+    {
+        return TextColumn::make('event')
+            ->label(__('Event'))
             ->sortable();
     }
 

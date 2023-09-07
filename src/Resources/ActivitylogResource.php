@@ -6,6 +6,7 @@ use Filament\Resources\Resource;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Rmsramos\Activitylog\ActivitylogPlugin;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ListActivitylog;
@@ -60,6 +61,7 @@ class ActivitylogResource extends Resource
             ->columns([
                 self::getLogNameColumnCompoment(),
                 self::getEventColumnCompoment(),
+                self::getSubjectTypeColumnCompoment(),
             ]);
     }
 
@@ -77,6 +79,20 @@ class ActivitylogResource extends Resource
         return TextColumn::make('event')
             ->label(__('Event'))
             ->sortable();
+    }
+
+    public static function getSubjectTypeColumnCompoment(): Column
+    {
+        return TextColumn::make('subject_type')
+            ->label(__('Subject'))
+            ->formatStateUsing(function ($state, Model $record) {
+                /** @var Activity&ActivityModel $record */
+                if (! $state) {
+                    return '-';
+                }
+
+                return Str::of($state)->afterLast('\\')->headline().' # '.$record->subject_id;
+            });
     }
 
     public static function getPages(): array

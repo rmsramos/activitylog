@@ -3,7 +3,11 @@
 namespace Rmsramos\Activitylog\Resources;
 
 use Filament\Resources\Resource;
+use Filament\Tables\Columns\Column;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Rmsramos\Activitylog\ActivitylogPlugin;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ListActivitylog;
@@ -56,8 +60,64 @@ class ActivitylogResource extends Resource
     {
         return $table
             ->columns([
-                //
+                static::getLogNameColumnCompoment(),
+                static::getEventColumnCompoment(),
+                static::getSubjectTypeColumnCompoment(),
+                static::getCauserNameColumnCompoment(),
+                static::getPropertiesColumnCompoment(),
+                static::getCreatedAtColumnCompoment(),
             ]);
+    }
+
+    public static function getLogNameColumnCompoment(): Column
+    {
+        return TextColumn::make('log_name')
+            ->badge()
+            ->label(__('Type'))
+            ->formatStateUsing(fn ($state) => ucwords($state))
+            ->sortable();
+    }
+
+    public static function getEventColumnCompoment(): Column
+    {
+        return TextColumn::make('event')
+            ->label(__('Event'))
+            ->sortable();
+    }
+
+    public static function getSubjectTypeColumnCompoment(): Column
+    {
+        return TextColumn::make('subject_type')
+            ->label(__('Subject'))
+            ->formatStateUsing(function ($state, Model $record) {
+                /** @var Activity&ActivityModel $record */
+                if (! $state) {
+                    return '-';
+                }
+
+                return Str::of($state)->afterLast('\\')->headline().' # '.$record->subject_id;
+            });
+    }
+
+    public static function getCauserNameColumnCompoment(): Column
+    {
+        return TextColumn::make('causer.name')
+            ->label(__('User'));
+    }
+
+    public static function getPropertiesColumnCompoment(): Column
+    {
+        return ViewColumn::make('properties')
+            ->view('activitylog::filament.tables.columns.activity-logs-properties')
+            ->toggleable(isToggledHiddenByDefault: true);
+    }
+
+    public static function getCreatedAtColumnCompoment(): Column
+    {
+        return TextColumn::make('created_at')
+            ->label(__('Logged At'))
+            ->dateTime()
+            ->sortable();
     }
 
     public static function getPages(): array

@@ -5,6 +5,7 @@ namespace Rmsramos\Activitylog\Resources;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -63,6 +64,7 @@ class ActivitylogResource extends Resource
                 self::getEventColumnCompoment(),
                 self::getSubjectTypeColumnCompoment(),
                 self::getCauserNameColumnCompoment(),
+                self::getPropertiesColumnCompoment(),
             ]);
     }
 
@@ -100,6 +102,14 @@ class ActivitylogResource extends Resource
     {
         return TextColumn::make('causer.name')
             ->label(__('User'));
+    }
+
+    public static function getPropertiesColumnCompoment(): Column
+    {
+        return ViewColumn::make('properties')
+            ->view('activitylog::filament.tables.columns.activity-logs-properties')
+            ->toggleable()
+            ->toggledHiddenByDefault();
     }
 
     public static function getPages(): array

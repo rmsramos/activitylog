@@ -2,6 +2,8 @@
 
 namespace Rmsramos\Activitylog;
 
+use Filament\Support\Assets\Css;
+use Filament\Support\Facades\FilamentAsset;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -13,6 +15,17 @@ class ActivitylogServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('activitylog')
-            ->hasConfigFile('activitylog');
+            ->hasConfigFile('activitylog')
+            ->hasViews('activitylog');
+    }
+
+    public function packageBooted(): void
+    {
+        FilamentAsset::register(
+            [
+                Css::make('activitylog-styles', __DIR__.'/../resources/dist/activitylog.css'),
+            ],
+            'rmsramos/activitylog'
+        );
     }
 }

@@ -3,6 +3,8 @@
 namespace Rmsramos\Activitylog\Resources;
 
 use Filament\Resources\Resource;
+use Filament\Tables\Columns\Column;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Rmsramos\Activitylog\ActivitylogPlugin;
@@ -56,8 +58,17 @@ class ActivitylogResource extends Resource
     {
         return $table
             ->columns([
-                //
+                self::getLogNameColumnCompoment(),
             ]);
+    }
+
+    public static function getLogNameColumnCompoment(): Column
+    {
+        return TextColumn::make('log_name')
+            ->badge()
+            ->label(__('Type'))
+            ->formatStateUsing(fn ($state) => ucwords($state))
+            ->sortable();
     }
 
     public static function getPages(): array

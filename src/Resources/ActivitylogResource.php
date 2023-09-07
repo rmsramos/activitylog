@@ -15,6 +15,7 @@ use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -164,6 +165,7 @@ class ActivitylogResource extends Resource
             ])
             ->filters([
                 static::getDateFilterComponent(),
+                static::getEventFilterCompoment(),
             ]);
     }
 
@@ -266,6 +268,12 @@ class ActivitylogResource extends Resource
                         fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                     );
             });
+    }
+
+    public static function getEventFilterCompoment(): SelectFilter
+    {
+        return SelectFilter::make('event')
+            ->options(static::getModel()::distinct()->pluck('event', 'event'));
     }
 
     public static function getPages(): array

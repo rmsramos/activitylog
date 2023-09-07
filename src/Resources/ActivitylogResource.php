@@ -62,6 +62,7 @@ class ActivitylogResource extends Resource
                 self::getLogNameColumnCompoment(),
                 self::getEventColumnCompoment(),
                 self::getSubjectTypeColumnCompoment(),
+                self::getCauserNameColumnCompoment(),
             ]);
     }
 
@@ -93,6 +94,12 @@ class ActivitylogResource extends Resource
 
                 return Str::of($state)->afterLast('\\')->headline().' # '.$record->subject_id;
             });
+    }
+
+    public static function getCauserNameColumnCompoment(): Column
+    {
+        return TextColumn::make('causer.name')
+            ->label(__('User'));
     }
 
     public static function getPages(): array

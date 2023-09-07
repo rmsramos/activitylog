@@ -60,12 +60,12 @@ class ActivitylogResource extends Resource
     {
         return $table
             ->columns([
-                self::getLogNameColumnCompoment(),
-                self::getEventColumnCompoment(),
-                self::getSubjectTypeColumnCompoment(),
-                self::getCauserNameColumnCompoment(),
-                self::getPropertiesColumnCompoment(),
-                self::getCreatedAtColumnCompoment(),
+                static::getLogNameColumnCompoment(),
+                static::getEventColumnCompoment(),
+                static::getSubjectTypeColumnCompoment(),
+                static::getCauserNameColumnCompoment(),
+                static::getPropertiesColumnCompoment(),
+                static::getCreatedAtColumnCompoment(),
             ]);
     }
 

@@ -2,7 +2,6 @@
 
 namespace Rmsramos\Activitylog\Resources;
 
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
@@ -51,14 +50,6 @@ class ActivitylogResource extends Resource
     {
         return ActivitylogPlugin::get()->getNavigationCountBadge() ?
             number_format(static::getModel()::count()) : null;
-    }
-
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                //
-            ]);
     }
 
     public static function table(Table $table): Table

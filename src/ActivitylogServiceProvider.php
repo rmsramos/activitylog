@@ -4,6 +4,7 @@ namespace Rmsramos\Activitylog;
 
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -16,7 +17,19 @@ class ActivitylogServiceProvider extends PackageServiceProvider
         $package
             ->name('activitylog')
             ->hasConfigFile('activitylog')
-            ->hasViews('activitylog');
+            ->hasViews('activitylog')
+            ->hasTranslations()
+            ->hasInstallCommand(function (InstallCommand $installCommand) {
+                $installCommand
+                    ->publishConfigFile()
+                    ->askToStarRepoOnGitHub('rmsramos/activitylog')
+                    ->startWith(function (InstallCommand $installCommand) {
+                        $installCommand->call('vendor:publish', [
+                            '--provider' => "Spatie\Activitylog\ActivitylogServiceProvider",
+                            '--tag' => 'activitylog-migrations',
+                        ]);
+                    });
+            });
     }
 
     public function packageBooted(): void

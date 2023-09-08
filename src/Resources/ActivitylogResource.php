@@ -22,8 +22,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use Livewire\Component as Livewire;
 use Rmsramos\Activitylog\ActivitylogPlugin;
+use Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ListActivitylog;
+use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ViewActivitylog;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivitylogResource extends Resource
@@ -204,7 +207,8 @@ class ActivitylogResource extends Resource
                 }
 
                 return Str::of($state)->afterLast('\\')->headline().' # '.$record->subject_id;
-            });
+            })
+            ->hidden(fn (Livewire $livewire) => $livewire instanceof ActivitylogRelationManager);
     }
 
     public static function getCauserNameColumnCompoment(): Column
@@ -280,6 +284,7 @@ class ActivitylogResource extends Resource
     {
         return [
             'index' => ListActivitylog::route('/'),
+            'view' => ViewActivitylog::route('/{record}'),
         ];
     }
 }

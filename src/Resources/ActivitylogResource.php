@@ -119,7 +119,7 @@ class ActivitylogResource extends Resource
                             ->label(__('activitylog::forms.fields.created_at.label'))
                             ->content(function (?Model $record): string {
                                 /** @var Activity&ActivityModel $record */
-                                return $record->created_at ? "{$record->created_at->format(config('filament-logger.datetime_format', 'd/m/Y H:i:s'))}" : '-';
+                                return $record->created_at ? "{$record->created_at->format(config('activitylog.datetime_format', 'd/m/Y H:i:s'))}" : '-';
                             }),
                     ]),
                 ]),

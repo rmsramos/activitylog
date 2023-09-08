@@ -254,7 +254,7 @@ class ActivitylogResource extends Resource
                 }
 
                 if ($data['created_until'] ?? null) {
-                    $indicators['created_until'] = __('activitylog::tables.filters.created_at.created_from').Carbon::parse($data['created_until'])->toFormattedDateString();
+                    $indicators['created_until'] = __('activitylog::tables.filters.created_at.created_until').Carbon::parse($data['created_until'])->toFormattedDateString();
                 }
 
                 return $indicators;
@@ -263,7 +263,7 @@ class ActivitylogResource extends Resource
                 DatePicker::make('created_from')
                     ->label(__('activitylog::tables.filters.created_at.created_from')),
                 DatePicker::make('created_until')
-                    ->label(__('activitylog::tables.filters.created_at.created_from')),
+                    ->label(__('activitylog::tables.filters.created_at.created_until')),
             ])
             ->query(function (Builder $query, array $data): Builder {
                 return $query

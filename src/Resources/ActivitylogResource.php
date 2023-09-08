@@ -83,17 +83,17 @@ class ActivitylogResource extends Resource
                                 /** @phpstan-ignore-next-line */
                                 return $component->state($record->causer?->name);
                             })
-                            ->label(__('user')),
+                            ->label(__('activitylog::forms.fields.causer.label')),
 
                         TextInput::make('subject_type')
                             ->afterStateHydrated(function ($component, ?Model $record, $state) {
                                 /** @var Activity&ActivityModel $record */
                                 return $state ? $component->state(Str::of($state)->afterLast('\\')->headline().' # '.$record->subject_id) : '-';
                             })
-                            ->label(__('subject')),
+                            ->label(__('activitylog::forms.fields.subject_type.label')),
 
                         Textarea::make('description')
-                            ->label(__('description'))
+                            ->label(__('activitylog::forms.fields.description.label'))
                             ->rows(2)
                             ->columnSpan('full'),
                     ])
@@ -106,17 +106,17 @@ class ActivitylogResource extends Resource
                                 /** @var Activity&ActivityModel $record */
                                 return $record->log_name ? ucwords($record->log_name) : '-';
                             })
-                            ->label(__('type')),
+                            ->label(__('activitylog::forms.fields.log_name.label')),
 
                         Placeholder::make('event')
                             ->content(function (?Model $record): string {
                                 /** @phpstan-ignore-next-line */
                                 return $record?->event ? ucwords($record?->event) : '-';
                             })
-                            ->label(__('event')),
+                            ->label(__('activitylog::forms.fields.event.label')),
 
                         Placeholder::make('created_at')
-                            ->label(__('event date'))
+                            ->label(__('activitylog::forms.fields.created_at.label'))
                             ->content(function (?Model $record): string {
                                 /** @var Activity&ActivityModel $record */
                                 return $record->created_at ? "{$record->created_at->format(config('filament-logger.datetime_format', 'd/m/Y H:i:s'))}" : '-';
@@ -134,20 +134,20 @@ class ActivitylogResource extends Resource
 
                         if ($properties->count()) {
                             $schema[] = KeyValue::make('properties')
-                                ->label(__('properties'))
+                                ->label(__('activitylog::forms.fields.properties.label'))
                                 ->columnSpan('full');
                         }
 
                         if ($old = $record->properties->get('old')) {
                             $schema[] = KeyValue::make('old')
                                 ->afterStateHydrated(fn (KeyValue $component) => $component->state($old))
-                                ->label(__('old'));
+                                ->label(__('activitylog::forms.fields.old.label'));
                         }
 
                         if ($attributes = $record->properties->get('attributes')) {
                             $schema[] = KeyValue::make('attributes')
                                 ->afterStateHydrated(fn (KeyValue $component) => $component->state($attributes))
-                                ->label(__('new'));
+                                ->label(__('activitylog::forms.fields.attributes.label'));
                         }
 
                         return $schema;

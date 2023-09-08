@@ -175,8 +175,8 @@ class ActivitylogResource extends Resource
     public static function getLogNameColumnCompoment(): Column
     {
         return TextColumn::make('log_name')
+            ->label(__('activitylog::tables.columns.log_name.label'))
             ->badge()
-            ->label(__('Type'))
             ->formatStateUsing(fn ($state) => ucwords($state))
             ->sortable();
     }
@@ -184,7 +184,7 @@ class ActivitylogResource extends Resource
     public static function getEventColumnCompoment(): Column
     {
         return TextColumn::make('event')
-            ->label(__('Event'))
+            ->label(__('activitylog::tables.columns.event.label'))
             ->formatStateUsing(fn ($state) => ucwords($state))
             ->badge()
             ->color(fn (string $state): string => match ($state) {
@@ -199,7 +199,7 @@ class ActivitylogResource extends Resource
     public static function getSubjectTypeColumnCompoment(): Column
     {
         return TextColumn::make('subject_type')
-            ->label(__('Subject'))
+            ->label(__('activitylog::tables.columns.subject_type.label'))
             ->formatStateUsing(function ($state, Model $record) {
                 /** @var Activity&ActivityModel $record */
                 if (! $state) {
@@ -214,7 +214,7 @@ class ActivitylogResource extends Resource
     public static function getCauserNameColumnCompoment(): Column
     {
         return TextColumn::make('causer.name')
-            ->label(__('User'))
+            ->label(__('activitylog::tables.columns.causer.label'))
             ->getStateUsing(function (Model $record) {
 
                 if ($record->causer_id == null) {
@@ -229,6 +229,7 @@ class ActivitylogResource extends Resource
     public static function getPropertiesColumnCompoment(): Column
     {
         return ViewColumn::make('properties')
+            ->label(__('activitylog::tables.columns.properties.label'))
             ->view('activitylog::filament.tables.columns.activity-logs-properties')
             ->toggleable(isToggledHiddenByDefault: true);
     }
@@ -236,7 +237,7 @@ class ActivitylogResource extends Resource
     public static function getCreatedAtColumnCompoment(): Column
     {
         return TextColumn::make('created_at')
-            ->label(__('Logged At'))
+            ->label(__('activitylog::tables.columns.created_at.label'))
             ->dateTime()
             ->sortable();
     }
@@ -244,22 +245,25 @@ class ActivitylogResource extends Resource
     public static function getDateFilterComponent(): Filter
     {
         return Filter::make('created_at')
+            ->label(__('activitylog::tables.filters.created_at.label'))
             ->indicateUsing(function (array $data): array {
                 $indicators = [];
 
                 if ($data['created_from'] ?? null) {
-                    $indicators['created_from'] = 'Created from '.Carbon::parse($data['created_from'])->toFormattedDateString();
+                    $indicators['created_from'] = __('activitylog::tables.filters.created_at.created_from').Carbon::parse($data['created_from'])->toFormattedDateString();
                 }
 
                 if ($data['created_until'] ?? null) {
-                    $indicators['created_until'] = 'Created until '.Carbon::parse($data['created_until'])->toFormattedDateString();
+                    $indicators['created_until'] = __('activitylog::tables.filters.created_at.created_from').Carbon::parse($data['created_until'])->toFormattedDateString();
                 }
 
                 return $indicators;
             })
             ->form([
-                DatePicker::make('created_from'),
-                DatePicker::make('created_until'),
+                DatePicker::make('created_from')
+                    ->label(__('activitylog::tables.filters.created_at.created_from')),
+                DatePicker::make('created_until')
+                    ->label(__('activitylog::tables.filters.created_at.created_from')),
             ])
             ->query(function (Builder $query, array $data): Builder {
                 return $query
@@ -277,6 +281,7 @@ class ActivitylogResource extends Resource
     public static function getEventFilterCompoment(): SelectFilter
     {
         return SelectFilter::make('event')
+            ->label(__('activitylog::tables.filters.event.label'))
             ->options(static::getModel()::distinct()->pluck('event', 'event'));
     }
 

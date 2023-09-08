@@ -16,7 +16,8 @@ class ActivitylogServiceProvider extends PackageServiceProvider
         $package
             ->name('activitylog')
             ->hasConfigFile('activitylog')
-            ->hasViews('activitylog');
+            ->hasViews('activitylog')
+            ->hasTranslations();
     }
 
     public function packageBooted(): void

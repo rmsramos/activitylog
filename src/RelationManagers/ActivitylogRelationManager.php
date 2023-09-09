@@ -5,6 +5,7 @@ namespace Rmsramos\Activitylog\RelationManagers;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
+use Rmsramos\Activitylog\ActivitylogPlugin;
 use Rmsramos\Activitylog\Resources\ActivitylogResource;
 
 class ActivitylogRelationManager extends RelationManager
@@ -20,6 +21,6 @@ class ActivitylogRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        return ActivitylogResource::table($table);
+        return ActivitylogResource::table($table->heading(ActivitylogPlugin::get()->getPluralLabel()));
     }
 }

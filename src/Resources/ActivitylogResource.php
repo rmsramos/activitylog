@@ -3,10 +3,10 @@
 namespace Rmsramos\Activitylog\Resources;
 
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Split;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -76,7 +76,7 @@ class ActivitylogResource extends Resource
     {
         return $form
             ->schema([
-                Group::make([
+                Split::make([
                     Section::make([
                         TextInput::make('causer_id')
                             ->afterStateHydrated(function ($component, ?Model $record) {
@@ -96,10 +96,7 @@ class ActivitylogResource extends Resource
                             ->label(__('activitylog::forms.fields.description.label'))
                             ->rows(2)
                             ->columnSpan('full'),
-                    ])
-                        ->columns(2),
-                ])->columnSpan(['sm' => 3]),
-                Group::make([
+                    ]),
                     Section::make([
                         Placeholder::make('log_name')
                             ->content(function (?Model $record): string {
@@ -121,8 +118,9 @@ class ActivitylogResource extends Resource
                                 /** @var Activity&ActivityModel $record */
                                 return $record->created_at ? "{$record->created_at->format(config('activitylog.datetime_format', 'd/m/Y H:i:s'))}" : '-';
                             }),
-                    ]),
-                ]),
+                    ])->grow(false),
+                ])->from('md'),
+
                 Section::make()
                     ->columns()
                     ->visible(fn ($record) => $record->properties?->count() > 0)
@@ -152,7 +150,7 @@ class ActivitylogResource extends Resource
 
                         return $schema;
                     }),
-            ])->columns(['sm' => 4, 'lg' => null]);
+            ])->columns(1);
     }
 
     public static function table(Table $table): Table

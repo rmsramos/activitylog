@@ -109,7 +109,7 @@ class ActivitylogPlugin implements Plugin
         return $this;
     }
 
-    public function navigationGroup(string|Closure $group = null): static
+    public function navigationGroup(string|Closure|null $group = null): static
     {
         $this->navigationGroup = $group;
 

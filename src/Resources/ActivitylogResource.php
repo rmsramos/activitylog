@@ -290,4 +290,9 @@ class ActivitylogResource extends Resource
             'view' => ViewActivitylog::route('/{record}'),
         ];
     }
+
+    public static function canAccess(): bool
+    {
+        return ActivitylogPlugin::get()->isAuthorized();
+    }
 }

@@ -4,13 +4,15 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/rmsramos/activitylog/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/rmsramos/activitylog/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/rmsramos/activitylog.svg?style=flat-square)](https://packagist.org/packages/rmsramos/activitylog/stats)
 
-This package provides a Filament resource that shows you all of the activity logs and detailed view of each log created using the `spatie/laravel-activitylog` package. It also provides a relationship manager for related models.
+![Screenshot of Application Feature](./arts/cover.png)
 
+This package provides a Filament resource that shows you all of the activity logs and detailed view of each log created using the `spatie/laravel-activitylog` package. It also provides a relationship manager for related models.
 
 ## Requirements
 
-* Filament v3
-* Spatie/Laravel-activitylog v4
+-   Laravel v11
+-   Filament v3
+-   Spatie/Laravel-activitylog v4
 
 ## Installation
 
@@ -21,9 +23,11 @@ composer require rmsramos/activitylog
 ```
 
 After that run the install command:
+
 ```bash
 php artisan activitylog:install
 ```
+
 This will publish the config & migrations from `spatie/laravel-activitylog`
 
 You can manually publish the configuration file with:
@@ -56,7 +60,38 @@ php artisan vendor:publish --tag="activitylog-views"
 ```
 
 ## Usage
-In your Panel ServiceProvider active the plugin `(App\Providers\Filament)`
+
+### Basic Spatie ActivityLog usage
+
+In you `Model` add `Spatie\Activitylog\Traits\LogsActivity` trait, and configure `getActivitylogOption` function
+
+For more configuration, Please review [Spatie Docs](https://spatie.be/docs/laravel-activitylog/v4)
+
+```php
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+
+class NewsItem extends Model
+{
+    use LogsActivity;
+
+    protected $fillable = ['name', 'text'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'text']);
+    }
+}
+```
+
+## Plugin usage
+
+In your Panel ServiceProvider `(App\Providers\Filament)` active the plugin
+
+Add the `Rmsramos\Activitylog\ActivitylogPlugin` to your panel config
+
 ```php
 use Rmsramos\Activitylog\ActivitylogPlugin;
 
@@ -122,6 +157,7 @@ public function panel(Panel $panel): Panel
 ```
 
 ## Customising a resource navigation icon
+
 You can swap out the `Resource navigation icon` used by updating the `->navigationIcon()` value.
 
 ```php
@@ -138,6 +174,7 @@ public function panel(Panel $panel): Panel
 ```
 
 ## Active a count badge
+
 You can active `Count Badge` updating the `->navigationCountBadge()` value.
 
 ```php
@@ -154,6 +191,7 @@ public function panel(Panel $panel): Panel
 ```
 
 ## Set navigation sort
+
 You can set the `Resource navigation sort` used by updating the `->navigationSort()` value.
 
 ```php
@@ -169,7 +207,45 @@ public function panel(Panel $panel): Panel
 }
 ```
 
+## Authorization
+
+If you would like to prevent certain users from accessing the logs resource, you should add a authorize callback in the `ActivitylogPlugin` chain.
+
+```php
+use Rmsramos\Activitylog\ActivitylogPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        ->plugins([
+            ActivitylogPlugin::make()
+                ->authorize(
+                    fn () => auth()->user()->id === 1
+                ),
+        ]);
+}
+```
+
+### Role Policy
+
+To ensure ActivitylogResource access via RolePolicy you would need to add the following to your AppServiceProvider:
+
+```php
+use App\Policies\ActivityPolicy;
+use Illuminate\Support\Facades\Gate;
+use Spatie\Activitylog\Models\Activity;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function boot(): void
+    {
+        Gate::policy(Activity::class, ActivityPolicy::class);
+    }
+}
+```
+
 ## Full configuration
+
 ```php
 use Rmsramos\Activitylog\ActivitylogPlugin;
 
@@ -184,7 +260,10 @@ public function panel(Panel $panel): Panel
                 ->navigationGroup('Activity Log')
                 ->navigationIcon('heroicon-o-shield-check')
                 ->navigationCountBadge(true)
-                ->navigationSort(2),
+                ->navigationSort(2)
+                ->authorize(
+                    fn () => auth()->user()->id() === 1
+                ),,
         ]);
 }
 ```
@@ -224,11 +303,11 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [Rômulo Ramos](https://github.com/rmsramos)
-- [Alex Justesen](https://github.com/alexjustesen)
-- [z3d0x](https://github.com/z3d0x/filament-logger)
-- [Spatie Activitylog Contributors](https://github.com/spatie/laravel-activitylog#credits) 
-- [All Contributors](../../contributors)
+-   [Rômulo Ramos](https://github.com/rmsramos)
+-   [Alex Justesen](https://github.com/alexjustesen)
+-   [z3d0x](https://github.com/z3d0x/filament-logger)
+-   [Spatie Activitylog Contributors](https://github.com/spatie/laravel-activitylog#credits)
+-   [All Contributors](../../contributors)
 
 ## License
 

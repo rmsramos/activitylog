@@ -20,6 +20,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Livewire\Component as Livewire;
@@ -88,7 +89,7 @@ class ActivitylogResource extends Resource
                         TextInput::make('subject_type')
                             ->afterStateHydrated(function ($component, ?Model $record, $state) {
                                 /** @var Activity&ActivityModel $record */
-                                return $state ? $component->state(Str::of($state)->afterLast('\\')->headline().' # '.$record->subject_id) : '-';
+                                return $state ? $component->state(Str::of($state)->afterLast('\\')->headline() . ' # ' . $record->subject_id) : '-';
                             })
                             ->label(__('activitylog::forms.fields.subject_type.label')),
 
@@ -186,7 +187,7 @@ class ActivitylogResource extends Resource
             ->formatStateUsing(fn ($state) => ucwords($state))
             ->badge()
             ->color(fn (string $state): string => match ($state) {
-                'draft' => 'gray',
+                'draft'   => 'gray',
                 'updated' => 'warning',
                 'created' => 'success',
                 'deleted' => 'danger',
@@ -200,11 +201,11 @@ class ActivitylogResource extends Resource
             ->label(__('activitylog::tables.columns.subject_type.label'))
             ->formatStateUsing(function ($state, Model $record) {
                 /** @var Activity&ActivityModel $record */
-                if (! $state) {
+                if (!$state) {
                     return '-';
                 }
 
-                return Str::of($state)->afterLast('\\')->headline().' # '.$record->subject_id;
+                return Str::of($state)->afterLast('\\')->headline() . ' # ' . $record->subject_id;
             })
             ->hidden(fn (Livewire $livewire) => $livewire instanceof ActivitylogRelationManager);
     }
@@ -248,11 +249,11 @@ class ActivitylogResource extends Resource
                 $indicators = [];
 
                 if ($data['created_from'] ?? null) {
-                    $indicators['created_from'] = __('activitylog::tables.filters.created_at.created_from').Carbon::parse($data['created_from'])->toFormattedDateString();
+                    $indicators['created_from'] = __('activitylog::tables.filters.created_at.created_from') . Carbon::parse($data['created_from'])->toFormattedDateString();
                 }
 
                 if ($data['created_until'] ?? null) {
-                    $indicators['created_until'] = __('activitylog::tables.filters.created_at.created_until').Carbon::parse($data['created_until'])->toFormattedDateString();
+                    $indicators['created_until'] = __('activitylog::tables.filters.created_at.created_until') . Carbon::parse($data['created_until'])->toFormattedDateString();
                 }
 
                 return $indicators;
@@ -287,12 +288,18 @@ class ActivitylogResource extends Resource
     {
         return [
             'index' => ListActivitylog::route('/'),
-            'view' => ViewActivitylog::route('/{record}'),
+            'view'  => ViewActivitylog::route('/{record}'),
         ];
     }
 
     public static function canAccess(): bool
     {
-        return ActivitylogPlugin::get()->isAuthorized();
+        $policy = Gate::getPolicyFor(static::getModel());
+
+        if ($policy && method_exists($policy, 'viewAny')) {
+            return static::canViewAny();
+        } else {
+            return ActivitylogPlugin::get()->isAuthorized();
+        }
     }
 }

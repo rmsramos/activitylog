@@ -23,8 +23,8 @@ return [
     ],
     'filters' => [
         'created_at' => [
-            'label' => 'Logged at',
-            'created_from' => 'Created from ',
+            'label'         => 'Logged at',
+            'created_from'  => 'Created from ',
             'created_until' => 'Created until ',
         ],
         'event' => [

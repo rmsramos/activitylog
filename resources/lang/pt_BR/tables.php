@@ -23,8 +23,8 @@ return [
     ],
     'filters' => [
         'created_at' => [
-            'label' => 'Criado em',
-            'created_from' => 'Criado a partir de ',
+            'label'         => 'Criado em',
+            'created_from'  => 'Criado a partir de ',
             'created_until' => 'Criado até ',
         ],
         'event' => [

@@ -8,6 +8,7 @@ use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Rmsramos\Activitylog\Infolists\Components\TimeLineRepeatableEntry;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogTimelineAction extends Action
@@ -50,7 +51,8 @@ class ActivityLogTimelineAction extends Action
     private function getSchema(): array
     {
         return [
-
+            TimeLineRepeatableEntry::make('activities')
+                ->schema([]),
         ];
     }
 

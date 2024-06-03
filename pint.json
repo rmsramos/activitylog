@@ -1,5 +1,5 @@
 {
-    "preset": "psr12",
+    "preset": "laravel",
     "rules": {
         "method_chaining_indentation": true,
         "group_import": false,

@@ -23,7 +23,7 @@ class ActivityLogTimelineAction extends Action
 
     private ?array $timelineIconColors = null;
 
-    private ?int $limit = null;
+    private ?int $limit = 10;
 
     public static function getDefaultName(): ?string
     {
@@ -116,7 +116,7 @@ class ActivityLogTimelineAction extends Action
         return $this->evaluate($this->timelineIconColors);
     }
 
-    public function limit(?int $limit = null): ?StaticAction
+    public function limit(?int $limit = 10): ?StaticAction
     {
         $this->limit = $limit;
 

@@ -1,10 +1,13 @@
-# Spatie/Laravel-activitylog for Filament
+# ActivityLog
+
+### Spatie/Laravel-activitylog for Filament
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/rmsramos/activitylog.svg?style=flat-square)](https://packagist.org/packages/rmsramos/activitylog)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE.md)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/rmsramos/activitylog/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/rmsramos/activitylog/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/rmsramos/activitylog.svg?style=flat-square)](https://packagist.org/packages/rmsramos/activitylog/stats)
 
-![Screenshot of Application Feature](./arts/cover.png)
+![Screenshot of Application Feature](./arts/cover.jpeg)
 
 This package provides a Filament resource that shows you all of the activity logs and detailed view of each log created using the `spatie/laravel-activitylog` package. It also provides a relationship manager for related models.
 
@@ -29,6 +32,12 @@ php artisan activitylog:install
 ```
 
 This will publish the config & migrations from `spatie/laravel-activitylog`
+
+And run migrates
+
+```bash
+php artisan migrate
+```
 
 You can manually publish the configuration file with:
 
@@ -87,6 +96,8 @@ class NewsItem extends Model
 ```
 
 ## Plugin usage
+
+![Screenshot of Application Feature](./arts/resource.png)
 
 In your Panel ServiceProvider `(App\Providers\Filament)` active the plugin
 
@@ -271,6 +282,7 @@ public function panel(Panel $panel): Panel
 ## Relationship manager
 
 If you have a model that uses the `Spatie\Activitylog\Traits\LogsActivity` trait, you can add the `Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager` relationship manager to your Filament resource to display all of the activity logs that are performed on your model.
+![Screenshot of Application Feature](./arts/relationManager.png)
 
 ```php
 use Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager;
@@ -283,10 +295,96 @@ public static function getRelations(): array
 }
 ```
 
-## Testing
+## Timeline Action
 
-```bash
-composer test
+![Screenshot of Application Feature](./arts/timeline.png)
+
+To make viewing activity logs easier, you can use a custom action. In your UserResource in the table function, add the `TimelineAction`.
+
+```php
+use Rmsramos\Activitylog\Actions\TimelineAction;
+
+public static function table(Table $table): Table
+{
+    return $table
+        ->actions([
+            TimelineAction::make('Activities'),
+        ]);
+}
+```
+
+you can pass a matrix with the relationships, remember to configure your `Models`.
+
+```php
+public static function table(Table $table): Table
+{
+    return $table
+        ->actions([
+            TimelineAction::make('Activities')
+                ->withRelations(['profile', 'address']), //opcional
+        ]);
+}
+```
+
+You can configure the icons and colors, by default the `'heroicon-m-check'` icon and the `'primary'` color are used.
+
+```php
+use Rmsramos\Activitylog\Actions\TimelineAction;
+
+public static function table(Table $table): Table
+{
+    return $table
+        ->actions([
+            TimelineAction::make('Activities')
+                ->timelineIcons([
+                    'created' => 'heroicon-m-check-badge',
+                    'updated' => 'heroicon-m-pencil-square',
+                ])
+                ->timelineIconColors([
+                    'created' => 'info',
+                    'updated' => 'warning',
+                ])
+        ]);
+}
+```
+
+You can limit the number of results in the query by passing a limit, by default the last 10 records are returned.
+
+```php
+use Rmsramos\Activitylog\Actions\TimelineAction;
+
+public static function table(Table $table): Table
+{
+    return $table
+        ->actions([
+            TimelineAction::make('Activities')
+                ->limit(30),
+        ]);
+}
+```
+
+## Full Timeline configuration
+
+```php
+use Rmsramos\Activitylog\Actions\TimelineAction;
+
+public static function table(Table $table): Table
+{
+    return $table
+        ->actions([
+            TimelineAction::make('Activities')
+                ->withRelations(['profile', 'address'])
+                ->timelineIcons([
+                    'created' => 'heroicon-m-check-badge',
+                    'updated' => 'heroicon-m-pencil-square',
+                ])
+                ->timelineIconColors([
+                    'created' => 'info',
+                    'updated' => 'warning',
+                ])
+                ->limit(10),
+        ]);
+}
 ```
 
 ## Changelog
@@ -301,12 +399,19 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
 
+## Acknowledgements
+
+Special acknowledgment goes to these remarkable tools and people (developers), the Activity Log plugin only exists due to the inspiration and at some point the use of these people's codes.
+
+-   [Jay-Are Ocero](https://github.com/199ocero/activity-timeline)
+-   [Alex Justesen](https://github.com/alexjustesen)
+-   [z3d0x](https://github.com/z3d0x/filament-logger)
+-   [Filament](https://github.com/filamentphp/filament)
+-   [Spatie Activitylog Contributors](https://github.com/spatie/laravel-activitylog#credits)
+
 ## Credits
 
 -   [Rômulo Ramos](https://github.com/rmsramos)
--   [Alex Justesen](https://github.com/alexjustesen)
--   [z3d0x](https://github.com/z3d0x/filament-logger)
--   [Spatie Activitylog Contributors](https://github.com/spatie/laravel-activitylog#credits)
 -   [All Contributors](../../contributors)
 
 ## License

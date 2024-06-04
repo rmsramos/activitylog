@@ -3,12 +3,14 @@
 namespace Rmsramos\Activitylog\Actions;
 
 use Filament\Actions\StaticAction;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineIconEntry;
+use Rmsramos\Activitylog\Infolists\Components\TimeLinePropertieEntry;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineRepeatableEntry;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineTitleEntry;
 use Spatie\Activitylog\Models\Activity;
@@ -67,6 +69,11 @@ class ActivityLogTimelineAction extends Action
                             return $this->getTimelineIconColors()[$state] ?? 'primary';
                         }),
                     TimeLineTitleEntry::make('activityData'),
+                    TimeLinePropertieEntry::make('activityData'),
+                    TextEntry::make('updated_at')
+                        ->hiddenLabel()
+                        ->since()
+                        ->badge(),
                 ]),
         ];
     }

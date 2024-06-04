@@ -201,7 +201,7 @@ class ActivitylogResource extends Resource
             ->label(__('activitylog::tables.columns.subject_type.label'))
             ->formatStateUsing(function ($state, Model $record) {
                 /** @var Activity&ActivityModel $record */
-                if (!$state) {
+                if (! $state) {
                     return '-';
                 }
 

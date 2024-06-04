@@ -20,12 +20,12 @@ class TimeLineTitleEntry extends Entry
     {
         parent::setUp();
 
-        $this->configureIconEntry();
+        $this->configureTitleEntry();
     }
 
     protected string $view = 'activitylog::filament.infolists.components.time-line-title-entry';
 
-    private function configureIconEntry()
+    private function configureTitleEntry()
     {
         $this
             ->hiddenLabel()

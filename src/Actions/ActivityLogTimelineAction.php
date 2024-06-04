@@ -23,6 +23,8 @@ class ActivityLogTimelineAction extends Action
 
     private ?array $timelineIconColors = null;
 
+    private ?int $limit = null;
+
     public static function getDefaultName(): ?string
     {
         return 'activitylog_timeline';
@@ -114,6 +116,18 @@ class ActivityLogTimelineAction extends Action
         return $this->evaluate($this->timelineIconColors);
     }
 
+    public function limit(?int $limit = null): ?StaticAction
+    {
+        $this->limit = $limit;
+
+        return $this;
+    }
+
+    public function getLimit(): ?int
+    {
+        return $this->evaluate($this->limit);
+    }
+
     private function getActivities(?Model $record, ?array $relations = null): Collection
     {
         return Activity::query()
@@ -132,6 +146,7 @@ class ActivityLogTimelineAction extends Action
                 });
             })
             ->latest()
+            ->limit($this->getLimit())
             ->get();
     }
 

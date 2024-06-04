@@ -1,10 +1,12 @@
-# Spatie/Laravel-activitylog for Filament
+# ActivityLog
+
+### Spatie/Laravel-activitylog for Filament
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/rmsramos/activitylog.svg?style=flat-square)](https://packagist.org/packages/rmsramos/activitylog)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/rmsramos/activitylog/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/rmsramos/activitylog/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/rmsramos/activitylog.svg?style=flat-square)](https://packagist.org/packages/rmsramos/activitylog/stats)
 
-![Screenshot of Application Feature](./arts/cover.png)
+![Screenshot of Application Feature](./arts/cover.jpeg)
 
 This package provides a Filament resource that shows you all of the activity logs and detailed view of each log created using the `spatie/laravel-activitylog` package. It also provides a relationship manager for related models.
 
@@ -29,6 +31,12 @@ php artisan activitylog:install
 ```
 
 This will publish the config & migrations from `spatie/laravel-activitylog`
+
+And run migrates
+
+```bash
+php artisan migrate
+```
 
 You can manually publish the configuration file with:
 
@@ -87,6 +95,8 @@ class NewsItem extends Model
 ```
 
 ## Plugin usage
+
+![Screenshot of Application Feature](./arts/resource.png)
 
 In your Panel ServiceProvider `(App\Providers\Filament)` active the plugin
 
@@ -271,6 +281,7 @@ public function panel(Panel $panel): Panel
 ## Relationship manager
 
 If you have a model that uses the `Spatie\Activitylog\Traits\LogsActivity` trait, you can add the `Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager` relationship manager to your Filament resource to display all of the activity logs that are performed on your model.
+![Screenshot of Application Feature](./arts/relationManager.png)
 
 ```php
 use Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager;
@@ -280,6 +291,25 @@ public static function getRelations(): array
     return [
         ActivitylogRelationManager::class,
     ];
+}
+```
+
+## Timeline Action
+
+![Screenshot of Application Feature](./arts/timeline.png)
+
+To make viewing activity logs easier, you can use a custom action. In your UserResource in the table function, add the `TimelineAction`
+
+```php
+use Rmsramos\Activitylog\Actions\TimelineAction;
+
+public static function table(Table $table): Table
+{
+    return $table
+        ->actions([
+            TimelineAction::make('Activities')
+                ->withRelations(['profiles']), // optional
+        ]);
 }
 ```
 
@@ -304,8 +334,6 @@ Please review [our security policy](../../security/policy) on how to report secu
 ## Credits
 
 -   [Rômulo Ramos](https://github.com/rmsramos)
--   [Alex Justesen](https://github.com/alexjustesen)
--   [z3d0x](https://github.com/z3d0x/filament-logger)
 -   [Spatie Activitylog Contributors](https://github.com/spatie/laravel-activitylog#credits)
 -   [All Contributors](../../contributors)
 

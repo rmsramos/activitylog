@@ -7,7 +7,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/rmsramos/activitylog/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/rmsramos/activitylog/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/rmsramos/activitylog.svg?style=flat-square)](https://packagist.org/packages/rmsramos/activitylog/stats)
 
-![Screenshot of Application Feature](./arts/cover.jpeg)
+![Screenshot of Application Feature](https://github.com/rmsramos/activitylog/assets/5170473/5997fabc-e784-4b20-9d1a-7e053a34b890)
 
 This package provides a Filament resource that shows you all of the activity logs and detailed view of each log created using the `spatie/laravel-activitylog` package. It also provides a relationship manager for related models.
 
@@ -97,7 +97,7 @@ class NewsItem extends Model
 
 ## Plugin usage
 
-![Screenshot of Application Feature](./arts/resource.png)
+![Screenshot of Application Feature](https://github.com/rmsramos/activitylog/assets/5170473/977e59a0-d4a5-462d-b72c-d6ebb79b4f64)
 
 In your Panel ServiceProvider `(App\Providers\Filament)` active the plugin
 
@@ -116,6 +116,7 @@ public function panel(Panel $panel): Panel
 ```
 
 ## Customising the ActivitylogResource
+
 
 You can swap out the `ActivitylogResource` used by updating the `->resource()` value. Use this to create your own `CustomResource` class and extend the original at `\Rmsramos\Activitylog\Resources\ActivitylogResource::class`. This will allow you to customise everything such as the views, table, form and permissions. If you wish to change the resource on List and View page be sure to replace the `getPages` method on the new resource and create your own version of the `ListPage` and `ViewPage` classes to reference the custom `CustomResource`.
 
@@ -282,7 +283,8 @@ public function panel(Panel $panel): Panel
 ## Relationship manager
 
 If you have a model that uses the `Spatie\Activitylog\Traits\LogsActivity` trait, you can add the `Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager` relationship manager to your Filament resource to display all of the activity logs that are performed on your model.
-![Screenshot of Application Feature](./arts/relationManager.png)
+![Screenshot of Application Feature](https://github.com/rmsramos/activitylog/assets/5170473/bf487db9-278a-420c-81dc-ab7c185b8952)
+
 
 ```php
 use Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager;
@@ -297,7 +299,8 @@ public static function getRelations(): array
 
 ## Timeline Action
 
-![Screenshot of Application Feature](./arts/timeline.png)
+![Screenshot of Application Feature](https://github.com/rmsramos/activitylog/assets/5170473/7394e620-172e-4778-a0a2-8d0396aa6103)
+
 
 To make viewing activity logs easier, you can use a custom action. In your UserResource in the table function, add the `TimelineAction`.
 
@@ -417,3 +420,4 @@ Special acknowledgment goes to these remarkable tools and people (developers), t
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+

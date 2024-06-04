@@ -7,7 +7,11 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/rmsramos/activitylog/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/rmsramos/activitylog/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/rmsramos/activitylog.svg?style=flat-square)](https://packagist.org/packages/rmsramos/activitylog/stats)
 
+<div class="filament-hidden">
+
 ![Screenshot of Application Feature](https://raw.githubusercontent.com/rmsramos/activitylog/main/arts/cover.jpeg)
+
+</div>
 
 This package provides a Filament resource that shows you all of the activity logs and detailed view of each log created using the `spatie/laravel-activitylog` package. It also provides a relationship manager for related models.
 
@@ -299,16 +303,16 @@ public static function getRelations(): array
 
 ![Screenshot of Application Feature](https://raw.githubusercontent.com/rmsramos/activitylog/main/arts/timeline.png)
 
-To make viewing activity logs easier, you can use a custom action. In your UserResource in the table function, add the `TimelineAction`.
+To make viewing activity logs easier, you can use a custom action. In your UserResource in the table function, add the `ActivityLogTimelineAction`.
 
 ```php
-use Rmsramos\Activitylog\Actions\TimelineAction;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineAction;
 
 public static function table(Table $table): Table
 {
     return $table
         ->actions([
-            TimelineAction::make('Activities'),
+            ActivityLogTimelineAction::make('Activities'),
         ]);
 }
 ```
@@ -320,7 +324,7 @@ public static function table(Table $table): Table
 {
     return $table
         ->actions([
-            TimelineAction::make('Activities')
+            ActivityLogTimelineAction::make('Activities')
                 ->withRelations(['profile', 'address']), //opcional
         ]);
 }
@@ -329,13 +333,13 @@ public static function table(Table $table): Table
 You can configure the icons and colors, by default the `'heroicon-m-check'` icon and the `'primary'` color are used.
 
 ```php
-use Rmsramos\Activitylog\Actions\TimelineAction;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineAction;
 
 public static function table(Table $table): Table
 {
     return $table
         ->actions([
-            TimelineAction::make('Activities')
+            ActivityLogTimelineAction::make('Activities')
                 ->timelineIcons([
                     'created' => 'heroicon-m-check-badge',
                     'updated' => 'heroicon-m-pencil-square',
@@ -351,13 +355,13 @@ public static function table(Table $table): Table
 You can limit the number of results in the query by passing a limit, by default the last 10 records are returned.
 
 ```php
-use Rmsramos\Activitylog\Actions\TimelineAction;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineAction;
 
 public static function table(Table $table): Table
 {
     return $table
         ->actions([
-            TimelineAction::make('Activities')
+            ActivityLogTimelineAction::make('Activities')
                 ->limit(30),
         ]);
 }
@@ -366,13 +370,13 @@ public static function table(Table $table): Table
 ## Full Timeline configuration
 
 ```php
-use Rmsramos\Activitylog\Actions\TimelineAction;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineAction;
 
 public static function table(Table $table): Table
 {
     return $table
         ->actions([
-            TimelineAction::make('Activities')
+            ActivityLogTimelineAction::make('Activities')
                 ->withRelations(['profile', 'address'])
                 ->timelineIcons([
                     'created' => 'heroicon-m-check-badge',

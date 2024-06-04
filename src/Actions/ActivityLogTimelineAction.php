@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineIconEntry;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineRepeatableEntry;
+use Rmsramos\Activitylog\Infolists\Components\TimeLineTitleEntry;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogTimelineAction extends Action
@@ -58,14 +59,14 @@ class ActivityLogTimelineAction extends Action
         return [
             TimeLineRepeatableEntry::make('activities')
                 ->schema([
-                    TimeLineIconEntry::make('event')
+                    TimeLineIconEntry::make('activityData.event')
                         ->icon(function ($state) {
                             return $this->getTimelineIcons()[$state] ?? 'heroicon-m-check';
                         })
                         ->color(function ($state) {
                             return $this->getTimelineIconColors()[$state] ?? 'primary';
                         }),
-
+                    TimeLineTitleEntry::make('activityData'),
                 ]),
         ];
     }
@@ -151,4 +152,5 @@ class ActivityLogTimelineAction extends Action
             'update'      => $activity->updated_at,
         ];
     }
+
 }

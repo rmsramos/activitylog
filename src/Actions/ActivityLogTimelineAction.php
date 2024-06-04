@@ -8,12 +8,17 @@ use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Rmsramos\Activitylog\Infolists\Components\TimeLineIconEntry;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineRepeatableEntry;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogTimelineAction extends Action
 {
     private ?array $withRelations = null;
+
+    private ?array $timelineIcons = null;
+
+    private ?array $timelineIconColors = null;
 
     public static function getDefaultName(): ?string
     {
@@ -30,9 +35,9 @@ class ActivityLogTimelineAction extends Action
 
     private function configureInfolist(): void
     {
-        $this->infolist(function (?Model $record, Infolist $infolist, ActivityLogTimelineAction $action) {
+        $this->infolist(function (?Model $record, Infolist $infolist) {
             return $infolist
-                ->state(['activities' => $this->getActivityLogRecord($record, $action->getWithRelations())])
+                ->state(['activities' => $this->getActivityLogRecord($record, $this->getWithRelations())])
                 ->schema($this->getSchema());
         });
     }
@@ -52,7 +57,16 @@ class ActivityLogTimelineAction extends Action
     {
         return [
             TimeLineRepeatableEntry::make('activities')
-                ->schema([]),
+                ->schema([
+                    TimeLineIconEntry::make('event')
+                        ->icon(function ($state) {
+                            return $this->getTimelineIcons()[$state] ?? 'heroicon-m-check';
+                        })
+                        ->color(function ($state) {
+                            return $this->getTimelineIconColors()[$state] ?? 'primary';
+                        }),
+
+                ]),
         ];
     }
 
@@ -66,6 +80,30 @@ class ActivityLogTimelineAction extends Action
     public function getWithRelations(): ?array
     {
         return $this->evaluate($this->withRelations);
+    }
+
+    public function timelineIcons(?array $timelineIcons = null): ?StaticAction
+    {
+        $this->timelineIcons = $timelineIcons;
+
+        return $this;
+    }
+
+    public function getTimelineIcons(): ?array
+    {
+        return $this->evaluate($this->timelineIcons);
+    }
+
+    public function timelineIconColors(?array $timelineIconColors = null): ?StaticAction
+    {
+        $this->timelineIconColors = $timelineIconColors;
+
+        return $this;
+    }
+
+    public function getTimelineIconColors(): ?array
+    {
+        return $this->evaluate($this->timelineIconColors);
     }
 
     private function getActivities(?Model $record, ?array $relations = null): Collection

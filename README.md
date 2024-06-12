@@ -277,8 +277,8 @@ public function panel(Panel $panel): Panel
                 ->navigationCountBadge(true)
                 ->navigationSort(2)
                 ->authorize(
-                    fn () => auth()->user()->id() === 1
-                ),,
+                    fn () => auth()->user()->id === 1
+                ),
         ]);
 }
 ```

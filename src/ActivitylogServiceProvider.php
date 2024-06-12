@@ -16,7 +16,7 @@ class ActivitylogServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('activitylog')
-            ->hasConfigFile('activitylog')
+            ->hasConfigFile('filament-activitylog')
             ->hasViews('activitylog')
             ->hasTranslations()
             ->hasInstallCommand(function (InstallCommand $installCommand) {

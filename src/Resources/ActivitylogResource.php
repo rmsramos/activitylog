@@ -191,6 +191,7 @@ class ActivitylogResource extends Resource
                 'updated' => 'warning',
                 'created' => 'success',
                 'deleted' => 'danger',
+                default   => 'primary',
             })
             ->sortable();
     }

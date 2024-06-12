@@ -117,7 +117,7 @@ class ActivitylogResource extends Resource
                             ->label(__('activitylog::forms.fields.created_at.label'))
                             ->content(function (?Model $record): string {
                                 /** @var Activity&ActivityModel $record */
-                                return $record->created_at ? "{$record->created_at->format(config('activitylog.datetime_format', 'd/m/Y H:i:s'))}" : '-';
+                                return $record->created_at ? "{$record->created_at->format(config('filament-activitylog.datetime_format', 'd/m/Y H:i:s'))}" : '-';
                             }),
                     ])->grow(false),
                 ])->from('md'),
@@ -237,7 +237,7 @@ class ActivitylogResource extends Resource
     {
         return TextColumn::make('created_at')
             ->label(__('activitylog::tables.columns.created_at.label'))
-            ->dateTime(config('activitylog.datetime_format', 'd/m/Y H:i:s'))
+            ->dateTime(config('filament-activitylog.datetime_format', 'd/m/Y H:i:s'))
             ->sortable();
     }
 

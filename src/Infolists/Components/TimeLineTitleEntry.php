@@ -37,7 +37,7 @@ class TimeLineTitleEntry extends Entry
         if ($state['description'] == $state['event']) {
             $className  = Str::lower(Str::snake(class_basename($state['subject']), ' '));
             $causerName = $this->getCauserName($state['causer']);
-            $update_at  = Carbon::parse($state['update'])->translatedFormat(config('activitylog.datetime_format'));
+            $update_at  = Carbon::parse($state['update'])->translatedFormat(config('filament-activitylog.datetime_format'));
 
             return new HtmlString(
                 sprintf(

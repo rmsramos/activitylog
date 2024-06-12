@@ -57,37 +57,37 @@ class ActivitylogPlugin implements Plugin
 
     public function getResource(): string
     {
-        return $this->resource ?? config('activitylog.resources.resource');
+        return $this->resource ?? config('filament-activitylog.resources.resource');
     }
 
     public function getLabel(): string
     {
-        return $this->evaluate($this->label) ?? config('activitylog.resources.label');
+        return $this->evaluate($this->label) ?? config('filament-activitylog.resources.label');
     }
 
     public function getPluralLabel(): string
     {
-        return $this->evaluate($this->pluralLabel) ?? config('activitylog.resources.plural_label');
+        return $this->evaluate($this->pluralLabel) ?? config('filament-activitylog.resources.plural_label');
     }
 
     public function getNavigationGroup(): ?string
     {
-        return $this->evaluate($this->navigationGroup) ?? config('activitylog.resources.navigation_group');
+        return $this->evaluate($this->navigationGroup) ?? config('filament-activitylog.resources.navigation_group');
     }
 
     public function getNavigationIcon(): ?string
     {
-        return $this->navigationIcon ?? config('activitylog.resources.navigation_icon');
+        return $this->navigationIcon ?? config('filament-activitylog.resources.navigation_icon');
     }
 
     public function getNavigationSort(): ?int
     {
-        return $this->navigationSort ?? config('activitylog.resources.navigation_sort');
+        return $this->navigationSort ?? config('filament-activitylog.resources.navigation_sort');
     }
 
     public function getNavigationCountBadge(): ?bool
     {
-        return $this->navigationCountBadge ?? config('activitylog.resources.navigation_count_badge');
+        return $this->navigationCountBadge ?? config('filament-activitylog.resources.navigation_count_badge');
     }
 
     public function resource(string $resource): static

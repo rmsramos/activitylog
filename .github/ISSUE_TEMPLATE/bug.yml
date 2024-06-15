@@ -1,8 +1,8 @@
-name: Bug Report
-description: Report an Issue or Bug with the Package
-labels: ["bug", "unconfirmed"]
+name: Bug report
+description: Report a problem you're experiencing
+labels: bug,unconfirmed
 body:
-    - type: markdown
+  - type: markdown
     attributes:
       value: |
         Before opening a bug report, please search the existing issues (both open and closed).
@@ -10,7 +10,7 @@ body:
         ---
 
         Thank you for taking the time to file a bug report. To address this bug as fast as possible, we need some information.
-      - type: input
+  - type: input
     id: package-version
     attributes:
       label: Package Version

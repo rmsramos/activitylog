@@ -2,6 +2,7 @@
 
 namespace Rmsramos\Activitylog\Actions;
 
+use Closure;
 use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -24,6 +25,11 @@ class ActivityLogTimelineAction extends Action
     private ?array $timelineIconColors = null;
 
     private ?int $limit = 10;
+    protected Closure $modifyQueryUsing;
+    protected Closure|Builder $query;
+    protected ?Closure $activitiesUsing;
+    protected ?Closure $modifyTitleUsing;
+    protected ?Closure $shouldModifyTitleUsing;
 
     public static function getDefaultName(): ?string
     {
@@ -36,6 +42,30 @@ class ActivityLogTimelineAction extends Action
 
         $this->configureInfolist();
         $this->configureModal();
+        $this->activitiesUsing = null;
+        $this->modifyTitleUsing = null;
+        $this->shouldModifyTitleUsing = fn() => true;
+        $this->modifyQueryUsing = fn($builder) => $builder;
+        $this->modalHeading= __('activitylog::action.modal.heading');
+        $this->modalDescription = __('activitylog::action.modal.description');
+        $this->query = function(?Model $record) {
+            return Activity::query()
+                ->where(function (Builder $query) use ($record) {
+                    $query->where(function (Builder $q) use ($record) {
+                        $q->where('subject_type', $record->getMorphClass())
+                            ->where('subject_id', $record->getKey());
+                    })->when($this->getWithRelations(), function (Builder $query, array $relations) use ($record) {
+                        foreach ($relations as $relation) {
+                            $model = get_class($record->{$relation}()->getRelated());
+                            $query->orWhere(function (Builder $q) use ($record, $model, $relation) {
+                                $q->where('subject_type', (new $model())->getMorphClass())
+                                    ->whereIn('subject_id', $record->{$relation}()->pluck('id'));
+                            });
+                        }
+                    });
+                });
+
+        };
     }
 
     private function configureInfolist(): void
@@ -50,8 +80,6 @@ class ActivityLogTimelineAction extends Action
     private function configureModal(): void
     {
         $this->slideOver()
-            ->modalHeading(__('activitylog::action.modal.heading'))
-            ->modalDescription(__('activitylog::action.modal.description'))
             ->modalIcon('heroicon-o-eye')
             ->modalFooterActions(fn () => [])
             ->tooltip(__('activitylog::action.modal.tooltip'))
@@ -70,8 +98,13 @@ class ActivityLogTimelineAction extends Action
                         ->color(function ($state) {
                             return $this->getTimelineIconColors()[$state] ?? 'primary';
                         }),
-                    TimeLineTitleEntry::make('activityData'),
+                    TimeLineTitleEntry::make('activityData')
+                    ->configureTitleUsing($this->modifyTitleUsing)
+                    ->shouldConfigureTitleUsing($this->shouldModifyTitleUsing),
                     TimeLinePropertieEntry::make('activityData'),
+                    TextEntry::make('log_name')
+                        ->hiddenLabel()
+                        ->badge(),
                     TextEntry::make('updated_at')
                         ->hiddenLabel()
                         ->since()
@@ -128,29 +161,70 @@ class ActivityLogTimelineAction extends Action
         return $this->evaluate($this->limit);
     }
 
-    private function getActivities(?Model $record, ?array $relations = null): Collection
+    public function query(Closure|Builder|null $query): static
     {
-        return Activity::query()
-            ->where(function (Builder $query) use ($record, $relations) {
-                $query->where(function (Builder $q) use ($record) {
-                    $q->where('subject_type', $record->getMorphClass())
-                        ->where('subject_id', $record->getKey());
-                })->when($relations, function (Builder $query, array $relations) use ($record) {
-                    foreach ($relations as $relation) {
-                        $model = get_class($record->{$relation}()->getRelated());
-                        $query->orWhere(function (Builder $q) use ($record, $model, $relation) {
-                            $q->where('subject_type', (new $model())->getMorphClass())
-                                ->whereIn('subject_id', $record->{$relation}()->pluck('id'));
-                        });
-                    }
-                });
-            })
-            ->latest()
-            ->limit($this->getLimit())
-            ->get();
+        $this->query = $query;
+        return $this;
     }
 
-    private function getActivityLogRecord(?Model $record, ?array $relations = null): Collection
+    public function getQuery(): ?Builder
+    {
+        return $this->evaluate($this->query);
+    }
+
+    public function modifyQueryUsing(Closure $closure): static
+    {
+        $this->modifyQueryUsing = $closure;
+        return $this;
+    }
+
+    public function getModifyQueryUsing(Builder $builder): Builder
+    {
+        $this->evaluate($this->modifyQueryUsing, ['builder' => $builder]);
+        return  $builder;
+    }
+
+    public function modifyTitleUsing(Closure $closure): static
+    {
+        $this->modifyTitleUsing = $closure;
+        return $this;
+    }
+
+    public function shouldModifyTitleUsing(Closure $closure): static
+    {
+        $this->shouldModifyTitleUsing = $closure;
+        return $this;
+    }
+
+
+
+    public function activitiesUsing(Closure $closure): static
+    {
+        $this->activitiesUsing = $closure;
+        return $this;
+    }
+
+    public function getActivitiesUsing(): ?Collection
+    {
+        return $this->evaluate($this->activitiesUsing);
+    }
+
+
+    protected function getActivities(?Model $record, ?array $relations = null): Collection
+    {
+        if($activities = $this->getActivitiesUsing()) {
+            return $activities;
+        } else {
+            $builder = $this->getQuery()
+                ->latest()
+                ->limit($this->getLimit());
+            $this->getModifyQueryUsing($builder);
+            return $builder
+                ->get();
+        }
+    }
+
+    protected function getActivityLogRecord(?Model $record, ?array $relations = null): Collection
     {
         $activities = $this->getActivities($record, $relations);
 
@@ -161,7 +235,9 @@ class ActivityLogTimelineAction extends Action
         });
     }
 
-    private function formatActivityData($activity): array
+
+
+    protected function formatActivityData($activity): array
     {
         return [
             'log_name'    => $activity->log_name,

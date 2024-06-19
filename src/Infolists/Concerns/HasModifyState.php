@@ -16,7 +16,7 @@ trait HasModifyState
         return $this;
     }
 
-    public function getModifiedState(): ?HtmlString
+    public function getModifiedState(): null|string|HtmlString
     {
         return $this->evaluate($this->state);
     }

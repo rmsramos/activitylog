@@ -18,6 +18,7 @@ class TimeLineTitleEntry extends Entry
     use HasModifyState;
 
     protected ?Closure $configureTitleUsing = null;
+
     protected ?Closure $shouldConfigureTitleUsing = null;
 
     protected function setUp(): void
@@ -29,21 +30,19 @@ class TimeLineTitleEntry extends Entry
 
     protected string $view = 'activitylog::filament.infolists.components.time-line-title-entry';
 
-
-
     public function configureTitleUsing(?Closure $configureTitleUsing): TimeLineTitleEntry
     {
         $this->configureTitleUsing = $configureTitleUsing;
+
         return $this;
     }
 
     public function shouldConfigureTitleUsing(?Closure $condition): TimeLineTitleEntry
     {
         $this->shouldConfigureTitleUsing = $condition;
+
         return $this;
     }
-
-
 
     private function configureTitleEntry()
     {
@@ -54,13 +53,13 @@ class TimeLineTitleEntry extends Entry
 
     private function modifiedTitle($state): string|HtmlString
     {
-        if(null !== $this->configureTitleUsing && null !== $this->shouldConfigureTitleUsing && $this->evaluate($this->shouldConfigureTitleUsing)) {
+        if ($this->configureTitleUsing !== null && $this->shouldConfigureTitleUsing !== null && $this->evaluate($this->shouldConfigureTitleUsing)) {
             return $this->evaluate($this->configureTitleUsing);
         } else {
             if ($state['description'] == $state['event']) {
-                $className = Str::lower(Str::snake(class_basename($state['subject']), ' '));
+                $className  = Str::lower(Str::snake(class_basename($state['subject']), ' '));
                 $causerName = $this->getCauserName($state['causer']);
-                $update_at = Carbon::parse($state['update'])->translatedFormat(config('filament-activitylog.datetime_format'));
+                $update_at  = Carbon::parse($state['update'])->translatedFormat(config('filament-activitylog.datetime_format'));
 
                 return new HtmlString(
                     sprintf(

@@ -1,4 +1,5 @@
-<?php return [
+<?php
+return [
     'columns' => [
         'log_name' => [
             'label' => 'Type',
@@ -21,8 +22,8 @@
     ],
     'filters' => [
         'created_at' => [
-            'label' => 'Enregistré à',
-            'created_from' => 'Créé à partir de ',
+            'label'         => 'Enregistré à',
+            'created_from'  => 'Créé à partir de ',
             'created_until' => 'Créé jusqu\'à ',
         ],
         'event' => [

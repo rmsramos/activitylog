@@ -63,6 +63,8 @@ class TimeLinePropertieEntry extends Entry
 
             if (isset($oldValues[$key]) && $oldValues[$key] != $newValue) {
                 $changes[] = "- {$key} from <strong>" . htmlspecialchars($oldValue) . '</strong> to <strong>' . htmlspecialchars($newValue) . '</strong>';
+            } else {
+                $changes[] = "- {$key} <strong>'" . htmlspecialchars($newValue) . '</strong>';
             }
         }
 

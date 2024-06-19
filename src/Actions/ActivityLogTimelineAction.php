@@ -25,10 +25,15 @@ class ActivityLogTimelineAction extends Action
     private ?array $timelineIconColors = null;
 
     private ?int $limit = 10;
+
     protected Closure $modifyQueryUsing;
+
     protected Closure|Builder $query;
+
     protected ?Closure $activitiesUsing;
+
     protected ?Closure $modifyTitleUsing;
+
     protected ?Closure $shouldModifyTitleUsing;
 
     public static function getDefaultName(): ?string
@@ -42,13 +47,13 @@ class ActivityLogTimelineAction extends Action
 
         $this->configureInfolist();
         $this->configureModal();
-        $this->activitiesUsing = null;
-        $this->modifyTitleUsing = null;
-        $this->shouldModifyTitleUsing = fn() => true;
-        $this->modifyQueryUsing = fn($builder) => $builder;
-        $this->modalHeading= __('activitylog::action.modal.heading');
-        $this->modalDescription = __('activitylog::action.modal.description');
-        $this->query = function(?Model $record) {
+        $this->activitiesUsing        = null;
+        $this->modifyTitleUsing       = null;
+        $this->shouldModifyTitleUsing = fn () => true;
+        $this->modifyQueryUsing       = fn ($builder) => $builder;
+        $this->modalHeading           = __('activitylog::action.modal.heading');
+        $this->modalDescription       = __('activitylog::action.modal.description');
+        $this->query                  = function (?Model $record) {
             return Activity::query()
                 ->where(function (Builder $query) use ($record) {
                     $query->where(function (Builder $q) use ($record) {
@@ -99,8 +104,8 @@ class ActivityLogTimelineAction extends Action
                             return $this->getTimelineIconColors()[$state] ?? 'primary';
                         }),
                     TimeLineTitleEntry::make('activityData')
-                    ->configureTitleUsing($this->modifyTitleUsing)
-                    ->shouldConfigureTitleUsing($this->shouldModifyTitleUsing),
+                        ->configureTitleUsing($this->modifyTitleUsing)
+                        ->shouldConfigureTitleUsing($this->shouldModifyTitleUsing),
                     TimeLinePropertieEntry::make('activityData'),
                     TextEntry::make('log_name')
                         ->hiddenLabel()
@@ -164,6 +169,7 @@ class ActivityLogTimelineAction extends Action
     public function query(Closure|Builder|null $query): static
     {
         $this->query = $query;
+
         return $this;
     }
 
@@ -175,32 +181,35 @@ class ActivityLogTimelineAction extends Action
     public function modifyQueryUsing(Closure $closure): static
     {
         $this->modifyQueryUsing = $closure;
+
         return $this;
     }
 
     public function getModifyQueryUsing(Builder $builder): Builder
     {
         $this->evaluate($this->modifyQueryUsing, ['builder' => $builder]);
-        return  $builder;
+
+        return $builder;
     }
 
     public function modifyTitleUsing(Closure $closure): static
     {
         $this->modifyTitleUsing = $closure;
+
         return $this;
     }
 
     public function shouldModifyTitleUsing(Closure $closure): static
     {
         $this->shouldModifyTitleUsing = $closure;
+
         return $this;
     }
-
-
 
     public function activitiesUsing(Closure $closure): static
     {
         $this->activitiesUsing = $closure;
+
         return $this;
     }
 
@@ -209,16 +218,16 @@ class ActivityLogTimelineAction extends Action
         return $this->evaluate($this->activitiesUsing);
     }
 
-
     protected function getActivities(?Model $record, ?array $relations = null): Collection
     {
-        if($activities = $this->getActivitiesUsing()) {
+        if ($activities = $this->getActivitiesUsing()) {
             return $activities;
         } else {
             $builder = $this->getQuery()
                 ->latest()
                 ->limit($this->getLimit());
             $this->getModifyQueryUsing($builder);
+
             return $builder
                 ->get();
         }
@@ -234,8 +243,6 @@ class ActivityLogTimelineAction extends Action
             return $activity;
         });
     }
-
-
 
     protected function formatActivityData($activity): array
     {

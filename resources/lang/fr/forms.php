@@ -1,4 +1,5 @@
-<?php return [
+<?php
+return [
     'fields' => [
         'log_name' => [
             'label' => 'Type',

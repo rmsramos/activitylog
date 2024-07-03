@@ -318,13 +318,13 @@ public static function getRelations(): array
 To make viewing activity logs easier, you can use a custom action. In your UserResource in the table function, add the `ActivityLogTimelineAction`.
 
 ```php
-use Rmsramos\Activitylog\Actions\ActivityLogTimelineAction;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 
 public static function table(Table $table): Table
 {
     return $table
         ->actions([
-            ActivityLogTimelineAction::make('Activities'),
+            ActivityLogTimelineTableAction::make('Activities'),
         ]);
 }
 ```
@@ -345,13 +345,13 @@ public static function table(Table $table): Table
 You can configure the icons and colors, by default the `'heroicon-m-check'` icon and the `'primary'` color are used.
 
 ```php
-use Rmsramos\Activitylog\Actions\ActivityLogTimelineAction;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 
 public static function table(Table $table): Table
 {
     return $table
         ->actions([
-            ActivityLogTimelineAction::make('Activities')
+            ActivityLogTimelineTableAction::make('Activities')
                 ->timelineIcons([
                     'created' => 'heroicon-m-check-badge',
                     'updated' => 'heroicon-m-pencil-square',
@@ -367,13 +367,13 @@ public static function table(Table $table): Table
 You can limit the number of results in the query by passing a limit, by default the last 10 records are returned.
 
 ```php
-use Rmsramos\Activitylog\Actions\ActivityLogTimelineAction;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 
 public static function table(Table $table): Table
 {
     return $table
         ->actions([
-            ActivityLogTimelineAction::make('Activities')
+            ActivityLogTimelineTableAction::make('Activities')
                 ->limit(30),
         ]);
 }
@@ -382,13 +382,13 @@ public static function table(Table $table): Table
 ## Full Timeline configuration
 
 ```php
-use Rmsramos\Activitylog\Actions\ActivityLogTimelineAction;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 
 public static function table(Table $table): Table
 {
     return $table
         ->actions([
-            ActivityLogTimelineAction::make('Activities')
+            ActivityLogTimelineTableAction::make('Activities')
                 ->withRelations(['profile', 'address'])
                 ->timelineIcons([
                     'created' => 'heroicon-m-check-badge',

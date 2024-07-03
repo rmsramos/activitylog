@@ -1,12 +1,11 @@
 <?php
 
-namespace Rmsramos\Activitylog\Actions;
+namespace Rmsramos\Activitylog\Actions\Concerns;
 
 use Closure;
 use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -16,7 +15,8 @@ use Rmsramos\Activitylog\Infolists\Components\TimeLineRepeatableEntry;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineTitleEntry;
 use Spatie\Activitylog\Models\Activity;
 
-class ActivityLogTimelineAction extends Action
+
+trait ActionContent
 {
     private ?array $withRelations = null;
 
@@ -47,13 +47,13 @@ class ActivityLogTimelineAction extends Action
 
         $this->configureInfolist();
         $this->configureModal();
-        $this->activitiesUsing        = null;
-        $this->modifyTitleUsing       = null;
-        $this->shouldModifyTitleUsing = fn () => true;
-        $this->modifyQueryUsing       = fn ($builder) => $builder;
-        $this->modalHeading           = __('activitylog::action.modal.heading');
-        $this->modalDescription       = __('activitylog::action.modal.description');
-        $this->query                  = function (?Model $record) {
+        $this->activitiesUsing = null;
+        $this->modifyTitleUsing = null;
+        $this->shouldModifyTitleUsing = fn() => true;
+        $this->modifyQueryUsing = fn($builder) => $builder;
+        $this->modalHeading = __('activitylog::action.modal.heading');
+        $this->modalDescription = __('activitylog::action.modal.description');
+        $this->query = function (?Model $record) {
             return Activity::query()
                 ->where(function (Builder $query) use ($record) {
                     $query->where(function (Builder $q) use ($record) {
@@ -86,7 +86,7 @@ class ActivityLogTimelineAction extends Action
     {
         $this->slideOver()
             ->modalIcon('heroicon-o-eye')
-            ->modalFooterActions(fn () => [])
+            ->modalFooterActions(fn() => [])
             ->tooltip(__('activitylog::action.modal.tooltip'))
             ->icon('heroicon-o-bell-alert');
     }
@@ -247,14 +247,15 @@ class ActivityLogTimelineAction extends Action
     protected function formatActivityData($activity): array
     {
         return [
-            'log_name'    => $activity->log_name,
+            'log_name' => $activity->log_name,
             'description' => $activity->description,
-            'subject'     => $activity->subject,
-            'event'       => $activity->event,
-            'causer'      => $activity->causer,
-            'properties'  => json_decode($activity->properties, true),
-            'batch_uuid'  => $activity->batch_uuid,
-            'update'      => $activity->updated_at,
+            'subject' => $activity->subject,
+            'event' => $activity->event,
+            'causer' => $activity->causer,
+            'properties' => json_decode($activity->properties, true),
+            'batch_uuid' => $activity->batch_uuid,
+            'update' => $activity->updated_at,
         ];
     }
+
 }

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineIconEntry;
-use Rmsramos\Activitylog\Infolists\Components\TimeLinePropertieEntry;
+use Rmsramos\Activitylog\Infolists\Components\TimeLinePropertiesEntry;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineRepeatableEntry;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineTitleEntry;
 use Spatie\Activitylog\Models\Activity;
@@ -106,7 +106,7 @@ class ActivityLogTimelineAction extends Action
                     TimeLineTitleEntry::make('activityData')
                         ->configureTitleUsing($this->modifyTitleUsing)
                         ->shouldConfigureTitleUsing($this->shouldModifyTitleUsing),
-                    TimeLinePropertieEntry::make('activityData'),
+                    TimeLinePropertiesEntry::make('activityData'),
                     TextEntry::make('log_name')
                         ->hiddenLabel()
                         ->badge(),

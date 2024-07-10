@@ -47,13 +47,13 @@ trait ActionContent
 
         $this->configureInfolist();
         $this->configureModal();
-        $this->activitiesUsing = null;
-        $this->modifyTitleUsing = null;
-        $this->shouldModifyTitleUsing = fn() => true;
-        $this->modifyQueryUsing = fn($builder) => $builder;
-        $this->modalHeading = __('activitylog::action.modal.heading');
-        $this->modalDescription = __('activitylog::action.modal.description');
-        $this->query = function (?Model $record) {
+        $this->activitiesUsing        = null;
+        $this->modifyTitleUsing       = null;
+        $this->shouldModifyTitleUsing = fn () => true;
+        $this->modifyQueryUsing       = fn ($builder) => $builder;
+        $this->modalHeading           = __('activitylog::action.modal.heading');
+        $this->modalDescription       = __('activitylog::action.modal.description');
+        $this->query                  = function (?Model $record) {
             return Activity::query()
                 ->where(function (Builder $query) use ($record) {
                     $query->where(function (Builder $q) use ($record) {
@@ -86,7 +86,7 @@ trait ActionContent
     {
         $this->slideOver()
             ->modalIcon('heroicon-o-eye')
-            ->modalFooterActions(fn() => [])
+            ->modalFooterActions(fn () => [])
             ->tooltip(__('activitylog::action.modal.tooltip'))
             ->icon('heroicon-o-bell-alert');
     }
@@ -247,14 +247,14 @@ trait ActionContent
     protected function formatActivityData($activity): array
     {
         return [
-            'log_name' => $activity->log_name,
+            'log_name'    => $activity->log_name,
             'description' => $activity->description,
-            'subject' => $activity->subject,
-            'event' => $activity->event,
-            'causer' => $activity->causer,
-            'properties' => json_decode($activity->properties, true),
-            'batch_uuid' => $activity->batch_uuid,
-            'update' => $activity->updated_at,
+            'subject'     => $activity->subject,
+            'event'       => $activity->event,
+            'causer'      => $activity->causer,
+            'properties'  => json_decode($activity->properties, true),
+            'batch_uuid'  => $activity->batch_uuid,
+            'update'      => $activity->updated_at,
         ];
     }
 

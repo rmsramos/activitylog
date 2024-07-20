@@ -165,6 +165,7 @@ class ActivitylogResource extends Resource
                 static::getPropertiesColumnCompoment(),
                 static::getCreatedAtColumnCompoment(),
             ])
+            ->defaultSort(config('filament-activitylog.resources.default_sort_column', 'created_at'), config('filament-activitylog.resources.default_sort_direction', 'asc'))
             ->filters([
                 static::getDateFilterComponent(),
                 static::getEventFilterCompoment(),

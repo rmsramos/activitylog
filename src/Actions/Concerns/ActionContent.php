@@ -62,7 +62,7 @@ trait ActionContent
                         foreach ($relations as $relation) {
                             $model = get_class($record->{$relation}()->getRelated());
                             $query->orWhere(function (Builder $q) use ($record, $model, $relation) {
-                                $q->where('subject_type', (new $model())->getMorphClass())
+                                $q->where('subject_type', (new $model)->getMorphClass())
                                     ->whereIn('subject_id', $record->{$relation}()->pluck('id'));
                             });
                         }

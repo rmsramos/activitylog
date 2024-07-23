@@ -7,5 +7,5 @@ use Rmsramos\Activitylog\Actions\Concerns\ActionContent;
 
 class ActivityLogTimelineSimpleAction extends Action
 {
-  use ActionContent;
+    use ActionContent;
 }

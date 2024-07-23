@@ -15,7 +15,6 @@ use Rmsramos\Activitylog\Infolists\Components\TimeLineRepeatableEntry;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineTitleEntry;
 use Spatie\Activitylog\Models\Activity;
 
-
 trait ActionContent
 {
     private ?array $withRelations = null;

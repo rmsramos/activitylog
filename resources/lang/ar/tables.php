@@ -2,22 +2,22 @@
 
 return [
     'columns' => [
-        'log_name'     => [
+        'log_name' => [
             'label' => 'النوع',
         ],
-        'event'        => [
+        'event' => [
             'label' => 'الحدث',
         ],
         'subject_type' => [
             'label' => 'الموضوع',
         ],
-        'causer'       => [
+        'causer' => [
             'label' => 'المستخدم',
         ],
-        'properties'   => [
+        'properties' => [
             'label' => 'الخصائص',
         ],
-        'created_at'   => [
+        'created_at' => [
             'label' => 'تاريخ التسجيل',
         ],
     ],
@@ -27,7 +27,7 @@ return [
             'created_from'  => 'تاريخ الإنشاء من',
             'created_until' => 'تاريخ الإنشاء حتى',
         ],
-        'event'      => [
+        'event' => [
             'label' => 'الحدث',
         ],
     ],

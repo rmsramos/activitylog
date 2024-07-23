@@ -2,31 +2,31 @@
 
 return [
     'fields' => [
-        'log_name'     => [
+        'log_name' => [
             'label' => 'النوع',
         ],
-        'event'        => [
+        'event' => [
             'label' => 'الحدث',
         ],
         'subject_type' => [
             'label' => 'الموضوع',
         ],
-        'causer'       => [
+        'causer' => [
             'label' => 'المستخدم',
         ],
-        'description'  => [
+        'description' => [
             'label' => 'الوصف',
         ],
-        'properties'   => [
+        'properties' => [
             'label' => 'الخصائص',
         ],
-        'created_at'   => [
+        'created_at' => [
             'label' => 'تاريخ التسجيل',
         ],
-        'old'          => [
+        'old' => [
             'label' => 'القديم',
         ],
-        'attributes'   => [
+        'attributes' => [
             'label' => 'الجديد',
         ],
     ],

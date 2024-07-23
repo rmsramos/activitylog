@@ -6,7 +6,7 @@ use Filament\Infolists\Components\Entry;
 use Illuminate\Support\HtmlString;
 use Rmsramos\Activitylog\Infolists\Concerns\HasModifyState;
 
-class TimeLinePropertieEntry extends Entry
+class TimeLinePropertiesEntry extends Entry
 {
     use HasModifyState;
 

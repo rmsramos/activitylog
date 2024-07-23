@@ -30,6 +30,7 @@ ActivityLog Plugin is translated for :
 -   🇪🇸 Spanish
 -   🇫🇷 French
 -   🇮🇷 Persian
+-   🇦🇪 Arabic
 
 ## Installation
 
@@ -318,7 +319,7 @@ public static function getRelations(): array
 
 ![Screenshot of Application Feature](https://raw.githubusercontent.com/rmsramos/activitylog/main/arts/timeline.png)
 
-To make viewing activity logs easier, you can use a custom action. In your UserResource in the table function, add the `ActivityLogTimelineAction`.
+To make viewing activity logs easier, you can use a custom action. In your UserResource in the table function, add the `ActivityLogTimelineTableAction`.
 
 ```php
 use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
@@ -339,7 +340,7 @@ public static function table(Table $table): Table
 {
     return $table
         ->actions([
-            ActivityLogTimelineAction::make('Activities')
+            ActivityLogTimelineTableAction::make('Activities')
                 ->withRelations(['profile', 'address']), //opcional
         ]);
 }

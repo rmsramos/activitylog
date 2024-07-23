@@ -1,12 +1,11 @@
 <?php
 
-namespace Rmsramos\Activitylog\Actions;
+namespace Rmsramos\Activitylog\Actions\Concerns;
 
 use Closure;
 use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -16,7 +15,8 @@ use Rmsramos\Activitylog\Infolists\Components\TimeLineRepeatableEntry;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineTitleEntry;
 use Spatie\Activitylog\Models\Activity;
 
-class ActivityLogTimelineAction extends Action
+
+trait ActionContent
 {
     private ?array $withRelations = null;
 
@@ -257,4 +257,5 @@ class ActivityLogTimelineAction extends Action
             'update'      => $activity->updated_at,
         ];
     }
+
 }

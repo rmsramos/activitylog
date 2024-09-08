@@ -2,6 +2,7 @@
 
 namespace Rmsramos\Activitylog\Resources;
 
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Placeholder;
@@ -292,6 +293,13 @@ class ActivitylogResource extends Resource
             'index' => ListActivitylog::route('/'),
             'view'  => ViewActivitylog::route('/{record}'),
         ];
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        $plugin = Filament::getCurrentPanel()?->getPlugin('rmsramos/activitylog');
+
+        return $plugin->getNavigationItem();
     }
 
     public static function canAccess(): bool

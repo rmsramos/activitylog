@@ -2,6 +2,8 @@
 
 namespace Rmsramos\Activitylog\Resources;
 
+use Carbon\Exceptions\InvalidFormatException;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Placeholder;
@@ -139,13 +141,13 @@ class ActivitylogResource extends Resource
 
                         if ($old = $record->properties->get('old')) {
                             $schema[] = KeyValue::make('old')
-                                ->afterStateHydrated(fn (KeyValue $component) => $component->state($old))
+                                ->formatStateUsing(fn () => self::formatDateValues($old))
                                 ->label(__('activitylog::forms.fields.old.label'));
                         }
 
                         if ($attributes = $record->properties->get('attributes')) {
                             $schema[] = KeyValue::make('attributes')
-                                ->afterStateHydrated(fn (KeyValue $component) => $component->state($attributes))
+                                ->formatStateUsing(fn () => self::formatDateValues($attributes))
                                 ->label(__('activitylog::forms.fields.attributes.label'));
                         }
 
@@ -302,6 +304,23 @@ class ActivitylogResource extends Resource
             return static::canViewAny();
         } else {
             return ActivitylogPlugin::get()->isAuthorized();
+        }
+    }
+
+    private static function formatDateValues(array|string $value): array|string
+    {
+        if (is_array($value)) {
+            foreach ($value as &$item) {
+                $item = self::formatDateValues($item);
+            }
+            return $value;
+        }
+
+        try {
+            return Carbon::parse($value)
+                ->format(config('filament-activitylog.datetime_format', 'd/m/Y H:i:s'));
+        } catch (InvalidFormatException $e) {
+            return $value;
         }
     }
 }

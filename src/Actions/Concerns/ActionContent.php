@@ -2,6 +2,8 @@
 
 namespace Rmsramos\Activitylog\Actions\Concerns;
 
+use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 use Closure;
 use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\TextEntry;
@@ -251,10 +253,26 @@ trait ActionContent
             'subject'     => $activity->subject,
             'event'       => $activity->event,
             'causer'      => $activity->causer,
-            'properties'  => json_decode($activity->properties, true),
+            'properties'  => $this->formatDateValues(json_decode($activity->properties, true)),
             'batch_uuid'  => $activity->batch_uuid,
             'update'      => $activity->updated_at,
         ];
     }
 
+    private static function formatDateValues(array|string $value): array|string
+    {
+        if (is_array($value)) {
+            foreach ($value as &$item) {
+                $item = self::formatDateValues($item);
+            }
+            return $value;
+        }
+
+        try {
+            return Carbon::parse($value)
+                ->format(config('filament-activitylog.datetime_format', 'd/m/Y H:i:s'));
+        } catch (InvalidFormatException $e) {
+            return $value;
+        }
+    }
 }

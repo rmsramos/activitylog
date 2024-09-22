@@ -259,8 +259,12 @@ trait ActionContent
         ];
     }
 
-    private static function formatDateValues(array|string $value): array|string
+    private static function formatDateValues(array|string|null $value): array|string|null
     {
+        if (is_null($value)) {
+            return $value;
+        }
+
         if (is_array($value)) {
             foreach ($value as &$item) {
                 $item = self::formatDateValues($item);
@@ -276,4 +280,5 @@ trait ActionContent
             return $value;
         }
     }
+
 }

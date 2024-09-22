@@ -2,8 +2,8 @@
 
 return [
     'modal' => [
-        'heading' => 'Log Aktivitas Pengguna',
+        'heading'     => 'Log Aktivitas Pengguna',
         'description' => 'Lacak semua aktivitas pengguna',
-        'tooltip' => 'Aktivitas Pengguna',
+        'tooltip'     => 'Aktivitas Pengguna',
     ],
 ];

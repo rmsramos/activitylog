@@ -118,7 +118,7 @@ class ActivitylogPlugin implements Plugin
         return $this;
     }
 
-    public function navigationItem(Closure | bool $value = true): static
+    public function navigationItem(Closure|bool $value = true): static
     {
         $this->navigationItem = $value;
 

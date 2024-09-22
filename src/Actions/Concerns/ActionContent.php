@@ -265,6 +265,7 @@ trait ActionContent
             foreach ($value as &$item) {
                 $item = self::formatDateValues($item);
             }
+
             return $value;
         }
 

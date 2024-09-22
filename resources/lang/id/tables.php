@@ -23,8 +23,8 @@ return [
     ],
     'filters' => [
         'created_at' => [
-            'label' => 'Masuk di',
-            'created_from' => 'Dibuat dari',
+            'label'         => 'Masuk di',
+            'created_from'  => 'Dibuat dari',
             'created_until' => 'Dibuat sampai',
         ],
         'event' => [

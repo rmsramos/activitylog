@@ -320,6 +320,7 @@ class ActivitylogResource extends Resource
             foreach ($value as &$item) {
                 $item = self::formatDateValues($item);
             }
+
             return $value;
         }
 

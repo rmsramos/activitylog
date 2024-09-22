@@ -296,6 +296,13 @@ class ActivitylogResource extends Resource
         ];
     }
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        $plugin = Filament::getCurrentPanel()?->getPlugin('rmsramos/activitylog');
+
+        return $plugin->getNavigationItem();
+    }
+
     public static function canAccess(): bool
     {
         $policy = Gate::getPolicyFor(static::getModel());

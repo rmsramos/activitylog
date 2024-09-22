@@ -15,6 +15,8 @@ class ActivitylogPlugin implements Plugin
 
     protected string|Closure|null $label = null;
 
+    protected Closure|bool $navigationItem = true;
+
     protected string|Closure|null $navigationGroup = null;
 
     protected ?string $navigationIcon = null;
@@ -70,6 +72,11 @@ class ActivitylogPlugin implements Plugin
         return $this->evaluate($this->pluralLabel) ?? config('filament-activitylog.resources.plural_label');
     }
 
+    public function getNavigationItem(): bool
+    {
+        return $this->evaluate($this->navigationItem) ?? config('filament-activitylog.resources.navigation_item');
+    }
+
     public function getNavigationGroup(): ?string
     {
         return $this->evaluate($this->navigationGroup) ?? config('filament-activitylog.resources.navigation_group');
@@ -107,6 +114,13 @@ class ActivitylogPlugin implements Plugin
     public function pluralLabel(string|Closure $label): static
     {
         $this->pluralLabel = $label;
+
+        return $this;
+    }
+
+    public function navigationItem(Closure | bool $value = true): static
+    {
+        $this->navigationItem = $value;
 
         return $this;
     }

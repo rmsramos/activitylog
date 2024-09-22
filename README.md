@@ -67,6 +67,7 @@ return [
     'resources' => [
         'label'                     => 'Activity Log',
         'plural_label'              => 'Activity Logs',
+        'navigation_item'           => true,
         'navigation_group'          => null,
         'navigation_icon'           => 'heroicon-o-shield-check',
         'navigation_sort'           => null,
@@ -166,6 +167,23 @@ public function panel(Panel $panel): Panel
             ActivitylogPlugin::make()
                 ->label('Log')
                 ->pluralLabel('Logs'),
+        ]);
+}
+```
+
+## Displaying the resource in the navigation
+
+You can enable or disable the `Resource navigation item` by updating the `->navigationItem()` value.
+
+```php
+use Rmsramos\Activitylog\ActivitylogPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        ->plugins([
+            ActivitylogPlugin::make()
+                ->navigationItem(false), // by default is true
         ]);
 }
 ```
@@ -288,6 +306,7 @@ public function panel(Panel $panel): Panel
                 ->resource(\Path\For\Your\CustomResource::class)
                 ->label('Log')
                 ->pluralLabel('Logs')
+                ->navigationItem(true)
                 ->navigationGroup('Activity Log')
                 ->navigationIcon('heroicon-o-shield-check')
                 ->navigationCountBadge(true)

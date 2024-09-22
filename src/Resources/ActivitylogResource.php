@@ -2,7 +2,6 @@
 
 namespace Rmsramos\Activitylog\Resources;
 
-use Carbon\Exceptions\InvalidFormatException;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\KeyValue;
@@ -26,6 +25,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Livewire\Component as Livewire;
+use Rmsramos\Activitylog\Actions\Concerns\ActionContent;
 use Rmsramos\Activitylog\ActivitylogPlugin;
 use Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ListActivitylog;
@@ -34,6 +34,8 @@ use Spatie\Activitylog\Models\Activity;
 
 class ActivitylogResource extends Resource
 {
+    use ActionContent;
+
     public static function getModel(): string
     {
         return Activity::class;
@@ -311,24 +313,6 @@ class ActivitylogResource extends Resource
             return static::canViewAny();
         } else {
             return ActivitylogPlugin::get()->isAuthorized();
-        }
-    }
-
-    private static function formatDateValues(array|string $value): array|string
-    {
-        if (is_array($value)) {
-            foreach ($value as &$item) {
-                $item = self::formatDateValues($item);
-            }
-
-            return $value;
-        }
-
-        try {
-            return Carbon::parse($value)
-                ->format(config('filament-activitylog.datetime_format', 'd/m/Y H:i:s'));
-        } catch (InvalidFormatException $e) {
-            return $value;
         }
     }
 }

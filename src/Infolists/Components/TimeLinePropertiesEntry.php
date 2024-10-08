@@ -34,7 +34,7 @@ class TimeLinePropertiesEntry extends Entry
             $changes    = $this->getPropertyChanges($properties);
             $causerName = $this->getCauserName($state['causer']);
 
-            return new HtmlString(sprintf('%s %s the following: <br>%s', $causerName, $state['event'], implode('<br>', $changes)));
+            return new HtmlString(sprintf(__('activitylog::timeline.properties.modifiedProperties'), $causerName, $state['event'], implode('<br>', $changes)));
         }
 
         return null;
@@ -62,9 +62,9 @@ class TimeLinePropertiesEntry extends Entry
             $newValue = $this->formatNewValue($newValue);
 
             if (isset($oldValues[$key]) && $oldValues[$key] != $newValue) {
-                $changes[] = "- {$key} from <strong>" . htmlspecialchars($oldValue) . '</strong> to <strong>' . htmlspecialchars($newValue) . '</strong>';
+                $changes[] = sprintf(__('activitylog::timeline.properties.compareOldAndNewValues.notEquals'), $key, htmlspecialchars($newValue));
             } else {
-                $changes[] = "- {$key} <strong>" . htmlspecialchars($newValue) . '</strong>';
+                $changes[] = sprintf(__('activitylog::timeline.properties.compareOldAndNewValues.equals'), $key, htmlspecialchars($newValue));
             }
         }
 
@@ -73,7 +73,12 @@ class TimeLinePropertiesEntry extends Entry
 
     private function getNewValues(array $newValues): array
     {
-        return array_map(fn ($key, $value) => "- {$key} <strong>" . htmlspecialchars($this->formatNewValue($value)) . '</strong>', array_keys($newValues), $newValues);
+        return array_map(fn ($key, $value) => sprintf(
+            __('activitylog::timeline.properties.getNewValues'),
+                $key,
+                        htmlspecialchars($this->formatNewValue($value))
+                    ),
+            array_keys($newValues), $newValues);
     }
 
     private function formatNewValue($value): string

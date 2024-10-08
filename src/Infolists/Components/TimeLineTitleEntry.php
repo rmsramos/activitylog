@@ -63,7 +63,7 @@ class TimeLineTitleEntry extends Entry
 
                 return new HtmlString(
                     sprintf(
-                        'The <strong>%s</strong> was <strong>%s</strong> by <strong>%s</strong>. <br><small> Updated at: <strong>%s</strong></small>',
+						__('activitylog::timeline.title.modifiedTitle'),
                         $className,
                         $state['event'],
                         $causerName,

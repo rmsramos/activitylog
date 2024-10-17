@@ -273,12 +273,41 @@ trait ActionContent
             return $value;
         }
 
-        try {
+        if (self::isValidDate($value)) {
             return Carbon::parse($value)
                 ->format(config('filament-activitylog.datetime_format', 'd/m/Y H:i:s'));
-        } catch (InvalidFormatException $e) {
-            return $value;
         }
+
+        return $value;
+    }
+
+    private static function isValidDate(string $dateString, string $dateFormat = 'Y-m-d', string $dateTimeFormat = 'Y-m-d H:i:s'): bool|string
+    {
+        try {
+
+            $dateTime = CarbonImmutable::createFromFormat($dateFormat, $dateString);
+
+            if ($dateTime && $dateTime->format($dateFormat) === $dateString) {
+                return true;
+            }
+
+        } catch (InvalidFormatException $e) {
+
+        }
+
+        try {
+
+            $dateTime = CarbonImmutable::createFromFormat($dateTimeFormat, $dateString);
+
+            if ($dateTime && $dateTime->format($dateTimeFormat) === $dateString) {
+                return true;
+            }
+
+        } catch (InvalidFormatException $e) {
+
+        }
+
+        return false;
     }
 
 }

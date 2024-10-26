@@ -6,9 +6,9 @@ return [
     'properties' => [
         'modifiedProperties' => '%s %s lo siguiente: <br>%s',
         'compareOldAndNewValues' => [
-            'notEquals' => '- {%s} de <strong>%s</strong> a <strong>%s</strong>',
-            'equals' => '- {%s} <strong>%s</strong>'
+            'notEquals' => '- %s de <strong>%s</strong> a <strong>%s</strong>',
+            'equals' => '- %s <strong>%s</strong>'
         ],
-        'getNewValues' => '- {%s} <strong>%s</strong>'
+        'getNewValues' => '- %s <strong>%s</strong>'
     ]
 ];

@@ -269,7 +269,10 @@ trait ActionContent
             foreach ($value as &$item) {
                 $item = self::formatDateValues($item);
             }
+            return $value;
+        }
 
+        if (is_numeric($value) && !preg_match('/^\d{10,}$/', $value)) {
             return $value;
         }
 

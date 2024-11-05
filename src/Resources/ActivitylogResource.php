@@ -287,7 +287,7 @@ class ActivitylogResource extends Resource
     {
         return SelectFilter::make('event')
             ->label(__('activitylog::tables.filters.event.label'))
-            ->options(static::getModel()::distinct()->pluck('event', 'event'));
+            ->options(static::getModel()::distinct()->pluck('event', 'event')->filter());
     }
 
     public static function getPages(): array

@@ -273,7 +273,7 @@ trait ActionContent
             return $value;
         }
 
-        f (is_numeric($value)) {
+        if (is_numeric($value)) {
             return $value;
         }
 

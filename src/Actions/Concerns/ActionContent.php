@@ -273,6 +273,10 @@ trait ActionContent
             return $value;
         }
 
+        f (is_numeric($value)) {
+            return $value;
+        }
+
         try {
             return Carbon::parse($value)
                 ->format(config('filament-activitylog.datetime_format', 'd/m/Y H:i:s'));

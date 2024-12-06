@@ -262,7 +262,7 @@ trait ActionContent
             'log_name'    => $activity->log_name,
             'description' => $activity->description,
             'subject'     => $activity->subject,
-            'event'       => __('activitylog::action.event.'.$activity->event),
+            'event'       => $activity->event,
             'causer'      => $activity->causer,
             'properties'  => $this->formatDateValues(json_decode($activity->properties, true)),
             'batch_uuid'  => $activity->batch_uuid,

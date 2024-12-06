@@ -36,7 +36,7 @@ class TimeLinePropertiesEntry extends Entry
 
             return new HtmlString(trans("activitylog::infolists.components.updater_updated",[
                 "causer"    =>  $causerName, 
-                "event"     =>  $state["event"], 
+                "event"     =>  __("activitylog::action.event.".$state['event']), 
                 "changes"   =>  implode('<br>', $changes)
             ]));
         }

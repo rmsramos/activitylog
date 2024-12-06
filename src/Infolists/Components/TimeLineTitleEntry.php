@@ -65,10 +65,10 @@ class TimeLineTitleEntry extends Entry
                 $update_at = $parser($state['update'])->format(ActivitylogPlugin::get()->getDatetimeFormat());
 
                 return new HtmlString(
-                    trans("activitylog::infolists.components.created_by_at",
+                    __("activitylog::infolists.components.created_by_at",
                         [
-                            "subject"=>trans("navarak.".$className), 
-                            "event"=>$state['event'], 
+                            "subject" => ActivitylogPlugin::get()->getTranslateSubject($className), 
+                            "event"=>__("activitylog::action.event.".$state['event']), 
                             "causer"=>$causerName, 
                             "update_at"=>$update_at
                         ]),

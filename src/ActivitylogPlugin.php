@@ -21,9 +21,11 @@ class ActivitylogPlugin implements Plugin
 
     protected string|Closure|null $navigationGroup = null;
 
-    protected ?DateTimeInterface $parseDate = null;
+    protected string|Closure|null $parseDate = null;
 
-    protected ?string $datetimeFormat = null;
+    protected string|Closure|null $datetimeFormat = null;
+
+    protected Closure|null $translateSubject = null;
 
     protected ?string $navigationIcon = null;
 
@@ -93,9 +95,17 @@ class ActivitylogPlugin implements Plugin
         return $this->evaluate($this->datetimeFormat) ?? config('filament-activitylog.datetime_format');
     }
 
-    public function getParseDate(): ?Closure
+    public function getTranslateSubject($label): ?string
     {
-        return $this->evaluate($this->parseDate) ?? fn($date) => Carbon::parse($date);
+        if(is_null($this->translateSubject))
+            return $label;
+        
+        return {$this->translateSubject}($label);
+    }
+
+    public function getParseDate(): ?Closure
+    { 
+        return $this->parseDate ?? fn($date) => Carbon::parse($date);
     }
 
     public function getNavigationIcon(): ?string
@@ -158,6 +168,13 @@ class ActivitylogPlugin implements Plugin
     public function datetimeFormat(string|Closure|null $format = null): static
     {
         $this->datetimeFormat = $format;
+
+        return $this;
+    }
+
+    public function translateSubject(string|Closure|null $callable = null): static
+    {
+        $this->translateSubject = $callable;
 
         return $this;
     }

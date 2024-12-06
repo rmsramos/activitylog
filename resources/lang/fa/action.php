@@ -2,7 +2,7 @@
 
 return [
     'modal' => [
-        'heading'     => 'سیاهه فعالیت کاربر',
+        'heading'     => 'سیاهه‌فعالیت‌کاربر',
         'description' => 'ردیابی تمام فعالیت های کاربر',
         'tooltip'     => 'فعالیت های کاربر',
     ],
@@ -12,5 +12,5 @@ return [
         'updated'  => 'بروزرسانی شد',
         'restored' => 'بازیابی شد',
     ],
-    'restore' => 'Restore'
+    'restore' => 'بازیابی'
 ];

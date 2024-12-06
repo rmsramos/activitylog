@@ -111,7 +111,7 @@ class ActivitylogResource extends Resource
                 ->tap(function ($log) {
                     $log->event = 'restored';
                 })
-                ->log(__("activitylog::notifications.activity_restored"));
+                ->log('restored');
 
             Notification::make()
                 ->title(__("activitylog::notifications.activity_restored_successfully"))

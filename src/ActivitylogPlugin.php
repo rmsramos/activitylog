@@ -99,8 +99,9 @@ class ActivitylogPlugin implements Plugin
     {
         if(is_null($this->translateSubject))
             return $label;
-        
-        return {$this->translateSubject}($label);
+
+        $callable = $this->translateSubject;
+        return $callable($label);
     }
 
     public function getParseDate(): ?Closure

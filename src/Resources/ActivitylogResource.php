@@ -31,6 +31,8 @@ use Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ListActivitylog;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ViewActivitylog;
 use Spatie\Activitylog\Models\Activity;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Notifications\Notification;
 
 class ActivitylogResource extends Resource
 {
@@ -246,7 +248,7 @@ class ActivitylogResource extends Resource
     {
         return TextColumn::make('event')
             ->label(__('activitylog::tables.columns.event.label'))
-            ->formatStateUsing(fn ($state) => ucwords($state))
+            ->formatStateUsing(fn ($state) => ucwords(__("activitylog::action.event.".$state)))
             ->badge()
             ->color(fn (string $state): string => match ($state) {
                 'draft'   => 'gray',

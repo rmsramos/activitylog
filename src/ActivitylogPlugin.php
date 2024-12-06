@@ -7,6 +7,7 @@ use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
 use DateTimeInterface;
+use Illuminate\Support\Carbon;
 
 class ActivitylogPlugin implements Plugin
 {
@@ -92,7 +93,7 @@ class ActivitylogPlugin implements Plugin
         return $this->evaluate($this->datetimeFormat) ?? config('filament-activitylog.datetime_format');
     }
 
-    public function getParseDate(?string $date): ?DateTimeInterface
+    public function getParseDate(): ?Closure
     {
         return $this->evaluate($this->parseDate) ?? fn($date) => Carbon::parse($date);
     }

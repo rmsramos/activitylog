@@ -6,6 +6,7 @@ use Closure;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
+use DateTimeInterface;
 
 class ActivitylogPlugin implements Plugin
 {
@@ -18,6 +19,10 @@ class ActivitylogPlugin implements Plugin
     protected Closure|bool $navigationItem = true;
 
     protected string|Closure|null $navigationGroup = null;
+
+    protected ?DateTimeInterface $parseDate = null;
+
+    protected ?string $datetimeFormat = null;
 
     protected ?string $navigationIcon = null;
 
@@ -82,6 +87,16 @@ class ActivitylogPlugin implements Plugin
         return $this->evaluate($this->navigationGroup) ?? config('filament-activitylog.resources.navigation_group');
     }
 
+    public function getDatetimeFormat(): ?string
+    {
+        return $this->evaluate($this->datetimeFormat) ?? config('filament-activitylog.datetime_format');
+    }
+
+    public function getParseDate(?string $date): ?DateTimeInterface
+    {
+        return $this->evaluate($this->parseDate) ?? fn($date) => Carbon::parse($date);
+    }
+
     public function getNavigationIcon(): ?string
     {
         return $this->navigationIcon ?? config('filament-activitylog.resources.navigation_icon');
@@ -128,6 +143,20 @@ class ActivitylogPlugin implements Plugin
     public function navigationGroup(string|Closure|null $group = null): static
     {
         $this->navigationGroup = $group;
+
+        return $this;
+    }
+
+    public function parseDate(Closure|null $parser = null): static
+    {
+        $this->parseDate = $parser;
+
+        return $this;
+    }
+
+    public function datetimeFormat(string|Closure|null $format = null): static
+    {
+        $this->datetimeFormat = $format;
 
         return $this;
     }

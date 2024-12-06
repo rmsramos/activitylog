@@ -34,7 +34,11 @@ class TimeLinePropertiesEntry extends Entry
             $changes    = $this->getPropertyChanges($properties);
             $causerName = $this->getCauserName($state['causer']);
 
-            return new HtmlString(sprintf('%s %s the following: <br>%s', $causerName, $state['event'], implode('<br>', $changes)));
+            return new HtmlString(trans("activitylog::infolists.components.updater_updated",[
+                "causer"    =>  $causerName, 
+                "event"     =>  $state["event"], 
+                "changes"   =>  implode('<br>', $changes)
+            ]));
         }
 
         return null;
@@ -62,9 +66,18 @@ class TimeLinePropertiesEntry extends Entry
             $newValue = $this->formatNewValue($newValue);
 
             if (isset($oldValues[$key]) && $oldValues[$key] != $newValue) {
-                $changes[] = "- {$key} from <strong>" . htmlspecialchars($oldValue) . '</strong> to <strong>' . htmlspecialchars($newValue) . '</strong>';
+                $changes[] = trans("activitylog::infolists.components.from_oldvalue_to_newvalue", 
+                    [
+                        "key"       =>  $key,  
+                        "old_value" =>  htmlspecialchars($oldValue), 
+                        "new_value" =>  htmlspecialchars($newValue) 
+                    ]);
             } else {
-                $changes[] = "- {$key} <strong>" . htmlspecialchars($newValue) . '</strong>';
+                $changes[] = trans("activitylog::infolists.components.to_newvalue", 
+                    [
+                        "key"       =>  $key, 
+                        "new_value" =>  htmlspecialchars($newValue) 
+                    ]);
             }
         }
 

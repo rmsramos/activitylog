@@ -61,7 +61,7 @@ class TimeLineTitleEntry extends Entry
                 $className  = Str::lower(Str::snake(class_basename($state['subject']), ' '));
                 $causerName = $this->getCauserName($state['causer']);
 
-                $parser = ActivitylogPlugin::get()->getParseDate();
+                $parser = ActivitylogPlugin::get()->getDateParser();
                 $update_at = $parser($state['update'])->format(ActivitylogPlugin::get()->getDatetimeFormat());
 
                 return new HtmlString(

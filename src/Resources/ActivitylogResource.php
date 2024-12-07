@@ -170,7 +170,7 @@ class ActivitylogResource extends Resource
                             ->content(function (?Model $record): string {
                                 /** @var Activity&ActivityModel $record */
 
-                                $parser = ActivitylogPlugin::get()->getParseDate();
+                                $parser = ActivitylogPlugin::get()->getDateParser();
 
                                 return $record->created_at ? 
                                     $parser($record->created_at)
@@ -301,10 +301,18 @@ class ActivitylogResource extends Resource
 
     public static function getCreatedAtColumnCompoment(): Column
     {
-        return TextColumn::make('created_at')
+        $column = TextColumn::make('created_at')
             ->label(__('activitylog::tables.columns.created_at.label'))
-            ->dateTime(config('filament-activitylog.datetime_format', 'd/m/Y H:i:s'))
+            ->dateTime(ActivitylogPlugin::get()->getDatetimeFormat())
             ->sortable();
+
+        // Apply the custom callback if set
+        $callback = ActivitylogPlugin::get()->getDatetimeColumnCallback();
+        if ($callback) {
+            $column = $callback($column);
+        }
+
+        return $column;
     }
 
     public static function getDateFilterComponent(): Filter
@@ -313,23 +321,29 @@ class ActivitylogResource extends Resource
             ->label(__('activitylog::tables.filters.created_at.label'))
             ->indicateUsing(function (array $data): array {
                 $indicators = [];
-                $parser = ActivitylogPlugin::get()->getParseDate();
+                $parser = ActivitylogPlugin::get()->getDateParser();
 
                 if ($data['created_from'] ?? null) {
-                    $indicators['created_from'] = __('activitylog::tables.filters.created_at.created_from') . $parser($data['created_from'])->format(ActivitylogPlugin::get()->getDatetimeFormat()) ;
+                    $indicators['created_from'] = __('activitylog::tables.filters.created_at.created_from_indicator', 
+                        [
+                            "created_from" => $parser($data['created_from'])
+                                                    ->format(ActivitylogPlugin::get()->getDateFormat())
+                        ]);
                 }
 
                 if ($data['created_until'] ?? null) {
-                    $indicators['created_until'] = __('activitylog::tables.filters.created_at.created_until') . $parser($data['created_until'])->format(ActivitylogPlugin::get()->getDatetimeFormat()) ;
+                    $indicators['created_until'] = __('activitylog::tables.filters.created_at.created_until_indicator', 
+                        [
+                            "created_until" => $parser($data['created_until'])
+                                                    ->format(ActivitylogPlugin::get()->getDateFormat())
+                        ]);
                 }
 
                 return $indicators;
             })
             ->form([
-                DatePicker::make('created_from')
-                    ->label(__('activitylog::tables.filters.created_at.created_from')),
-                DatePicker::make('created_until')
-                    ->label(__('activitylog::tables.filters.created_at.created_until')),
+                self::getDatePickerCompoment('created_from'),
+                self::getDatePickerCompoment('created_until'),
             ])
             ->query(function (Builder $query, array $data): Builder {
                 return $query
@@ -344,12 +358,31 @@ class ActivitylogResource extends Resource
             });
     }
 
+    public static function getDatePickerCompoment($label): DatePicker
+    {
+        $field = DatePicker::make($label)
+                    ->format(ActivitylogPlugin::get()->getDateFormat())
+                    ->label(__('activitylog::tables.filters.created_at.'.$label));
+
+        // Apply the custom callback if set
+        $callback = ActivitylogPlugin::get()->getDatePickerCallback();
+        if ($callback) {
+            $field = $callback($field);
+        }
+
+        return $field;
+    }
+
     public static function getEventFilterCompoment(): SelectFilter
     {
         return SelectFilter::make('event')
             ->label(__('activitylog::tables.filters.event.label'))
-            ->options(static::getModel()::distinct()->pluck('event', 'event'));
+            ->options(static::getModel()::distinct()
+                ->pluck('event', 'event')
+                ->mapWithKeys(fn ($value, $key) => [$key => __('activitylog::action.event.' . $value)])
+            );
     }
+
 
     public static function getPages(): array
     {

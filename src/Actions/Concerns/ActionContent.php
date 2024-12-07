@@ -289,7 +289,7 @@ trait ActionContent
         }
 
         try {
-            $parser = ActivitylogPlugin::get()->getParseDate();
+            $parser = ActivitylogPlugin::get()->getDateParser();
 
             return $parser($value)
                 ->format(ActivitylogPlugin::get()->getDatetimeFormat());

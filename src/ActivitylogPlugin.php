@@ -21,9 +21,15 @@ class ActivitylogPlugin implements Plugin
 
     protected string|Closure|null $navigationGroup = null;
 
-    protected string|Closure|null $parseDate = null;
+    protected string|Closure|null $dateParser = null;
+
+    protected string|Closure|null $dateFormat = null;
 
     protected string|Closure|null $datetimeFormat = null;
+
+    protected ?Closure $datetimeColumnCallback = null;
+
+    protected ?Closure $datePickerCallback = null;
 
     protected Closure|null $translateSubject = null;
 
@@ -90,9 +96,24 @@ class ActivitylogPlugin implements Plugin
         return $this->evaluate($this->navigationGroup) ?? config('filament-activitylog.resources.navigation_group');
     }
 
+    public function getDateFormat(): ?string
+    {
+        return $this->evaluate($this->dateFormat) ?? config('filament-activitylog.date_format');
+    }
+
     public function getDatetimeFormat(): ?string
     {
         return $this->evaluate($this->datetimeFormat) ?? config('filament-activitylog.datetime_format');
+    }
+
+    public function getDatetimeColumnCallback(): ?Closure
+    {
+        return $this->datetimeColumnCallback;
+    }
+
+    public function getDatePickerCallback(): ?Closure
+    {
+        return $this->datePickerCallback;
     }
 
     public function getTranslateSubject($label): ?string
@@ -104,9 +125,9 @@ class ActivitylogPlugin implements Plugin
         return $callable($label);
     }
 
-    public function getParseDate(): ?Closure
+    public function getDateParser(): ?Closure
     { 
-        return $this->parseDate ?? fn($date) => Carbon::parse($date);
+        return $this->dateParser ?? fn($date) => Carbon::parse($date);
     }
 
     public function getNavigationIcon(): ?string
@@ -159,9 +180,16 @@ class ActivitylogPlugin implements Plugin
         return $this;
     }
 
-    public function parseDate(Closure|null $parser = null): static
+    public function dateParser(Closure|null $parser = null): static
     {
-        $this->parseDate = $parser;
+        $this->dateParser = $parser;
+
+        return $this;
+    }
+
+    public function dateFormat(string|Closure|null $format = null): static
+    {
+        $this->dateFormat = $format;
 
         return $this;
     }
@@ -170,6 +198,18 @@ class ActivitylogPlugin implements Plugin
     {
         $this->datetimeFormat = $format;
 
+        return $this;
+    }
+
+    public function customizeDatetimeColumn(Closure $callable): self
+    {
+        $this->datetimeColumnCallback = $callable;
+        return $this;
+    }
+
+    public function customizeDatePicker(Closure $callable): self
+    {
+        $this->datePickerCallback = $callable;
         return $this;
     }
 

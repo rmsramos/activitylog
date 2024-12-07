@@ -183,6 +183,9 @@ class ActivitylogResource extends Resource
                 Section::make(__('activitylog::forms.changes'))
                     ->headerActions([
                         Action::make(__('activitylog::action.restore'))
+                            ->authorize(function ($record) {
+                                return auth()->user()->can("restore_activitylog") ;
+                            })
                             ->action(fn (Activity $record) => self::restoreActivity($record->id))
                             ->requiresConfirmation(),
                     ])

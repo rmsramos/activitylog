@@ -12,5 +12,7 @@ return [
         'updated'  => 'updated',
         'restored' => 'restored',
     ],
-    'restore' => 'Restore'
+    'view'    => 'View',
+    'edit'    => 'Edit',
+    'restore' => 'Restore',
 ];

@@ -33,6 +33,9 @@ use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ViewActivitylog;
 use Spatie\Activitylog\Models\Activity;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Notifications\Notification;
+use Rmsramos\Activitylog\Helpers\ActivityLogHelper;
+use Rmsramos\Activitylog\Traits\HasCustomActivityResource;
+
 
 class ActivitylogResource extends Resource
 {
@@ -125,6 +128,43 @@ class ActivitylogResource extends Resource
         }
     }
 
+    private static function getResourceUrl($record)
+    {
+        $panelID = Filament::getCurrentPanel()->getId();
+
+        if ($record->subject_type && $record->subject_id) {
+            $model = app($record->subject_type);
+            if (ActivityLogHelper::classUsesTrait($model, HasCustomActivityResource::class)) {
+                $resourceModel = $model->getFilamentActualResourceModel($record);
+                $resourcePluralName = ActivityLogHelper::getResourcePluralName($resourceModel);
+                return route('filament.'.$panelID.'.resources.' . $resourcePluralName . '.edit', ['record' => $resourceModel->id]);
+            } 
+            
+            // Fallback to a standard resource mapping
+            $resourcePluralName = ActivityLogHelper::getResourcePluralName($record->subject_type);
+            return route('filament.'.$panelID.'.resources.' . $resourcePluralName . '.edit', ['record' => $record->subject_id]);
+        }
+
+        return '#';
+    }
+
+    private static function canViewResource($record)
+    {
+        return true;
+        if ($record->subject_type && $record->subject_id) {
+            $model = app($record->subject_type);
+            if (ActivityLogHelper::classUsesTrait($model, HasCustomActivityResource::class)) {
+                $resourceModel = $model->getFilamentActualResourceModel($record);
+                return auth()->user()->can('update', $resourceModel);
+            } 
+            
+            // Fallback to check if the user can edit the model using a generic policy
+            return auth()->user()->can('update', $record->subject);
+        }
+
+        return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -183,11 +223,20 @@ class ActivitylogResource extends Resource
                 Section::make(__('activitylog::forms.changes'))
                     ->headerActions([
                         Action::make(__('activitylog::action.restore'))
-                            ->authorize(function ($record) {
-                                return auth()->user()->can("restore_activitylog") ;
-                            })
+                            ->icon('heroicon-o-eye')
+                            ->color('primary')
                             ->action(fn (Activity $record) => self::restoreActivity($record->id))
+                            ->visible(fn () => !ActivitylogPlugin::get()->getIsRestoreActionHidden() ?? true)
+                            ->authorize(fn () => auth()->user()->can("restore_activitylog"))
                             ->requiresConfirmation(),
+                        Action::make(__('activitylog::action.edit'))
+                            ->label( ActivitylogPlugin::get()->getResourceActionLabel() ?? __('activitylog::action.edit'))
+                            ->icon('heroicon-o-eye')
+                            ->color('info')
+                            ->url(fn ($record) => self::getResourceUrl($record))
+                            ->visible(fn () => !ActivitylogPlugin::get()->getIsResourceActionHidden() ?? true)
+                            ->authorize(fn ($record) => self::canViewResource($record))
+                            ,
                     ])
                     ->columns()
                     ->visible(fn ($record) => $record->properties?->count() > 0)

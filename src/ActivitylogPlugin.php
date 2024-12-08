@@ -17,6 +17,12 @@ class ActivitylogPlugin implements Plugin
 
     protected string|Closure|null $label = null;
 
+    protected string|Closure|null $resourceActionLabel = null;
+
+    protected bool|Closure|null $isResourceActionHidden = null;
+
+    protected bool|Closure|null $isRestoreActionHidden = null;
+
     protected Closure|bool $navigationItem = true;
 
     protected string|Closure|null $navigationGroup = null;
@@ -79,6 +85,21 @@ class ActivitylogPlugin implements Plugin
     public function getLabel(): string
     {
         return $this->evaluate($this->label) ?? config('filament-activitylog.resources.label');
+    }
+
+    public function getResourceActionLabel(): string
+    {
+        return $this->evaluate($this->resourceActionLabel) ?? config('filament-activitylog.resources.resource_action_label');
+    }
+
+    public function getIsResourceActionHidden(): bool
+    {
+        return $this->evaluate($this->isResourceActionHidden) ?? config('filament-activitylog.resources.hide_resource_action');
+    }
+
+    public function getIsRestoreActionHidden(): bool
+    {
+        return $this->evaluate($this->isRestoreActionHidden) ?? config('filament-activitylog.resources.hide_restore_action');
     }
 
     public function getPluralLabel(): string
@@ -155,6 +176,27 @@ class ActivitylogPlugin implements Plugin
     public function label(string|Closure $label): static
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    public function resourceActionLabel(string|Closure $label): static
+    {
+        $this->resourceActionLabel = $label;
+
+        return $this;
+    }
+
+    public function isResourceActionHidden(bool|Closure $isHidden): static
+    {
+        $this->isResourceActionHidden = $isHidden;
+
+        return $this;
+    }
+
+    public function isRestoreActionHidden(bool|Closure $isHidden): static
+    {
+        $this->isRestoreActionHidden = $isHidden;
 
         return $this;
     }

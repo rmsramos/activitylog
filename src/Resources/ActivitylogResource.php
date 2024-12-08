@@ -230,7 +230,7 @@ class ActivitylogResource extends Resource
                             ->authorize(fn () => auth()->user()->can("restore_activitylog"))
                             ->requiresConfirmation(),
                         Action::make(__('activitylog::action.edit'))
-                            ->label( ActivitylogPlugin::get()->getResourceActionLabel() ?? __('activitylog::action.edit'))
+                            ->label(fn () => ActivitylogPlugin::get()->getResourceActionLabel() ?? __('activitylog::action.edit'))
                             ->icon('heroicon-o-eye')
                             ->color('info')
                             ->url(fn ($record) => self::getResourceUrl($record))

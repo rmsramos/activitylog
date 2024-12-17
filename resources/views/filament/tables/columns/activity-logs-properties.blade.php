@@ -1,6 +1,6 @@
 <div class="my-2 text-sm tracking-tight">
-    @if(is_array($getState()))
-        @foreach($getState() as $key => $value)
+    @if(is_iterable($state = $getState()))
+        @foreach($state as $key => $value)
             <span class="inline-block p-1 mr-1 font-medium text-gray-700 whitespace-normal rounded-md dark:text-gray-200 bg-gray-500/10">
                 {{ $key }}
             </span>

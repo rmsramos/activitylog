@@ -56,6 +56,7 @@ trait ActionContent
         $this->modalDescription       = __('activitylog::action.modal.description');
         $this->query                  = function (?Model $record) {
             return Activity::query()
+                ->load(['subject', 'causer'])
                 ->where(function (Builder $query) use ($record) {
                     $query->where(function (Builder $q) use ($record) {
                         $q->where('subject_type', $record->getMorphClass())

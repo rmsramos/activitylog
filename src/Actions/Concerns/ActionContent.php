@@ -189,9 +189,7 @@ trait ActionContent
 
     public function getModifyQueryUsing(Builder $builder): Builder
     {
-        $this->evaluate($this->modifyQueryUsing, ['builder' => $builder]);
-
-        return $builder;
+        return $this->evaluate($this->modifyQueryUsing, ['builder' => $builder]);
     }
 
     public function modifyTitleUsing(Closure $closure): static
@@ -228,9 +226,7 @@ trait ActionContent
             $builder = $this->getQuery()
                 ->latest()
                 ->limit($this->getLimit());
-            $this->getModifyQueryUsing($builder);
-
-            return $builder
+            return $this->getModifyQueryUsing($builder)
                 ->get();
         }
     }

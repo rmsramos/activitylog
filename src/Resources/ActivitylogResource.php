@@ -222,11 +222,11 @@ class ActivitylogResource extends Resource
             ->label(__('activitylog::tables.columns.causer.label'))
             ->getStateUsing(function (Model $record) {
 
-                if ($record->causer_id == null) {
+                if ($record->causer == null) {
                     return new HtmlString('&mdash;');
                 }
 
-                return $record->causer->name;
+                return $record->causer?->name;
             })
             ->searchable();
     }

@@ -221,11 +221,12 @@ class ActivitylogResource extends Resource
         return TextColumn::make('causer.name')
             ->label(__('activitylog::tables.columns.causer.label'))
             ->getStateUsing(function (Model $record) {
-
-                if ($record->causer_id == null) {
+                // Check if causer is null or causer_id is null
+                if ($record->causer_id == null || $record->causer == null) {
                     return new HtmlString('&mdash;');
                 }
 
+                // Return the causer's name if causer exists
                 return $record->causer->name;
             })
             ->searchable();

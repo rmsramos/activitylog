@@ -3,6 +3,7 @@
 namespace Rmsramos\Activitylog\Actions\Concerns;
 
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Carbon\Exceptions\InvalidFormatException;
 use Closure;
 use Filament\Actions\StaticAction;
@@ -29,7 +30,7 @@ trait ActionContent
 
     protected Closure $modifyQueryUsing;
 
-    protected Closure|Builder $query;
+    protected Closure | Builder $query;
 
     protected ?Closure $activitiesUsing;
 
@@ -48,13 +49,13 @@ trait ActionContent
 
         $this->configureInfolist();
         $this->configureModal();
-        $this->activitiesUsing        = null;
-        $this->modifyTitleUsing       = null;
+        $this->activitiesUsing = null;
+        $this->modifyTitleUsing = null;
         $this->shouldModifyTitleUsing = fn () => true;
-        $this->modifyQueryUsing       = fn ($builder) => $builder;
-        $this->modalHeading           = __('activitylog::action.modal.heading');
-        $this->modalDescription       = __('activitylog::action.modal.description');
-        $this->query                  = function (?Model $record) {
+        $this->modifyQueryUsing = fn ($builder) => $builder;
+        $this->modalHeading = __('activitylog::action.modal.heading');
+        $this->modalDescription = __('activitylog::action.modal.description');
+        $this->query = function (?Model $record) {
             return Activity::query()
                 ->where(function (Builder $query) use ($record) {
                     $query->where(function (Builder $q) use ($record) {
@@ -167,7 +168,7 @@ trait ActionContent
         return $this->evaluate($this->limit);
     }
 
-    public function query(Closure|Builder|null $query): static
+    public function query(Closure | Builder | null $query): static
     {
         $this->query = $query;
 
@@ -248,18 +249,18 @@ trait ActionContent
     protected function formatActivityData($activity): array
     {
         return [
-            'log_name'    => $activity->log_name,
+            'log_name' => $activity->log_name,
             'description' => $activity->description,
-            'subject'     => $activity->subject,
-            'event'       => $activity->event,
-            'causer'      => $activity->causer,
-            'properties'  => $this->formatDateValues(json_decode($activity->properties, true)),
-            'batch_uuid'  => $activity->batch_uuid,
-            'update'      => $activity->updated_at,
+            'subject' => $activity->subject,
+            'event' => $activity->event,
+            'causer' => $activity->causer,
+            'properties' => $this->formatDateValues(json_decode($activity->properties, true)),
+            'batch_uuid' => $activity->batch_uuid,
+            'update' => $activity->updated_at,
         ];
     }
 
-    private static function formatDateValues(array|string|null $value): array|string|null
+    private static function formatDateValues(array | string | null $value): array | string | null
     {
         if (is_null($value)) {
             return $value;
@@ -281,7 +282,7 @@ trait ActionContent
         return $value;
     }
 
-    private static function isValidDate(string $dateString, string $dateFormat = 'Y-m-d', string $dateTimeFormat = 'Y-m-d H:i:s'): bool|string
+    private static function isValidDate(string $dateString, string $dateFormat = 'Y-m-d', string $dateTimeFormat = 'Y-m-d H:i:s'): bool | string
     {
         try {
 
@@ -309,5 +310,4 @@ trait ActionContent
 
         return false;
     }
-
 }

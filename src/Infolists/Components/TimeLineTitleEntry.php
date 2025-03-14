@@ -51,19 +51,19 @@ class TimeLineTitleEntry extends Entry
             ->modifyState(fn ($state) => $this->modifiedTitle($state));
     }
 
-    private function modifiedTitle($state): string|HtmlString
+    private function modifiedTitle($state): string | HtmlString | Closure
     {
         if ($this->configureTitleUsing !== null && $this->shouldConfigureTitleUsing !== null && $this->evaluate($this->shouldConfigureTitleUsing)) {
             return $this->evaluate($this->configureTitleUsing);
         } else {
             if ($state['description'] == $state['event']) {
-                $className  = Str::lower(Str::snake(class_basename($state['subject']), ' '));
+                $className = Str::lower(Str::snake(class_basename($state['subject']), ' '));
                 $causerName = $this->getCauserName($state['causer']);
-                $update_at  = Carbon::parse($state['update'])->translatedFormat(config('filament-activitylog.datetime_format'));
+                $update_at = Carbon::parse($state['update'])->translatedFormat(config('filament-activitylog.datetime_format'));
 
                 return new HtmlString(
                     sprintf(
-						__('activitylog::timeline.title.modifiedTitle'),
+                        __('activitylog::timeline.title.modifiedTitle'),
                         $className,
                         $state['event'],
                         $causerName,
@@ -75,5 +75,4 @@ class TimeLineTitleEntry extends Entry
 
         return '';
     }
-
 }

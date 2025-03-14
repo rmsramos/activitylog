@@ -1,10 +1,6 @@
 @php
     $isContained = $isContained();
 @endphp
-<div x-data="{}"
-     x-load-css="[@js(\Filament\Support\Facades\FilamentAsset::getStyleHref('activitylog-styles', package: 'rmsramos/activitylog'))]"
->
-</div>
 
 <x-dynamic-component :component="$getEntryWrapperView()" :entry="$entry">
     <div

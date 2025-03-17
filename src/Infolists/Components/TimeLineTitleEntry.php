@@ -57,7 +57,9 @@ class TimeLineTitleEntry extends Entry
             return $this->evaluate($this->configureTitleUsing);
         } else {
             if ($state['description'] == $state['event']) {
-                $className  = Str::lower(Str::snake(class_basename($state['subject']), ' '));
+                $className = property_exists($state['subject'], 'activityTitleName') && !empty($state['subject']::$activityTitleName)
+                    ? $state['subject']::$activityTitleName
+                    : Str::lower(Str::snake(class_basename($state['subject']), ' '));
                 $causerName = $this->getCauserName($state['causer']);
                 $update_at  = Carbon::parse($state['update'])->translatedFormat(config('filament-activitylog.datetime_format'));
 

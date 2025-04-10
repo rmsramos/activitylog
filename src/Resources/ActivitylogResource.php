@@ -36,6 +36,8 @@ class ActivitylogResource extends Resource
 {
     use ActionContent;
 
+    protected static ?string $slug = 'activitylogs';
+
     public static function getModel(): string
     {
         return Activity::class;

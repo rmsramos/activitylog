@@ -4,10 +4,10 @@ namespace Rmsramos\Activitylog\Resources;
 
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Split;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -81,51 +81,57 @@ class ActivitylogResource extends Resource
     {
         return $form
             ->schema([
-                Split::make([
-                    Section::make([
-                        TextInput::make('causer_id')
-                            ->afterStateHydrated(function ($component, ?Model $record) {
-                                /** @phpstan-ignore-next-line */
-                                return $component->state($record->causer?->name);
-                            })
-                            ->label(__('activitylog::forms.fields.causer.label')),
+                Grid::make()
+                    ->schema([
+                        Section::make([
+                            TextInput::make('causer_id')
+                                ->afterStateHydrated(function ($component, ?Model $record) {
+                                    /** @phpstan-ignore-next-line */
+                                    return $component->state($record->causer?->name);
+                                })
+                                ->label(__('activitylog::forms.fields.causer.label')),
 
-                        TextInput::make('subject_type')
-                            ->afterStateHydrated(function ($component, ?Model $record, $state) {
-                                /** @var Activity&ActivityModel $record */
-                                return $state ? $component->state(Str::of($state)->afterLast('\\')->headline() . ' # ' . $record->subject_id) : '-';
-                            })
-                            ->label(__('activitylog::forms.fields.subject_type.label')),
+                            TextInput::make('subject_type')
+                                ->afterStateHydrated(function ($component, ?Model $record, $state) {
+                                    /** @var Activity&ActivityModel $record */
+                                    return $state ? $component->state(Str::of($state)->afterLast('\\')->headline().' # '.$record->subject_id) : '-';
+                                })
+                                ->label(__('activitylog::forms.fields.subject_type.label')),
 
-                        Textarea::make('description')
-                            ->label(__('activitylog::forms.fields.description.label'))
-                            ->rows(2)
-                            ->columnSpan('full'),
-                    ]),
-                    Section::make([
-                        Placeholder::make('log_name')
-                            ->content(function (?Model $record): string {
-                                /** @var Activity&ActivityModel $record */
-                                return $record->log_name ? ucwords($record->log_name) : '-';
-                            })
-                            ->label(__('activitylog::forms.fields.log_name.label')),
+                            Textarea::make('description')
+                                ->label(__('activitylog::forms.fields.description.label'))
+                                ->rows(4)
+                                ->columnSpan('full'),
+                        ])
+                            ->extraAttributes(['class' => 'h-full'])
+                            ->columns(2)
+                            ->columnSpan(6),
+                        Section::make([
+                            Placeholder::make('log_name')
+                                ->content(function (?Model $record): string {
+                                    /** @var Activity&ActivityModel $record */
+                                    return $record->log_name ? ucwords($record->log_name) : '-';
+                                })
+                                ->label(__('activitylog::forms.fields.log_name.label')),
 
-                        Placeholder::make('event')
-                            ->content(function (?Model $record): string {
-                                /** @phpstan-ignore-next-line */
-                                return $record?->event ? ucwords($record?->event) : '-';
-                            })
-                            ->label(__('activitylog::forms.fields.event.label')),
+                            Placeholder::make('event')
+                                ->content(function (?Model $record): string {
+                                    /** @phpstan-ignore-next-line */
+                                    return $record?->event ? ucwords($record?->event) : '-';
+                                })
+                                ->label(__('activitylog::forms.fields.event.label')),
 
-                        Placeholder::make('created_at')
-                            ->label(__('activitylog::forms.fields.created_at.label'))
-                            ->content(function (?Model $record): string {
-                                /** @var Activity&ActivityModel $record */
-                                return $record->created_at ? "{$record->created_at->format(config('filament-activitylog.datetime_format', 'd/m/Y H:i:s'))}" : '-';
-                            }),
-                    ])->grow(false),
-                ])->from('md'),
-
+                            Placeholder::make('created_at')
+                                ->label(__('activitylog::forms.fields.created_at.label'))
+                                ->content(function (?Model $record): string {
+                                    /** @var Activity&ActivityModel $record */
+                                    return $record->created_at ? "{$record->created_at->format(config('filament-activitylog.datetime_format', 'd/m/Y H:i:s'))}" : '-';
+                                }),
+                        ])
+                            ->extraAttributes(['class' => 'h-full'])
+                            ->columnSpan(2),
+                    ])
+                    ->columns(8),
                 Section::make()
                     ->columns()
                     ->visible(fn ($record) => $record->properties?->count() > 0)
@@ -155,7 +161,8 @@ class ActivitylogResource extends Resource
 
                         return $schema;
                     }),
-            ])->columns(1);
+            ])
+            ->columns(1);
     }
 
     public static function table(Table $table): Table
@@ -193,11 +200,11 @@ class ActivitylogResource extends Resource
             ->formatStateUsing(fn ($state) => ucwords($state))
             ->badge()
             ->color(fn (string $state): string => match ($state) {
-                'draft'   => 'gray',
+                'draft' => 'gray',
                 'updated' => 'warning',
                 'created' => 'success',
                 'deleted' => 'danger',
-                default   => 'primary',
+                default => 'primary',
             })
             ->searchable()
             ->sortable();
@@ -213,7 +220,7 @@ class ActivitylogResource extends Resource
                     return '-';
                 }
 
-                return Str::of($state)->afterLast('\\')->headline() . ' # ' . $record->subject_id;
+                return Str::of($state)->afterLast('\\')->headline().' # '.$record->subject_id;
             })
             ->searchable()
             ->hidden(fn (Livewire $livewire) => $livewire instanceof ActivitylogRelationManager);
@@ -261,11 +268,11 @@ class ActivitylogResource extends Resource
                 $indicators = [];
 
                 if ($data['created_from'] ?? null) {
-                    $indicators['created_from'] = __('activitylog::tables.filters.created_at.created_from') . Carbon::parse($data['created_from'])->toFormattedDateString();
+                    $indicators['created_from'] = __('activitylog::tables.filters.created_at.created_from').Carbon::parse($data['created_from'])->toFormattedDateString();
                 }
 
                 if ($data['created_until'] ?? null) {
-                    $indicators['created_until'] = __('activitylog::tables.filters.created_at.created_until') . Carbon::parse($data['created_until'])->toFormattedDateString();
+                    $indicators['created_until'] = __('activitylog::tables.filters.created_at.created_until').Carbon::parse($data['created_until'])->toFormattedDateString();
                 }
 
                 return $indicators;
@@ -300,7 +307,7 @@ class ActivitylogResource extends Resource
     {
         return [
             'index' => ListActivitylog::route('/'),
-            'view'  => ViewActivitylog::route('/{record}'),
+            'view' => ViewActivitylog::route('/{record}'),
         ];
     }
 

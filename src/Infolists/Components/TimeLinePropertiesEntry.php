@@ -69,9 +69,18 @@ class TimeLinePropertiesEntry extends Entry
             $newValue = $this->formatNewValue($newValue);
 
             if (isset($oldValues[$key]) && $oldValues[$key] != $newValue) {
-                $changes[] = sprintf(__('activitylog::timeline.properties.compareOldAndNewValues.notEquals'), $key, htmlspecialchars($oldValue), htmlspecialchars($newValue));
+                $changes[] = sprintf(
+                    __('activitylog::timeline.properties.compareOldAndNewValues.notEquals'),
+                    __(sprintf('models.%s', $key)),
+                    htmlspecialchars($oldValue),
+                    htmlspecialchars($newValue),
+                );
             } else {
-                $changes[] = sprintf(__('activitylog::timeline.properties.compareOldAndNewValues.equals'), $key, htmlspecialchars($newValue));
+                $changes[] = sprintf(
+                    __('activitylog::timeline.properties.compareOldAndNewValues.equals'),
+                    __(sprintf('models.%s', $key)),
+                    htmlspecialchars($newValue)
+                );
             }
         }
 
@@ -83,7 +92,7 @@ class TimeLinePropertiesEntry extends Entry
         return array_map(
             fn ($key, $value) => sprintf(
                 __('activitylog::timeline.properties.getNewValues'),
-                $key,
+                __(sprintf('models.%s', $key)),
                 htmlspecialchars($this->formatNewValue($value))
             ),
             array_keys($newValues),

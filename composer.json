@@ -1,17 +1,22 @@
 {
-    "name": "rmsramos/activitylog",
+    "name": "matteoggl/activitylog",
     "description": "This is my package activitylog",
     "keywords": [
         "Rmsramos",
         "laravel",
         "activitylog"
     ],
-    "homepage": "https://github.com/rmsramos/activitylog",
+    "homepage": "https://github.com/matteoggl/activitylog",
     "license": "MIT",
     "authors": [
         {
             "name": "Rômulo Ramos",
             "email": "rmsramos@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Matteo Guglielmetti",
+            "email": "16136669+MatteoGgl@users.noreply.github.com",
             "role": "Developer"
         }
     ],

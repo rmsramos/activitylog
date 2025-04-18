@@ -27,6 +27,7 @@ use Illuminate\Support\Str;
 use Livewire\Component as Livewire;
 use Rmsramos\Activitylog\Actions\Concerns\ActionContent;
 use Rmsramos\Activitylog\ActivitylogPlugin;
+use Rmsramos\Activitylog\Contracts\LogsTranslatedActivity;
 use Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ListActivitylog;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ViewActivitylog;
@@ -92,8 +93,16 @@ class ActivitylogResource extends Resource
 
                         TextInput::make('subject_type')
                             ->afterStateHydrated(function ($component, ?Model $record, $state) {
+                                if (! $state) {
+                                    return '-';
+                                }
+
                                 /** @var Activity&ActivityModel $record */
-                                return $state ? $component->state(Str::of($state)->afterLast('\\')->headline() . ' # ' . $record->subject_id) : '-';
+                                if ($record->subject instanceof LogsTranslatedActivity) {
+                                    return $component->state(Str::of($record->subject::activityLabel())->headline() . ' # ' . $record->subject_id);
+                                }
+
+                                return $component->state(Str::of($state)->afterLast('\\')->headline() . ' # ' . $record->subject_id);
                             })
                             ->label(__('activitylog::forms.fields.subject_type.label')),
 
@@ -142,12 +151,26 @@ class ActivitylogResource extends Resource
                         }
 
                         if ($old = $record->properties->get('old')) {
+                            $old = collect($old)->mapWithKeys(function ($value, $key) {
+                                $translatedKey = __(sprintf('models.%s', $key));
+
+                                return [$translatedKey => $value];
+                            })
+                                ->toArray();
+
                             $schema[] = KeyValue::make('old')
                                 ->formatStateUsing(fn () => self::formatDateValues($old))
                                 ->label(__('activitylog::forms.fields.old.label'));
                         }
 
                         if ($attributes = $record->properties->get('attributes')) {
+                            $attributes = collect($attributes)->mapWithKeys(function ($value, $key) {
+                                $translatedKey = __(sprintf('models.%s', $key));
+
+                                return [$translatedKey => $value];
+                            })
+                                ->toArray();
+
                             $schema[] = KeyValue::make('attributes')
                                 ->formatStateUsing(fn () => self::formatDateValues($attributes))
                                 ->label(__('activitylog::forms.fields.attributes.label'));
@@ -190,7 +213,7 @@ class ActivitylogResource extends Resource
     {
         return TextColumn::make('event')
             ->label(__('activitylog::tables.columns.event.label'))
-            ->formatStateUsing(fn ($state) => ucwords($state))
+            ->formatStateUsing(fn ($state) => ucwords(__("activitylog::events.$state")))
             ->badge()
             ->color(fn (string $state): string => match ($state) {
                 'draft'   => 'gray',
@@ -211,6 +234,10 @@ class ActivitylogResource extends Resource
                 /** @var Activity&ActivityModel $record */
                 if (! $state) {
                     return '-';
+                }
+
+                if ($record->subject instanceof LogsTranslatedActivity) {
+                    return Str::of($record->subject::activityLabel())->headline() . ' # ' . $record->subject_id;
                 }
 
                 return Str::of($state)->afterLast('\\')->headline() . ' # ' . $record->subject_id;

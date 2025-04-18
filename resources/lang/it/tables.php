@@ -24,7 +24,7 @@ return [
     'filters' => [
         'created_at' => [
             'label'         => 'Loggato il',
-            'created_from'  => 'Creato da ',
+            'created_from'  => 'Creato dal ',
             'created_until' => 'Creato fino al ',
         ],
         'event' => [

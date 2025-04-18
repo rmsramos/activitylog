@@ -1,12 +1,12 @@
 <?php
 return [
     'title' => [
-        'modifiedTitle' => 'The <strong>%s</strong> was <strong>%s</strong> by <strong>%s</strong>. <br><small> Updated at: <strong>%s</strong></small>',
+        'modifiedTitle' => 'Il soggetto <strong>%s</strong> è stato <strong>%s</strong> da <strong>%s</strong>. <br><small> Modificato il: <strong>%s</strong></small>',
     ],
     'properties' => [
-        'modifiedProperties'     => '%s %s the following: <br>%s',
+        'modifiedProperties'     => '%s ha %s i seguenti: <br>%s',
         'compareOldAndNewValues' => [
-            'notEquals' => '- %s from <strong>%s</strong> to <strong>%s</strong>',
+            'notEquals' => '- %s da <strong>%s</strong> a <strong>%s</strong>',
             'equals'    => '- %s <strong>%s</strong>',
         ],
         'getNewValues' => '- %s <strong>%s</strong>',

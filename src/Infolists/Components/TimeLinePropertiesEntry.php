@@ -34,7 +34,14 @@ class TimeLinePropertiesEntry extends Entry
             $changes    = $this->getPropertyChanges($properties);
             $causerName = $this->getCauserName($state['causer']);
 
-            return new HtmlString(sprintf(__('activitylog::timeline.properties.modifiedProperties'), $causerName, $state['event'], implode('<br>', $changes)));
+            return new HtmlString(
+                sprintf(
+                    __('activitylog::timeline.properties.modifiedProperties'),
+                    $causerName,
+                    __(sprintf('activitylog::events.%s', $state['event'])),
+                    implode('<br>', $changes),
+                )
+            );
         }
 
         return null;

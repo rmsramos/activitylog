@@ -9,6 +9,7 @@ use Filament\Infolists\Components\Entry;
 use Filament\Support\Concerns\HasExtraAttributes;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use Rmsramos\Activitylog\Contracts\LogsTranslatedActivity;
 use Rmsramos\Activitylog\Infolists\Concerns\HasModifyState;
 
 class TimeLineTitleEntry extends Entry
@@ -57,15 +58,14 @@ class TimeLineTitleEntry extends Entry
             return $this->evaluate($this->configureTitleUsing);
         } else {
             if ($state['description'] == $state['event']) {
-                $className  = Str::lower(Str::snake(class_basename($state['subject']), ' '));
                 $causerName = $this->getCauserName($state['causer']);
                 $update_at  = Carbon::parse($state['update'])->translatedFormat(config('filament-activitylog.datetime_format'));
 
                 return new HtmlString(
                     sprintf(
                         __('activitylog::timeline.title.modifiedTitle'),
-                        $className,
-                        $state['event'],
+                        $this->getSubjectLabel($state['subject']),
+                        __(sprintf('activitylog::events.%s', $state['event'])),
                         $causerName,
                         $update_at
                     )
@@ -74,5 +74,14 @@ class TimeLineTitleEntry extends Entry
         }
 
         return '';
+    }
+
+    private function getSubjectLabel($subject): string
+    {
+        if ($subject instanceof LogsTranslatedActivity) {
+            return $subject::activityLabel();
+        }
+
+        return Str::lower(Str::snake(class_basename($subject), ' '));
     }
 }

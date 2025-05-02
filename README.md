@@ -27,6 +27,7 @@ ActivityLog Plugin is translated for :
 
 -   🇧🇷 Brazilian Portuguese
 -   🇺🇸 English
+-   🇩🇪 German
 -   🇪🇸 Spanish
 -   🇫🇷 French
 -   🇮🇷 Persian

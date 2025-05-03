@@ -30,7 +30,6 @@ use Rmsramos\Activitylog\ActivitylogPlugin;
 use Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ListActivitylog;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ViewActivitylog;
-use Spatie\Activitylog\Models\Activity;
 
 class ActivitylogResource extends Resource
 {
@@ -40,7 +39,7 @@ class ActivitylogResource extends Resource
 
     public static function getModel(): string
     {
-        return Activity::class;
+        return config('activitylog.activity_model');
     }
 
     public static function getModelLabel(): string

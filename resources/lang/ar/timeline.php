@@ -1,12 +1,12 @@
 <?php
 return [
     'title' => [
-        'modifiedTitle' => 'The <strong>%s</strong> was <strong>%s</strong> by <strong>%s</strong>. <br><small> Updated at: <strong>%s</strong></small>',
+        'modifiedTitle' => 'تم تعديل <strong>%s</strong> بواسطة <strong>%s</strong>. <br><small> تم التحديث في: <strong>%s</strong></small>',
     ],
     'properties' => [
-        'modifiedProperties'     => '%s %s the following: <br>%s',
+        'modifiedProperties'     => 'تم تعديل الخصائص التالية بواسطة %s: <br>%s',
         'compareOldAndNewValues' => [
-            'notEquals' => '- %s from <strong>%s</strong> to <strong>%s</strong>',
+            'notEquals' => '- %s من <strong>%s</strong> إلى <strong>%s</strong>',
             'equals'    => '- %s <strong>%s</strong>',
         ],
         'getNewValues' => '- %s <strong>%s</strong>',

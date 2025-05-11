@@ -86,7 +86,15 @@ class TimeLinePropertiesEntry extends Entry
 
     private function getNewValues(array $newValues): array
     {
-        return array_map(fn ($key, $value) => "- {$key} <strong>" . htmlspecialchars($this->formatNewValue($value)) . '</strong>', array_keys($newValues), $newValues);
+        return array_map(
+            fn ($key, $value) => sprintf(
+                __('activitylog::timeline.properties.getNewValues'),
+                $key,
+                htmlspecialchars($this->formatNewValue($value))
+            ),
+            array_keys($newValues),
+            $newValues
+        );
     }
 
     private function formatNewValue($value): string

@@ -3,6 +3,7 @@
 namespace Rmsramos\Activitylog\Actions\Concerns;
 
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Carbon\Exceptions\InvalidFormatException;
 use Closure;
 use Filament\Actions\StaticAction;
@@ -67,6 +68,7 @@ trait ActionContent
         $this->modalDescription       = __('activitylog::action.modal.description');
         $this->query                  = function (?Model $record) {
             return Activity::query()
+                ->with(['subject', 'causer'])
                 ->where(function (Builder $query) use ($record) {
                     $query->where(function (Builder $q) use ($record) {
                         $q->where('subject_type', $record->getMorphClass())
@@ -199,9 +201,7 @@ trait ActionContent
 
     public function getModifyQueryUsing(Builder $builder): Builder
     {
-        $this->evaluate($this->modifyQueryUsing, ['builder' => $builder]);
-
-        return $builder;
+        return $this->evaluate($this->modifyQueryUsing, ['builder' => $builder]);
     }
 
     public function modifyTitleUsing(Closure $closure): static
@@ -238,9 +238,8 @@ trait ActionContent
             $builder = $this->getQuery()
                 ->latest()
                 ->limit($this->getLimit());
-            $this->getModifyQueryUsing($builder);
 
-            return $builder
+            return $this->getModifyQueryUsing($builder)
                 ->get();
         }
     }
@@ -284,7 +283,7 @@ trait ActionContent
             return $value;
         }
 
-        if (is_numeric($value)) {
+        if (is_numeric($value) && ! preg_match('/^\d{10,}$/', $value)) {
             return $value;
         }
 
@@ -296,6 +295,36 @@ trait ActionContent
         } catch (InvalidFormatException $e) {
             return $value;
         }
+
+        return $value;
     }
 
+    private static function isValidDate(string $dateString, string $dateFormat = 'Y-m-d', string $dateTimeFormat = 'Y-m-d H:i:s'): bool|string
+    {
+        try {
+
+            $dateTime = CarbonImmutable::createFromFormat($dateFormat, $dateString);
+
+            if ($dateTime && $dateTime->format($dateFormat) === $dateString) {
+                return true;
+            }
+
+        } catch (InvalidFormatException $e) {
+
+        }
+
+        try {
+
+            $dateTime = CarbonImmutable::createFromFormat($dateTimeFormat, $dateString);
+
+            if ($dateTime && $dateTime->format($dateTimeFormat) === $dateString) {
+                return true;
+            }
+
+        } catch (InvalidFormatException $e) {
+
+        }
+
+        return false;
+    }
 }

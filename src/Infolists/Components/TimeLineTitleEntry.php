@@ -52,7 +52,7 @@ class TimeLineTitleEntry extends Entry
             ->modifyState(fn ($state) => $this->modifiedTitle($state));
     }
 
-    private function modifiedTitle($state): string|HtmlString
+    private function modifiedTitle($state): string|HtmlString|Closure
     {
         if ($this->configureTitleUsing !== null && $this->shouldConfigureTitleUsing !== null && $this->evaluate($this->shouldConfigureTitleUsing)) {
             return $this->evaluate($this->configureTitleUsing);
@@ -78,5 +78,4 @@ class TimeLineTitleEntry extends Entry
 
         return '';
     }
-
 }

@@ -31,6 +31,11 @@ use Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ListActivitylog;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ViewActivitylog;
 use Spatie\Activitylog\Models\Activity;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Notifications\Notification;
+use Rmsramos\Activitylog\Helpers\ActivityLogHelper;
+use Rmsramos\Activitylog\Traits\HasCustomActivityResource;
+
 
 class ActivitylogResource extends Resource
 {
@@ -79,6 +84,89 @@ class ActivitylogResource extends Resource
             number_format(static::getModel()::count()) : null;
     }
 
+    public static function restoreActivity(int|string $key): void
+    {
+        $activity = Activity::find($key);
+
+        $oldProperties = data_get($activity, 'properties.old');
+
+        $newProperties = data_get($activity, 'properties.attributes');
+
+        if ($oldProperties === null) {
+            Notification::make()
+                ->title(__("activitylog::notifications.no_properties_to_restore"))
+                ->danger()
+                ->send();
+            return;
+        }
+
+        try {
+            $record = $activity->subject;
+
+            // Temporarily disable activity logging to prevent updated log
+            activity()->withoutLogs(function () use ($record, $oldProperties) {
+                $record->update($oldProperties);
+            });
+
+            // Log the restore event
+            activity()
+                ->performedOn($record)
+                ->causedBy(auth()->user())
+                ->withProperties(["attributes"=>$oldProperties, "old" => $newProperties])
+                ->tap(function ($log) {
+                    $log->event = 'restored';
+                })
+                ->log('restored');
+
+            Notification::make()
+                ->title(__("activitylog::notifications.activity_restored_successfully"))
+                ->success()
+                ->send();
+        } catch (Exception $e) {
+            Notification::make()
+                ->title(__("activitylog::notifications.failed_to_restore_activity",["error" => $e->getMessage()]))
+                ->danger()
+                ->send();
+        }
+    }
+
+    private static function getResourceUrl($record)
+    {
+        $panelID = Filament::getCurrentPanel()->getId();
+
+        if ($record->subject_type && $record->subject_id) {
+            $model = app($record->subject_type);
+            if (ActivityLogHelper::classUsesTrait($model, HasCustomActivityResource::class)) {
+                $resourceModel = $model->getFilamentActualResourceModel($record);
+                $resourcePluralName = ActivityLogHelper::getResourcePluralName($resourceModel);
+                return route('filament.'.$panelID.'.resources.' . $resourcePluralName . '.edit', ['record' => $resourceModel->id]);
+            } 
+            
+            // Fallback to a standard resource mapping
+            $resourcePluralName = ActivityLogHelper::getResourcePluralName($record->subject_type);
+            return route('filament.'.$panelID.'.resources.' . $resourcePluralName . '.edit', ['record' => $record->subject_id]);
+        }
+
+        return '#';
+    }
+
+    private static function canViewResource($record)
+    {
+        return true;
+        if ($record->subject_type && $record->subject_id) {
+            $model = app($record->subject_type);
+            if (ActivityLogHelper::classUsesTrait($model, HasCustomActivityResource::class)) {
+                $resourceModel = $model->getFilamentActualResourceModel($record);
+                return auth()->user()->can('update', $resourceModel);
+            } 
+            
+            // Fallback to check if the user can edit the model using a generic policy
+            return auth()->user()->can('update', $record->subject);
+        }
+
+        return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -115,7 +203,7 @@ class ActivitylogResource extends Resource
                         Placeholder::make('event')
                             ->content(function (?Model $record): string {
                                 /** @phpstan-ignore-next-line */
-                                return $record?->event ? ucwords($record?->event) : '-';
+                                return $record?->event ? ucwords(__('activitylog::action.event.'.$record?->event)) : '-';
                             })
                             ->label(__('activitylog::forms.fields.event.label')),
 
@@ -123,12 +211,35 @@ class ActivitylogResource extends Resource
                             ->label(__('activitylog::forms.fields.created_at.label'))
                             ->content(function (?Model $record): string {
                                 /** @var Activity&ActivityModel $record */
-                                return $record->created_at ? "{$record->created_at->format(config('filament-activitylog.datetime_format', 'd/m/Y H:i:s'))}" : '-';
+
+                                $parser = ActivitylogPlugin::get()->getDateParser();
+
+                                return $record->created_at ? 
+                                    $parser($record->created_at)
+                                        ->format(ActivitylogPlugin::get()->getDatetimeFormat()) 
+                                    : '-';
                             }),
                     ])->grow(false),
                 ])->from('md'),
 
-                Section::make()
+                Section::make(__('activitylog::forms.changes'))
+                    ->headerActions([
+                        Action::make(__('activitylog::action.restore'))
+                            ->icon('heroicon-o-eye')
+                            ->color('primary')
+                            ->action(fn (Activity $record) => self::restoreActivity($record->id))
+                            ->visible(fn () => !ActivitylogPlugin::get()->getIsRestoreActionHidden() ?? true)
+                            ->authorize(fn () => auth()->user()->can("restore_activitylog"))
+                            ->requiresConfirmation(),
+                        Action::make(__('activitylog::action.edit'))
+                            ->label(fn () => ActivitylogPlugin::get()->getResourceActionLabel() ?? __('activitylog::action.edit'))
+                            ->icon('heroicon-o-eye')
+                            ->color('info')
+                            ->url(fn ($record) => self::getResourceUrl($record))
+                            ->visible(fn () => !ActivitylogPlugin::get()->getIsResourceActionHidden() ?? true)
+                            ->authorize(fn ($record) => self::canViewResource($record))
+                            ,
+                    ])
                     ->columns()
                     ->visible(fn ($record) => $record->properties?->count() > 0)
                     ->schema(function (?Model $record) {
@@ -192,13 +303,14 @@ class ActivitylogResource extends Resource
     {
         return TextColumn::make('event')
             ->label(__('activitylog::tables.columns.event.label'))
-            ->formatStateUsing(fn ($state) => ucwords($state))
+            ->formatStateUsing(fn ($state) => ucwords(__("activitylog::action.event.".$state)))
             ->badge()
             ->color(fn (string $state): string => match ($state) {
                 'draft'   => 'gray',
                 'updated' => 'warning',
                 'created' => 'success',
                 'deleted' => 'danger',
+                'restored'=> 'info',
                 default   => 'primary',
             })
             ->searchable()
@@ -248,11 +360,19 @@ class ActivitylogResource extends Resource
 
     public static function getCreatedAtColumnComponent(): Column
     {
-        return TextColumn::make('created_at')
+        $column = TextColumn::make('created_at')
             ->label(__('activitylog::tables.columns.created_at.label'))
-            ->dateTime(config('filament-activitylog.datetime_format', 'd/m/Y H:i:s'))
+            ->dateTime(ActivitylogPlugin::get()->getDatetimeFormat())
             ->searchable()
             ->sortable();
+
+        // Apply the custom callback if set
+        $callback = ActivitylogPlugin::get()->getDatetimeColumnCallback();
+        if ($callback) {
+            $column = $callback($column);
+        }
+
+        return $column;
     }
 
     public static function getDateFilterComponent(): Filter
@@ -261,22 +381,29 @@ class ActivitylogResource extends Resource
             ->label(__('activitylog::tables.filters.created_at.label'))
             ->indicateUsing(function (array $data): array {
                 $indicators = [];
+                $parser = ActivitylogPlugin::get()->getDateParser();
 
                 if ($data['created_from'] ?? null) {
-                    $indicators['created_from'] = __('activitylog::tables.filters.created_at.created_from') . Carbon::parse($data['created_from'])->toFormattedDateString();
+                    $indicators['created_from'] = __('activitylog::tables.filters.created_at.created_from_indicator', 
+                        [
+                            "created_from" => $parser($data['created_from'])
+                                                    ->format(ActivitylogPlugin::get()->getDateFormat())
+                        ]);
                 }
 
                 if ($data['created_until'] ?? null) {
-                    $indicators['created_until'] = __('activitylog::tables.filters.created_at.created_until') . Carbon::parse($data['created_until'])->toFormattedDateString();
+                    $indicators['created_until'] = __('activitylog::tables.filters.created_at.created_until_indicator', 
+                        [
+                            "created_until" => $parser($data['created_until'])
+                                                    ->format(ActivitylogPlugin::get()->getDateFormat())
+                        ]);
                 }
 
                 return $indicators;
             })
             ->form([
-                DatePicker::make('created_from')
-                    ->label(__('activitylog::tables.filters.created_at.created_from')),
-                DatePicker::make('created_until')
-                    ->label(__('activitylog::tables.filters.created_at.created_until')),
+                self::getDatePickerCompoment('created_from'),
+                self::getDatePickerCompoment('created_until'),
             ])
             ->query(function (Builder $query, array $data): Builder {
                 return $query
@@ -291,12 +418,31 @@ class ActivitylogResource extends Resource
             });
     }
 
-    public static function getEventFilterComponent(): SelectFilter
+    public static function getDatePickerCompoment($label): DatePicker
+    {
+        $field = DatePicker::make($label)
+                    ->format(ActivitylogPlugin::get()->getDateFormat())
+                    ->label(__('activitylog::tables.filters.created_at.'.$label));
+
+        // Apply the custom callback if set
+        $callback = ActivitylogPlugin::get()->getDatePickerCallback();
+        if ($callback) {
+            $field = $callback($field);
+        }
+
+        return $field;
+    }
+
+    public static function getEventFilterCompoment(): SelectFilter
     {
         return SelectFilter::make('event')
             ->label(__('activitylog::tables.filters.event.label'))
-            ->options(static::getModel()::distinct()->pluck('event', 'event')->filter());
+            ->options(static::getModel()::distinct()
+                ->pluck('event', 'event')
+                ->mapWithKeys(fn ($value, $key) => [$key => __('activitylog::action.event.' . $value)])
+            );
     }
+
 
     public static function getPages(): array
     {

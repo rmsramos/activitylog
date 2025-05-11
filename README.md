@@ -71,6 +71,10 @@ return [
     'resources' => [
         'label'                     => 'Activity Log',
         'plural_label'              => 'Activity Logs',
+        'hide_restore_action'       => false,
+        'restore_action_label'      => 'Restore',
+        'hide_resource_action'      => false,
+        'resource_action_label'     => 'View',
         'navigation_item'           => true,
         'navigation_group'          => null,
         'navigation_icon'           => 'heroicon-o-shield-check',
@@ -80,6 +84,7 @@ return [
         'navigation_count_badge'    => false,
         'resource'                  => \Rmsramos\Activitylog\Resources\ActivitylogResource::class,
     ],
+    'date_format'     => 'd/m/Y',
     'datetime_format' => 'd/m/Y H:i:s',
 ];
 ```
@@ -279,6 +284,166 @@ public function panel(Panel $panel): Panel
 }
 ```
 
+## Translate Resource Names
+
+To translate resource names in the activity log, add a `translateSubject` callback within the `ActivitylogPlugin` chain
+
+```php
+use Rmsramos\Activitylog\ActivitylogPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        ->plugins([
+            ActivitylogPlugin::make()
+                ->translateSubject(fn($label) => __("yourCustomLangFile.".$label)),
+        ]);
+}
+```
+
+## Customize Date Parsing
+
+To customize how dates are parsed, depending on user preferences or settings:
+
+```php
+use Rmsramos\Activitylog\ActivitylogPlugin;
+use Morilog\Jalali\Jalalian;
+use Carbon\Carbon;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        ->plugins([
+            ActivitylogPlugin::make()
+                ->dateParser(
+                    fn($date) => auth()->user()->isJalaliCalendar() ? 
+                        Jalalian::fromDateTime($date) :  
+                        Carbon::parse($date)
+                )
+        ]);
+}
+```
+
+## Customize Date and DateTime Formats
+
+To customize the format of dates and datetime columns based on user settings:
+
+```php
+use Rmsramos\Activitylog\ActivitylogPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        ->plugins([
+            ActivitylogPlugin::make()
+                ->dateFormat('Y-m-d')
+                ->datetimeFormat(fn() => auth()->user()->getFilamentDateTimeFormat())
+        ]);
+}
+
+```
+
+## Customize DateTime Columns
+
+To conditionally customize datetime columns in the UI, depending on the user's calendar preference:
+
+```php
+use Rmsramos\Activitylog\ActivitylogPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        ->plugins([
+            ActivitylogPlugin::make()
+                ->customizeDatetimeColumn(function ($column) {
+                    return $column->when(
+                        auth()->user()->isJalaliCalendar(), 
+                        function ($column) {
+                            return $column->jalaliDateTime();
+                        }
+                    );
+                })
+        ]);
+}
+```
+
+## Customize Date Picker Fields
+
+To customize date picker fields in forms, depending on user preferences:
+
+```php
+use Rmsramos\Activitylog\ActivitylogPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        ->plugins([
+            ActivitylogPlugin::make()
+                ->customizeDatePicker(function ($field) {
+                    return $field->when(
+                        auth()->user()->isJalaliCalendar(),
+                        function ($field) {
+                            return $field->jalali();
+                        }
+                    );
+                })
+        ]);
+}
+```
+
+## Manipulate View Action Using Custom Activity Resource Trait
+
+Implement `getFilamentActualResourceModel` in the trait `HasCustomActivityResource` to determine the actual model related to the activity record for generating valid URLs.
+
+```php
+use Rmsramos\Activitylog\Traits\HasCustomActivityResource;
+
+trait HasCustomActivityResource
+{
+    public function getFilamentActualResourceModel($record)
+    {
+        $record = $record->subject->translatable;
+        $model = null;
+
+        switch ($record::class) {
+            case FirstTranslatableModel::class:
+                $model = $record->firstModel;
+                break;
+
+            case SecondTranslatableModel::class:
+                $model = $record->secondModel;
+                break;
+            
+            default:
+                throw new Exception("Error Translatable subject model not found. record = ".$record::class, 1);
+                break;
+        }
+
+        return $model;
+    }
+}
+```
+
+### Hide Restore / View Action
+
+To hide the restore / view action globally for a resource within the `ActivitylogPlugin`, you can use the `isRestoreActionHidden` and `isResourceActionHidden` method. these are particularly useful in scenarios where you do not want users to have the ability to restore or view entries from the activity log. you can also customize the label of view action:
+
+```php
+use Rmsramos\Activitylog\ActivitylogPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        ->plugins([
+            ActivitylogPlugin::make()
+                ->isRestoreActionHidden(true)
+                ->isResourceActionHidden(true)
+                ->resourceActionLabel("Sample Label")
+        ]);
+}
+```
+
+
 ### Role Policy
 
 To ensure ActivitylogResource access via RolePolicy you would need to add the following to your AppServiceProvider:
@@ -317,7 +482,35 @@ public function panel(Panel $panel): Panel
                 ->navigationSort(2)
                 ->authorize(
                     fn () => auth()->user()->id === 1
-                ),
+                )
+                ->translateSubject(fn($label) => __("yourCustomLangFile.".$label)),
+                ->dateParser(
+                    fn($date) => auth()->user()->isJalaliCalendar() ? 
+                        Jalalian::fromDateTime($date) :  
+                        Carbon::parse($date)
+                )
+                ->dateFormat('Y-m-d')
+                ->datetimeFormat(fn() => auth()->user()->getFilamentDateTimeFormat())
+                ->customizeDatetimeColumn(function ($column) {
+                    return $column->when(
+                        auth()->user()->isJalaliCalendar(), 
+                        function ($column) {
+                            return $column->jalaliDateTime();
+                        }
+                    );
+                })
+                ->customizeDatePicker(function ($field) {
+                    return $field->when(
+                        auth()->user()->isJalaliCalendar(),
+                        function ($field) {
+                            return $field->jalali();
+                        }
+                    );
+                })
+                ->isRestoreActionHidden(true)
+                ->isResourceActionHidden(true)
+                ->resourceActionLabel("Sample Label")
+                ,
         ]);
 }
 ```

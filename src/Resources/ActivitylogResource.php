@@ -175,6 +175,7 @@ class ActivitylogResource extends Resource
             ->filters([
                 static::getDateFilterComponent(),
                 static::getEventFilterComponent(),
+                static::getLogNameFilterComponent(),
             ]);
     }
 
@@ -296,6 +297,13 @@ class ActivitylogResource extends Resource
         return SelectFilter::make('event')
             ->label(__('activitylog::tables.filters.event.label'))
             ->options(static::getModel()::distinct()->pluck('event', 'event')->filter());
+    }
+
+    public static function getLogNameFilterComponent(): SelectFilter
+    {
+        return SelectFilter::make('log_name')
+            ->label(__('activitylog::tables.filters.log_name.label'))
+            ->options(static::getModel()::distinct()->pluck('log_name', 'log_name')->filter());
     }
 
     public static function getPages(): array

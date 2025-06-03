@@ -145,13 +145,13 @@ class ActivitylogResource extends Resource
 
                         if ($old = $record->properties->get('old')) {
                             $schema[] = KeyValue::make('old')
-                                ->formatStateUsing(fn () => self::formatDateValues($old))
+                                ->formatStateUsing(fn () => self::normalizeProperties(self::formatDateValues($old)))
                                 ->label(__('activitylog::forms.fields.old.label'));
                         }
 
                         if ($attributes = $record->properties->get('attributes')) {
                             $schema[] = KeyValue::make('attributes')
-                                ->formatStateUsing(fn () => self::formatDateValues($attributes))
+                                ->formatStateUsing(fn () => self::normalizeProperties(self::formatDateValues($attributes)))
                                 ->label(__('activitylog::forms.fields.attributes.label'));
                         }
 

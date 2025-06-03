@@ -312,4 +312,19 @@ trait ActionContent
 
         return false;
     }
+
+    private static function normalizeProperties(array|string|null $value): array|string|null
+    {
+        if (! is_array($value)) {
+            return $value;
+        }
+
+        foreach ($value as &$item) {
+            if (is_array($item)) {
+                $item = json_encode($item, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+            }
+        }
+
+        return $value;
+    }
 }

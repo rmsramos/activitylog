@@ -138,23 +138,61 @@ class ActivitylogResource extends Resource
                         $schema = [];
 
                         if ($properties->count()) {
-                            $schema[] = KeyValue::make('properties')
+                            $schema[] = Textarea::make('properties')
+                                ->formatStateUsing(fn () => json_encode($properties->toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))
                                 ->label(__('activitylog::forms.fields.properties.label'))
+                                ->rows(10)
+                                ->disabled()
                                 ->columnSpan('full');
                         }
 
                         if ($old = $record->properties->get('old')) {
-                            $schema[] = KeyValue::make('old')
-                                ->formatStateUsing(fn () => self::formatDateValues($old))
-                                ->label(__('activitylog::forms.fields.old.label'));
+                            $hasJsonValues = static::hasJsonValues($old);
+
+                            if ($hasJsonValues) {
+                                $schema[] = Textarea::make('old')
+                                    ->formatStateUsing(function () use ($record) {
+                                        $old = $record->properties->get('old');
+                                        $normalized = static::normalizeProperties(static::formatDateValues($old));
+                                        return json_encode($normalized, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                                    })
+                                    ->label(__('activitylog::forms.fields.old.label'))
+                                    ->rows(10)
+                                    ->disabled()
+                                    ->columnSpan('full');
+                            } else {
+                                $schema[] = KeyValue::make('old')
+                                    ->formatStateUsing(function () use ($record) {
+                                        $old = $record->properties->get('old');
+                                        return static::normalizeProperties(static::formatDateValues($old));  // <-- FIXED
+                                    })
+                                    ->label(__('activitylog::forms.fields.old.label'));
+                            }
                         }
 
                         if ($attributes = $record->properties->get('attributes')) {
-                            $schema[] = KeyValue::make('attributes')
-                                ->formatStateUsing(fn () => self::formatDateValues($attributes))
-                                ->label(__('activitylog::forms.fields.attributes.label'));
-                        }
+                            $hasJsonValues = static::hasJsonValues($attributes);
 
+                            if ($hasJsonValues) {
+                                $schema[] = Textarea::make('attributes')
+                                    ->formatStateUsing(function () use ($record) {
+                                        $attributes = $record->properties->get('attributes');
+                                        $normalized = static::normalizeProperties(static::formatDateValues($attributes));
+                                        return json_encode($normalized, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                                    })
+                                    ->label(__('activitylog::forms.fields.attributes.label'))
+                                    ->rows(10)
+                                    ->disabled()
+                                    ->columnSpan('full');
+                            } else {
+                                $schema[] = KeyValue::make('attributes')
+                                    ->formatStateUsing(function () use ($record) {
+                                        $attributes = $record->properties->get('attributes');
+                                        return static::normalizeProperties(static::formatDateValues($attributes));
+                                    })
+                                    ->label(__('activitylog::forms.fields.attributes.label'));
+                            }
+                        }
                         return $schema;
                     }),
             ])->columns(1);
@@ -322,5 +360,74 @@ class ActivitylogResource extends Resource
         } else {
             return ActivitylogPlugin::get()->isAuthorized();
         }
+    }
+
+
+    protected static function formatDateValues(array $values): array
+    {
+        $formatted = [];
+
+        foreach ($values as $key => $value) {
+            if (is_string($value) && preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/', $value)) {
+                try {
+                    $formatted[$key] = \Carbon\Carbon::parse($value)->format(
+                        config('filament-activitylog.datetime_format', 'd/m/Y H:i:s')
+                    );
+                } catch (\Exception $e) {
+                    $formatted[$key] = $value;
+                }
+            } elseif (is_array($value) || is_object($value)) {
+                $formatted[$key] = json_encode($value, JSON_PRETTY_PRINT);
+            } else {
+                $formatted[$key] = $value;
+            }
+        }
+
+        return $formatted;
+    }
+
+    protected static function normalizeProperties(array|string|null $value): array|string|null
+    {
+        if (! is_array($value)) {
+            return $value;
+        }
+
+        foreach ($value as &$item) {
+            if (is_array($item)) {
+                $item = json_encode($item, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+            } elseif (is_string($item) && json_decode($item) !== null) {
+                $decoded = json_decode($item, true);
+                if ($decoded !== null) {
+                    $item = $decoded;
+                }
+            }
+        }
+
+        return $value;
+    }
+
+    protected static function hasJsonValues(array $data): bool
+    {
+        foreach ($data as $value) {
+            if (is_array($value)) {
+                return true;
+            }
+
+            if (is_string($value)) {
+                $trimmed = trim($value);
+
+                if ((str_starts_with($trimmed, '{') && str_ends_with($trimmed, '}')) ||
+                    (str_starts_with($trimmed, '[') && str_ends_with($trimmed, ']'))) {
+
+                    $decoded = json_decode($value, true);
+
+                    if (json_last_error() === JSON_ERROR_NONE && $decoded !== null) {
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
     }
 }

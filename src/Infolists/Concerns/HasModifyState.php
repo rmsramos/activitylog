@@ -21,7 +21,7 @@ trait HasModifyState
         return $this->evaluate($this->state);
     }
 
-    private function getCauserName($causer): string
+    protected function getCauserName($causer): string
     {
         return $causer->name ?? $causer->first_name ?? $causer->last_name ?? $causer->username ?? trans('activitylog::infolists.components.unknown');
     }

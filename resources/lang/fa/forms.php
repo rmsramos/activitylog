@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'fields' => [
+    'changes' => 'تغییرات',
+    'fields'  => [
         'log_name' => [
             'label' => 'نوع',
         ],
@@ -9,7 +10,7 @@ return [
             'label' => 'رویداد',
         ],
         'subject_type' => [
-            'label' => 'مفعول',
+            'label' => 'موضوع مورد سیاهه',
         ],
         'causer' => [
             'label' => 'کاربر',

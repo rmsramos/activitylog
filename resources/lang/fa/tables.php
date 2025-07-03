@@ -23,9 +23,11 @@ return [
     ],
     'filters' => [
         'created_at' => [
-            'label'         => 'ورود به سیستم در',
-            'created_from'  => 'ایجاد شده از',
-            'created_until' => 'ایجاد شده تا',
+            'label'                   => 'ورود به سیستم در',
+            'created_from'            => 'ایجاد شده از ',
+            'created_from_indicator'  => 'ایجاد شده از تاریخ : :created_from',
+            'created_until'           => 'ایجاد شده تا ',
+            'created_until_indicator' => 'ایجاد شده تا تاریخ : :created_until',
         ],
         'event' => [
             'label' => 'رویداد',

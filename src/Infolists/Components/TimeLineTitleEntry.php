@@ -2,13 +2,13 @@
 
 namespace Rmsramos\Activitylog\Infolists\Components;
 
-use Carbon\Carbon;
 use Closure;
 use Filament\Forms\Components\Concerns\CanAllowHtml;
 use Filament\Infolists\Components\Entry;
 use Filament\Support\Concerns\HasExtraAttributes;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use Rmsramos\Activitylog\ActivitylogPlugin;
 use Rmsramos\Activitylog\Infolists\Concerns\HasModifyState;
 
 class TimeLineTitleEntry extends Entry
@@ -54,21 +54,25 @@ class TimeLineTitleEntry extends Entry
     private function modifiedTitle($state): string|HtmlString|Closure
     {
         if ($this->configureTitleUsing !== null && $this->shouldConfigureTitleUsing !== null && $this->evaluate($this->shouldConfigureTitleUsing)) {
-            return $this->evaluate($this->configureTitleUsing);
+            return $this->evaluate($this->configureTitleUsing, ['state' => $state]);
         } else {
             if ($state['description'] == $state['event']) {
-                $className  = Str::lower(Str::snake(class_basename($state['subject']), ' '));
+                $className = property_exists($state['subject'], 'activityTitleName') && !empty($state['subject']::$activityTitleName)
+                    ? $state['subject']::$activityTitleName
+                    : Str::lower(Str::snake(class_basename($state['subject']), ' '));
                 $causerName = $this->getCauserName($state['causer']);
-                $update_at  = Carbon::parse($state['update'])->translatedFormat(config('filament-activitylog.datetime_format'));
+
+                $parser    = ActivitylogPlugin::get()->getDateParser();
+                $update_at = $parser($state['update'])->format(ActivitylogPlugin::get()->getDatetimeFormat());
 
                 return new HtmlString(
-                    sprintf(
-                        __('activitylog::timeline.title.modifiedTitle'),
-                        $className,
-                        $state['event'],
-                        $causerName,
-                        $update_at
-                    )
+                    __('activitylog::infolists.components.created_by_at',
+                        [
+                            'subject'   => ActivitylogPlugin::get()->getTranslateSubject($className),
+                            'event'     => __('activitylog::action.event.' . $state['event']),
+                            'causer'    => $causerName,
+                            'update_at' => $update_at,
+                        ]),
                 );
             }
         }

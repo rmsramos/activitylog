@@ -34,6 +34,7 @@ ActivityLog Plugin is translated for :
 -   🇦🇪 Arabic
 -   🇵🇹 Portuguese
 -   🇮🇱 Hebrew
+-   🇳🇱 Dutch
 -   🇱🇻 Latvian
 
 ## Installation

@@ -17,6 +17,6 @@ return [
         'navigation_count_badge' => false,
         'resource'               => \Rmsramos\Activitylog\Resources\ActivitylogResource::class,
     ],
-    'date_format'       => 'd/m/Y',
-    'datetime_format'   => 'd/m/Y H:i:s',
+    'date_format'     => 'd/m/Y',
+    'datetime_format' => 'd/m/Y H:i:s',
 ];

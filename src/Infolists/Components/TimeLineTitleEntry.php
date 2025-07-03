@@ -54,7 +54,7 @@ class TimeLineTitleEntry extends Entry
     private function modifiedTitle($state): string|HtmlString|Closure
     {
         if ($this->configureTitleUsing !== null && $this->shouldConfigureTitleUsing !== null && $this->evaluate($this->shouldConfigureTitleUsing)) {
-            return $this->evaluate($this->configureTitleUsing);
+            return $this->evaluate($this->configureTitleUsing, ['state' => $state]);
         } else {
             if ($state['description'] == $state['event']) {
                 $className  = Str::lower(Str::snake(class_basename($state['subject']), ' '));

@@ -45,7 +45,7 @@ class ActivitylogResource extends Resource
 
     public static function getModel(): string
     {
-        return Activity::class;
+        return config('activitylog.activity_model', Activity::class);
     }
 
     public static function getModelLabel(): string

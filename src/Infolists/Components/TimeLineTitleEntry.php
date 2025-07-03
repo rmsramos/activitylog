@@ -57,7 +57,9 @@ class TimeLineTitleEntry extends Entry
             return $this->evaluate($this->configureTitleUsing, ['state' => $state]);
         } else {
             if ($state['description'] == $state['event']) {
-                $className  = Str::lower(Str::snake(class_basename($state['subject']), ' '));
+                $className = property_exists($state['subject'], 'activityTitleName') && !empty($state['subject']::$activityTitleName)
+                    ? $state['subject']::$activityTitleName
+                    : Str::lower(Str::snake(class_basename($state['subject']), ' '));
                 $causerName = $this->getCauserName($state['causer']);
 
                 $parser    = ActivitylogPlugin::get()->getDateParser();

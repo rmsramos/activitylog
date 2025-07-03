@@ -2,7 +2,7 @@
 
 return [
     'changes' => 'تغییرات',
-    'fields' => [
+    'fields'  => [
         'log_name' => [
             'label' => 'نوع',
         ],

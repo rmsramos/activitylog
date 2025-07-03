@@ -6,7 +6,6 @@ use Closure;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
-use DateTimeInterface;
 use Illuminate\Support\Carbon;
 
 class ActivitylogPlugin implements Plugin
@@ -37,7 +36,7 @@ class ActivitylogPlugin implements Plugin
 
     protected ?Closure $datePickerCallback = null;
 
-    protected Closure|null $translateSubject = null;
+    protected ?Closure $translateSubject = null;
 
     protected ?string $navigationIcon = null;
 
@@ -139,16 +138,18 @@ class ActivitylogPlugin implements Plugin
 
     public function getTranslateSubject($label): ?string
     {
-        if(is_null($this->translateSubject))
+        if (is_null($this->translateSubject)) {
             return $label;
+        }
 
         $callable = $this->translateSubject;
+
         return $callable($label);
     }
 
     public function getDateParser(): ?Closure
-    { 
-        return $this->dateParser ?? fn($date) => Carbon::parse($date);
+    {
+        return $this->dateParser ?? fn ($date) => Carbon::parse($date);
     }
 
     public function getNavigationIcon(): ?string
@@ -222,7 +223,7 @@ class ActivitylogPlugin implements Plugin
         return $this;
     }
 
-    public function dateParser(Closure|null $parser = null): static
+    public function dateParser(?Closure $parser = null): static
     {
         $this->dateParser = $parser;
 
@@ -246,12 +247,14 @@ class ActivitylogPlugin implements Plugin
     public function customizeDatetimeColumn(Closure $callable): self
     {
         $this->datetimeColumnCallback = $callable;
+
         return $this;
     }
 
     public function customizeDatePicker(Closure $callable): self
     {
         $this->datePickerCallback = $callable;
+
         return $this;
     }
 

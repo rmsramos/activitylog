@@ -2,15 +2,14 @@
 
 namespace Rmsramos\Activitylog\Infolists\Components;
 
-use Carbon\Carbon;
 use Closure;
 use Filament\Forms\Components\Concerns\CanAllowHtml;
 use Filament\Infolists\Components\Entry;
 use Filament\Support\Concerns\HasExtraAttributes;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
-use Rmsramos\Activitylog\Infolists\Concerns\HasModifyState;
 use Rmsramos\Activitylog\ActivitylogPlugin;
+use Rmsramos\Activitylog\Infolists\Concerns\HasModifyState;
 
 class TimeLineTitleEntry extends Entry
 {
@@ -61,16 +60,16 @@ class TimeLineTitleEntry extends Entry
                 $className  = Str::lower(Str::snake(class_basename($state['subject']), ' '));
                 $causerName = $this->getCauserName($state['causer']);
 
-                $parser = ActivitylogPlugin::get()->getDateParser();
+                $parser    = ActivitylogPlugin::get()->getDateParser();
                 $update_at = $parser($state['update'])->format(ActivitylogPlugin::get()->getDatetimeFormat());
 
                 return new HtmlString(
-                    __("activitylog::infolists.components.created_by_at",
+                    __('activitylog::infolists.components.created_by_at',
                         [
-                            "subject" => ActivitylogPlugin::get()->getTranslateSubject($className), 
-                            "event"=>__("activitylog::action.event.".$state['event']), 
-                            "causer"=>$causerName, 
-                            "update_at"=>$update_at
+                            'subject'   => ActivitylogPlugin::get()->getTranslateSubject($className),
+                            'event'     => __('activitylog::action.event.' . $state['event']),
+                            'causer'    => $causerName,
+                            'update_at' => $update_at,
                         ]),
                 );
             }

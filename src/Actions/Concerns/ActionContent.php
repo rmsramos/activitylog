@@ -17,14 +17,25 @@ use Rmsramos\Activitylog\Infolists\Components\TimeLinePropertiesEntry;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineRepeatableEntry;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineTitleEntry;
 use Spatie\Activitylog\Models\Activity;
+use Rmsramos\Activitylog\ActivitylogPlugin;
 
 trait ActionContent
 {
     private ?array $withRelations = null;
 
-    private ?array $timelineIcons = null;
+    private ?array $timelineIcons = [
+                        'created' => 'heroicon-m-plus',
+                        'updated' => 'heroicon-m-pencil-square',
+                        'deleted' => 'heroicon-m-trash',
+                        'restored' => 'heroicon-m-arrow-uturn-left',
+                    ];
 
-    private ?array $timelineIconColors = null;
+    private ?array $timelineIconColors = [
+                        'created'  => 'success',
+                        'updated'  => 'warning',
+                        'deleted'  => 'danger',
+                        'restored' => 'info',
+                    ];
 
     private ?int $limit = 10;
 
@@ -276,9 +287,13 @@ trait ActionContent
             return $value;
         }
 
-        if (self::isValidDate($value)) {
-            return Carbon::parse($value)
-                ->format(config('filament-activitylog.datetime_format', 'd/m/Y H:i:s'));
+        try {
+            $parser = ActivitylogPlugin::get()->getDateParser();
+
+            return $parser($value)
+                ->format(ActivitylogPlugin::get()->getDatetimeFormat());
+        } catch (InvalidFormatException $e) {
+            return $value;
         }
 
         return $value;

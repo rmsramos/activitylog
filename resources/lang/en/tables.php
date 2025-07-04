@@ -34,5 +34,8 @@ return [
         'event' => [
             'label' => 'Event',
         ],
+        'log_name' => [
+            'label' => 'Log name',
+        ],
     ],
 ];

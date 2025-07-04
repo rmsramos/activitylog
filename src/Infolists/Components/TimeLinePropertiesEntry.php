@@ -52,6 +52,8 @@ class TimeLinePropertiesEntry extends Entry
             $changes = $this->compareOldAndNewValues($properties['old'], $properties['attributes']);
         } elseif (isset($properties['attributes'])) {
             $changes = $this->getNewValues($properties['attributes']);
+        } elseif (isset($properties['old'])) {
+            $changes = $this->getNewValues($properties['old']);
         }
 
         return $changes;

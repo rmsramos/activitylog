@@ -71,7 +71,14 @@ trait ActionContent
             }
 
             return Activity::query()
-                ->with(['subject', 'causer'])
+                ->with([
+                    'subject' => function ($query) {
+                        if (method_exists($query, 'withTrashed')) {
+                            $query->withTrashed();
+                        }
+                    },
+                    'causer',
+                ])
                 ->where(function (Builder $query) use ($record) {
                     $query->where('subject_type', $record->getMorphClass())
                         ->where('subject_id', $record->getKey());
@@ -91,6 +98,7 @@ trait ActionContent
                                         });
                                     }
                                 } catch (\Exception $e) {
+                                    // Ignore errors
                                 }
                             }
                         }
@@ -98,7 +106,6 @@ trait ActionContent
                 });
         };
     }
-
     private function configureInfolist(): void
     {
         $this->infolist(function (?Model $record, Infolist $infolist) {
@@ -292,6 +299,12 @@ trait ActionContent
                 $properties = $activity->properties;
             } elseif (is_object($activity->properties) && method_exists($activity->properties, 'toArray')) {
                 $properties = $activity->properties->toArray();
+            }
+        }
+
+        if ($activity->event === 'restored') {
+            if (empty($properties) && $activity->description !== 'restored') {
+                $properties['description'] = $activity->description;
             }
         }
 

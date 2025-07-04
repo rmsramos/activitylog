@@ -56,7 +56,7 @@ class TimeLineTitleEntry extends Entry
         if ($this->configureTitleUsing !== null && $this->shouldConfigureTitleUsing !== null && $this->evaluate($this->shouldConfigureTitleUsing)) {
             return $this->evaluate($this->configureTitleUsing, ['state' => $state]);
         } else {
-            if ($state['description'] == $state['event']) {
+            if ($state['description'] == $state['event'] || $state['event'] === 'restored') {
                 $className = property_exists($state['subject'], 'activityTitleName') && ! empty($state['subject']::$activityTitleName)
                     ? $state['subject']::$activityTitleName
                     : Str::lower(Str::snake(class_basename($state['subject']), ' '));

@@ -12,7 +12,12 @@ return [
         'updated'  => 'updated',
         'restored' => 'restored',
     ],
-    'view'    => 'View',
-    'edit'    => 'Edit',
-    'restore' => 'Restore',
+    'view'                => 'View',
+    'edit'                => 'Edit',
+    'restore'             => 'Restore',
+    'restore_soft_delete' => [
+        'label'             => 'Restore Model',
+        'modal_heading'     => 'Restore Deleted Model',
+        'modal_description' => 'This will restore the model that was deleted (soft delete).',
+    ],
 ];

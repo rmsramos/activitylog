@@ -9,7 +9,9 @@ return [
             'label' => 'Evento',
         ],
         'subject_type' => [
-            'label' => 'Assunto',
+            'label'        => 'Assunto',
+            'soft_deleted' => ' (Delete suave)',
+            'deleted'      => ' (Deletado)',
         ],
         'causer' => [
             'label' => 'Usuário',

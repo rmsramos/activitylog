@@ -22,6 +22,8 @@ class ActivitylogPlugin implements Plugin
 
     protected bool|Closure|null $isRestoreActionHidden = null;
 
+    protected bool|Closure|null $isRestoreModelActionHidden = null;
+
     protected Closure|bool $navigationItem = true;
 
     protected string|Closure|null $navigationGroup = null;
@@ -99,6 +101,11 @@ class ActivitylogPlugin implements Plugin
     public function getIsRestoreActionHidden(): bool
     {
         return $this->evaluate($this->isRestoreActionHidden) ?? config('filament-activitylog.resources.hide_restore_action');
+    }
+
+    public function getIsRestoreModelActionHidden(): bool
+    {
+        return $this->evaluate($this->isRestoreModelActionHidden) ?? config('filament-activitylog.resources.hide_restore_model_action');
     }
 
     public function getPluralLabel(): string
@@ -198,6 +205,13 @@ class ActivitylogPlugin implements Plugin
     public function isRestoreActionHidden(bool|Closure $isHidden): static
     {
         $this->isRestoreActionHidden = $isHidden;
+
+        return $this;
+    }
+
+    public function isRestoreModelActionHidden(bool|Closure $isHidden): static
+    {
+        $this->isRestoreModelActionHidden = $isHidden;
 
         return $this;
     }

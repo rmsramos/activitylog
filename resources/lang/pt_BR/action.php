@@ -12,7 +12,12 @@ return [
         'updated'  => 'atualizado',
         'restored' => 'restaurado',
     ],
-    'view'    => 'Visualizar',
-    'edit'    => 'Editar',
-    'restore' => 'Restaurar',
+    'view'                => 'Visualizar',
+    'edit'                => 'Editar',
+    'restore'             => 'Restaurar',
+    'restore_soft_delete' => [
+        'label'             => 'Restaurar Modelo',
+        'modal_heading'     => 'Restaurar Modelo Excluído',
+        'modal_description' => 'Isso irá restaurar o modelo que foi excluído (soft delete).',
+    ],
 ];

@@ -17,7 +17,7 @@ This package provides a Filament resource that shows you all of the activity log
 
 ## Requirements
 
--   Laravel v11
+-   Laravel v12
 -   Filament v3
 -   Spatie/Laravel-activitylog v4
 
@@ -70,11 +70,12 @@ This is the contents of the published config file:
 ```php
 return [
     'resources' => [
-        'label'                     => 'Activity Log',
+       'label'                     => 'Activity Log',
         'plural_label'              => 'Activity Logs',
         'hide_restore_action'       => false,
         'restore_action_label'      => 'Restore',
         'hide_resource_action'      => false,
+        'hide_restore_model_action' => true,
         'resource_action_label'     => 'View',
         'navigation_item'           => true,
         'navigation_group'          => null,
@@ -317,8 +318,8 @@ public function panel(Panel $panel): Panel
         ->plugins([
             ActivitylogPlugin::make()
                 ->dateParser(
-                    fn($date) => auth()->user()->isJalaliCalendar() ? 
-                        Jalalian::fromDateTime($date) :  
+                    fn($date) => auth()->user()->isJalaliCalendar() ?
+                        Jalalian::fromDateTime($date) :
                         Carbon::parse($date)
                 )
         ]);
@@ -358,7 +359,7 @@ public function panel(Panel $panel): Panel
             ActivitylogPlugin::make()
                 ->customizeDatetimeColumn(function ($column) {
                     return $column->when(
-                        auth()->user()->isJalaliCalendar(), 
+                        auth()->user()->isJalaliCalendar(),
                         function ($column) {
                             return $column->jalaliDateTime();
                         }
@@ -414,7 +415,7 @@ trait HasCustomActivityResource
             case SecondTranslatableModel::class:
                 $model = $record->secondModel;
                 break;
-            
+
             default:
                 throw new Exception("Error Translatable subject model not found. record = ".$record::class, 1);
                 break;
@@ -444,6 +445,30 @@ public function panel(Panel $panel): Panel
 }
 ```
 
+### Show Restore (Soft Deletes)
+
+In the `laravel-activitylog` configuration file `config/activitylog.php`:
+
+```php
+return [
+    'subject_returns_soft_deleted_models' => true,
+]
+```
+
+To globally display the restore (soft delete) action of a resource within the `ActivitylogPlugin`, you can use the `isRestoreModelActionHidden` method. This is particularly useful in scenarios where you do not want users to have the ability to restore activity log entries:
+
+```php
+use Rmsramos\Activitylog\ActivitylogPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        ->plugins([
+            ActivitylogPlugin::make()
+                ->isRestoreModelActionHidden(false)
+        ]);
+}
+```
 
 ### Role Policy
 
@@ -486,15 +511,15 @@ public function panel(Panel $panel): Panel
                 )
                 ->translateSubject(fn($label) => __("yourCustomLangFile.".$label)),
                 ->dateParser(
-                    fn($date) => auth()->user()->isJalaliCalendar() ? 
-                        Jalalian::fromDateTime($date) :  
+                    fn($date) => auth()->user()->isJalaliCalendar() ?
+                        Jalalian::fromDateTime($date) :
                         Carbon::parse($date)
                 )
                 ->dateFormat('Y-m-d')
                 ->datetimeFormat(fn() => auth()->user()->getFilamentDateTimeFormat())
                 ->customizeDatetimeColumn(function ($column) {
                     return $column->when(
-                        auth()->user()->isJalaliCalendar(), 
+                        auth()->user()->isJalaliCalendar(),
                         function ($column) {
                             return $column->jalaliDateTime();
                         }
@@ -510,8 +535,8 @@ public function panel(Panel $panel): Panel
                 })
                 ->isRestoreActionHidden(true)
                 ->isResourceActionHidden(true)
-                ->resourceActionLabel("Sample Label")
-                ,
+                ->isRestoreModelActionHidden(false)
+                ->resourceActionLabel("Sample Label"),
         ]);
 }
 ```

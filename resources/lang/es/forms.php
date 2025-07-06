@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'fields' => [
+    'changes' => 'Cambios',
+    'fields'  => [
         'log_name' => [
             'label' => 'Tipo',
         ],
@@ -9,7 +10,7 @@ return [
             'label' => 'Evento',
         ],
         'subject_type' => [
-            'label' => 'Asunto',
+            'label' => 'Sujeto',
         ],
         'causer' => [
             'label' => 'Usuario',
@@ -24,7 +25,7 @@ return [
             'label' => 'Registrado en',
         ],
         'old' => [
-            'label' => 'Antiguo',
+            'label' => 'Anterior',
         ],
         'attributes' => [
             'label' => 'Nuevo',

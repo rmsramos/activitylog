@@ -9,7 +9,9 @@ return [
             'label' => 'Evento',
         ],
         'subject_type' => [
-            'label' => 'Asunto',
+            'label'        => 'Sujeto',
+            'soft_deleted' => ' (borrado lógico)',
+            'deleted'      => ' (eliminado)',
         ],
         'causer' => [
             'label' => 'Usuario',
@@ -23,9 +25,11 @@ return [
     ],
     'filters' => [
         'created_at' => [
-            'label'         => 'Registrado en',
-            'created_from'  => 'Creado desde ',
-            'created_until' => 'Creado hasta ',
+            'label'                   => 'Registrado en',
+            'created_from'            => 'Creado desde ',
+            'created_from_indicator'  => 'Creado desde: :created_from',
+            'created_until'           => 'Creado hasta ',
+            'created_until_indicator' => 'Creado hasta: :created_until',
         ],
         'event' => [
             'label' => 'Evento',

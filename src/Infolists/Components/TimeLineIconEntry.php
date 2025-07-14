@@ -15,7 +15,7 @@ class TimeLineIconEntry extends IconEntry
 
     protected string $view = 'activitylog::filament.infolists.components.time-line-icon-entry';
 
-    private function configureIconEntry()
+    protected function configureIconEntry()
     {
         $this
             ->hiddenLabel()

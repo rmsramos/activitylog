@@ -44,14 +44,14 @@ class TimeLineTitleEntry extends Entry
         return $this;
     }
 
-    private function configureTitleEntry()
+    protected function configureTitleEntry()
     {
         $this
             ->hiddenLabel()
             ->modifyState(fn ($state) => $this->modifiedTitle($state));
     }
 
-    private function modifiedTitle($state): string|HtmlString|Closure
+    protected function modifiedTitle($state): string|HtmlString|Closure
     {
         if ($this->configureTitleUsing !== null && $this->shouldConfigureTitleUsing !== null && $this->evaluate($this->shouldConfigureTitleUsing)) {
             return $this->evaluate($this->configureTitleUsing, ['state' => $state]);

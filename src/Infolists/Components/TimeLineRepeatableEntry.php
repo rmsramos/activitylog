@@ -13,7 +13,7 @@ class TimeLineRepeatableEntry extends RepeatableEntry
         $this->configureRepeatableEntry();
     }
 
-    private function configureRepeatableEntry(): void
+    protected function configureRepeatableEntry(): void
     {
         $this
             ->extraAttributes(['style' => 'margin-left:1.25rem;'])

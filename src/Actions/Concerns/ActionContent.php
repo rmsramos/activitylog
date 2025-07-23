@@ -88,6 +88,21 @@ trait ActionContent
                             if (method_exists($record, $relation)) {
                                 try {
                                     $relationInstance = $record->{$relation}();
+
+                                    if ($relationInstance instanceof BelongsToMany) {
+                                        $subjectType = $relationInstance->getPivotClass();
+                                        $relatedIds  = $relationInstance->pluck($relationInstance->getTable().'.id')->toArray();
+
+                                        if (! empty($relatedIds)) {
+                                            $query->orWhere(function (Builder $q) use ($subjectType, $relatedIds) {
+                                                $q->where('subject_type', $subjectType)
+                                                    ->whereIn('subject_id', $relatedIds);
+                                            });
+                                        }
+
+                                        continue;
+                                    }
+
                                     $relatedModel     = $relationInstance->getRelated();
                                     $relatedIds       = $relationInstance->pluck('id')->toArray();
 

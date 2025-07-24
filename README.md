@@ -303,6 +303,23 @@ public function panel(Panel $panel): Panel
 }
 ```
 
+## Translate Activity log key Names
+
+To translate the names of the keys in the activity log, add a `translateLogKey` callback within the `ActivitylogPlugin` chain
+
+```php
+use Rmsramos\Activitylog\ActivitylogPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        ->plugins([
+            ActivitylogPlugin::make()
+                ->translateLogKey(fn($label) => __("yourCustomLangFile.".$label)),
+        ]);
+}
+```
+
 ## Customize Date Parsing
 
 To customize how dates are parsed, depending on user preferences or settings:

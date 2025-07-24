@@ -40,6 +40,8 @@ class ActivitylogPlugin implements Plugin
 
     protected ?Closure $translateSubject = null;
 
+    protected ?Closure $translateLogKey = null;
+
     protected ?string $navigationIcon = null;
 
     protected ?int $navigationSort = null;
@@ -150,6 +152,17 @@ class ActivitylogPlugin implements Plugin
         }
 
         $callable = $this->translateSubject;
+
+        return $callable($label);
+    }
+
+    public function getTranslateLogKey($label): ?string
+    {
+        if (is_null($this->translateLogKey)) {
+            return $label;
+        }
+
+        $callable = $this->translateLogKey;
 
         return $callable($label);
     }
@@ -275,6 +288,13 @@ class ActivitylogPlugin implements Plugin
     public function translateSubject(string|Closure|null $callable = null): static
     {
         $this->translateSubject = $callable;
+
+        return $this;
+    }
+
+    public function translateLogKey(string|Closure|null $callable = null): static
+    {
+        $this->translateLogKey = $callable;
 
         return $this;
     }

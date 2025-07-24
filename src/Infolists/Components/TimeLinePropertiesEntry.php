@@ -4,6 +4,7 @@ namespace Rmsramos\Activitylog\Infolists\Components;
 
 use Filament\Infolists\Components\Entry;
 use Illuminate\Support\HtmlString;
+use Rmsramos\Activitylog\ActivitylogPlugin;
 use Rmsramos\Activitylog\Infolists\Concerns\HasModifyState;
 
 class TimeLinePropertiesEntry extends Entry
@@ -70,14 +71,14 @@ class TimeLinePropertiesEntry extends Entry
             if (isset($oldValues[$key]) && $oldValues[$key] != $newValue) {
                 $changes[] = trans('activitylog::infolists.components.from_oldvalue_to_newvalue',
                     [
-                        'key'       => $key,
+                        'key'       => ActivitylogPlugin::get()->getTranslateLogKey($key),
                         'old_value' => htmlspecialchars($oldValue),
                         'new_value' => htmlspecialchars($newValue),
                     ]);
             } else {
                 $changes[] = trans('activitylog::infolists.components.to_newvalue',
                     [
-                        'key'       => $key,
+                        'key'       => ActivitylogPlugin::get()->getTranslateLogKey($key),
                         'new_value' => htmlspecialchars($newValue),
                     ]);
             }
@@ -91,7 +92,7 @@ class TimeLinePropertiesEntry extends Entry
         return array_map(
             fn ($key, $value) => sprintf(
                 __('activitylog::timeline.properties.getNewValues'),
-                $key,
+                ActivitylogPlugin::get()->getTranslateLogKey($key),
                 htmlspecialchars($this->formatNewValue($value))
             ),
             array_keys($newValues),

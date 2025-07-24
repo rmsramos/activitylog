@@ -22,7 +22,7 @@ trait ActionContent
 {
     private ?array $withRelations = null;
 
-    private ?array $timelineIcons = [
+    protected ?array $timelineIcons = [
         'created'  => 'heroicon-m-plus',
         'updated'  => 'heroicon-m-pencil-square',
         'deleted'  => 'heroicon-m-trash',
@@ -142,7 +142,7 @@ trait ActionContent
         });
     }
 
-    private function configureModal(): void
+    protected function configureModal(): void
     {
         $this->slideOver()
             ->modalIcon('heroicon-o-eye')

@@ -336,7 +336,7 @@ trait ActionContent
         ];
     }
 
-    private static function formatDateValues(array|string|null $value): array|string|null
+    private static function formatDateValues(array|string|bool|null $value): array|string|null
     {
         if (is_null($value)) {
             return $value;
@@ -352,6 +352,10 @@ trait ActionContent
 
         if (is_numeric($value) && ! preg_match('/^\d{10,}$/', $value)) {
             return $value;
+        }
+
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
         }
 
         try {

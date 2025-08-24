@@ -3,7 +3,7 @@
 namespace Rmsramos\Activitylog\Resources\ActivitylogResource\Pages;
 
 use Filament\Resources\Pages\ViewRecord;
-use Rmsramos\Activitylog\Resources\ActivitylogResource;
+use Rmsramos\Activitylog\Resources\ActivitylogResource\ActivitylogResource;
 
 class ViewActivitylog extends ViewRecord
 {

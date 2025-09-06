@@ -151,31 +151,32 @@ trait ActionContent
             ->icon('heroicon-o-bell-alert');
     }
 
-    protected function getSchema(): array
+    public function getSchema(\Filament\Schemas\Schema $schema): ?\Filament\Schemas\Schema
     {
-        return [
-            TimeLineRepeatableEntry::make('activities')
-                ->schema([
-                    TimeLineIconEntry::make('activityData.event')
-                        ->icon(function ($state) {
-                            return $this->getTimelineIcons()[$state] ?? 'heroicon-m-check';
-                        })
-                        ->color(function ($state) {
-                            return $this->getTimelineIconColors()[$state] ?? 'primary';
-                        }),
-                    TimeLineTitleEntry::make('activityData')
-                        ->configureTitleUsing($this->modifyTitleUsing)
-                        ->shouldConfigureTitleUsing($this->shouldModifyTitleUsing),
-                    TimeLinePropertiesEntry::make('activityData'),
-                    TextEntry::make('log_name')
-                        ->hiddenLabel()
-                        ->badge(),
-                    TextEntry::make('updated_at')
-                        ->hiddenLabel()
-                        ->since()
-                        ->badge(),
-                ]),
-        ];
+        return $schema
+            ->schema([
+                TimeLineRepeatableEntry::make('activities')
+                    ->schema([
+                        TimeLineIconEntry::make('activityData.event')
+                            ->icon(function ($state) {
+                                return $this->getTimelineIcons()[$state] ?? 'heroicon-m-check';
+                            })
+                            ->color(function ($state) {
+                                return $this->getTimelineIconColors()[$state] ?? 'primary';
+                            }),
+                        TimeLineTitleEntry::make('activityData')
+                            ->configureTitleUsing($this->modifyTitleUsing)
+                            ->shouldConfigureTitleUsing($this->shouldModifyTitleUsing),
+                        TimeLinePropertiesEntry::make('activityData'),
+                        TextEntry::make('log_name')
+                            ->hiddenLabel()
+                            ->badge(),
+                        TextEntry::make('updated_at')
+                            ->hiddenLabel()
+                            ->since()
+                            ->badge(),
+                    ]),
+            ]);
     }
 
     public function withRelations(?array $relations = null): ?StaticAction

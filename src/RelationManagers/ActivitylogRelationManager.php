@@ -4,6 +4,7 @@ namespace Rmsramos\Activitylog\RelationManagers;
 
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Schema;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +25,7 @@ class ActivitylogRelationManager extends RelationManager
             ->headline();
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $form): Form
     {
         return ActivitylogResource::form($form);
     }

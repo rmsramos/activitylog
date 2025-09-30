@@ -1,9 +1,9 @@
 <?php
 
-namespace Rmsramos\Activitylog\Resources\ActivitylogResource\Pages;
+namespace Rmsramos\Activitylog\Resources\Activitylogs\Pages;
 
 use Filament\Resources\Pages\ViewRecord;
-use Rmsramos\Activitylog\Resources\ActivitylogResource;
+use Rmsramos\Activitylog\Resources\Activitylogs\ActivitylogResource;
 
 class ViewActivitylog extends ViewRecord
 {

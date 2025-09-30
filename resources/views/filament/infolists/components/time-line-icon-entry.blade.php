@@ -49,9 +49,9 @@
                 @endif
             @endforeach
         @elseif (($placeholder = $getPlaceholder()) !== null)
-            <x-filament-infolists::entries.placeholder>
+            <div class="fi-in-placeholder">
                 {{ $placeholder }}
-            </x-filament-infolists::entries.placeholder>
+            </div>
         @endif
     </div>
 </x-dynamic-component>

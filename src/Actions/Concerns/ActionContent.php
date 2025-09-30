@@ -4,6 +4,7 @@ namespace Rmsramos\Activitylog\Actions\Concerns;
 
 use Carbon\Exceptions\InvalidFormatException;
 use Closure;
+use Filament\Schemas\Schema;
 use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -151,9 +152,9 @@ trait ActionContent
             ->icon('heroicon-o-bell-alert');
     }
 
-    protected function getSchema(): array
+    public function getSchema(Schema $schema): Schema
     {
-        return [
+        return $schema->schema([
             TimeLineRepeatableEntry::make('activities')
                 ->schema([
                     TimeLineIconEntry::make('activityData.event')
@@ -175,7 +176,7 @@ trait ActionContent
                         ->since()
                         ->badge(),
                 ]),
-        ];
+        ]);
     }
 
     public function withRelations(?array $relations = null): ?StaticAction

@@ -1,11 +1,14 @@
 <?php
 
+namespace Rmsramos\Activitylog\Resources\Activitylogs\Schemas;
+
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Rmsramos\Activitylog\ActivitylogPlugin;
 
 class ActivitylogForm
@@ -36,14 +39,14 @@ class ActivitylogForm
 
                 Section::make([
                     TextEntry::make('log_name')
-                        ->content(function (?Model $record): string {
+                        ->state(function (?Model $record): string {
                             /** @var Activity $record */
                             return $record?->log_name ? ucwords($record->log_name) : '-';
                         })
                         ->label(__('activitylog::forms.fields.log_name.label')),
 
                     TextEntry::make('event')
-                        ->content(function (?Model $record): string {
+                        ->state(function (?Model $record): string {
                             /** @var Activity $record */
                             return $record?->event ? ucwords(__('activitylog::action.event.' . $record->event)) : '-';
                         })
@@ -51,7 +54,7 @@ class ActivitylogForm
 
                     TextEntry::make('created_at')
                         ->label(__('activitylog::forms.fields.created_at.label'))
-                        ->content(function (?Model $record): string {
+                        ->state(function (?Model $record): string {
                             /** @var Activity $record */
                             if (! $record?->created_at) {
                                 return '-';

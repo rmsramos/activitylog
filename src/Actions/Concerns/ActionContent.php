@@ -337,7 +337,7 @@ trait ActionContent
     }
 
 
-    protected static function formatDateValues(array|string|null $value): array|string|null
+    protected static function formatDateValues(array|string|bool|null $value): array|string|null
     {
         if (is_null($value)) {
             return $value;

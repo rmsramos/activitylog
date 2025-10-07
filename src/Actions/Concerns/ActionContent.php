@@ -2,11 +2,12 @@
 
 namespace Rmsramos\Activitylog\Actions\Concerns;
 
+use Exception;
+use Filament\Schemas\Schema;
+use Filament\Actions\Action;
 use Carbon\Exceptions\InvalidFormatException;
 use Closure;
-use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -113,7 +114,7 @@ trait ActionContent
                                                 ->whereIn('subject_id', $relatedIds);
                                         });
                                     }
-                                } catch (\Exception $e) {
+                                } catch (Exception $e) {
                                     // Ignore errors
                                 }
                             }
@@ -124,7 +125,7 @@ trait ActionContent
     }
     protected function configureInfolist(): void
     {
-        $this->infolist(function (?Model $record, Infolist $infolist) {
+        $this->infolist(function (?Model $record, Schema $schema) {
             $activities = $this->getActivityLogRecord($record, $this->getWithRelations());
 
             $formattedActivities = $activities->map(function ($activity) {
@@ -136,9 +137,9 @@ trait ActionContent
                 ];
             })->toArray();
 
-            return $infolist
+            return $schema
                 ->state(['activities' => $formattedActivities])
-                ->schema($this->getSchema());
+                ->schema($this->getActivitiesSchema());
         });
     }
 
@@ -151,7 +152,7 @@ trait ActionContent
             ->icon('heroicon-o-bell-alert');
     }
 
-    protected function getSchema(): array
+    protected function getActivitiesSchema(): array
     {
         return [
             TimeLineRepeatableEntry::make('activities')
@@ -178,28 +179,28 @@ trait ActionContent
         ];
     }
 
-    public function withRelations(?array $relations = null): ?StaticAction
+    public function withRelations(?array $relations = null): ?Action
     {
         $this->withRelations = $relations;
 
         return $this;
     }
 
-    public function timelineIcons(?array $timelineIcons = null): ?StaticAction
+    public function timelineIcons(?array $timelineIcons = null): ?Action
     {
         $this->timelineIcons = $timelineIcons;
 
         return $this;
     }
 
-    public function timelineIconColors(?array $timelineIconColors = null): ?StaticAction
+    public function timelineIconColors(?array $timelineIconColors = null): ?Action
     {
         $this->timelineIconColors = $timelineIconColors;
 
         return $this;
     }
 
-    public function limit(?int $limit = 10): ?StaticAction
+    public function limit(?int $limit = 10): ?Action
     {
         $this->limit = $limit;
 
@@ -365,7 +366,7 @@ trait ActionContent
             return $parser($value)->format(ActivitylogPlugin::get()->getDatetimeFormat());
         } catch (InvalidFormatException $e) {
             return $value;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $value;
         }
     }

@@ -2,7 +2,6 @@
 
 namespace Rmsramos\Activitylog\Resources\ActivitylogResource;
 
-use ActivitylogForm;
 use Exception;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
@@ -30,6 +29,7 @@ use Rmsramos\Activitylog\Helpers\ActivityLogHelper;
 use Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ListActivitylog;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ViewActivitylog;
+use Rmsramos\Activitylog\Resources\ActivitylogResource\Schemas\ActivitylogForm;
 use Rmsramos\Activitylog\Traits\HasCustomActivityResource;
 use Spatie\Activitylog\Models\Activity;
 
@@ -82,7 +82,7 @@ class ActivitylogResource extends Resource
 
     protected static function getResourceUrl(Activity $record): string
     {
-        $panelID = Filament::getCurrentPanel()->getId();
+        $panelID = Filament::getCurrentOrDefaultPanel()->getId();
 
         if ($record->subject_type && $record->subject_id) {
             try {
@@ -299,7 +299,7 @@ class ActivitylogResource extends Resource
 
                 return $indicators;
             })
-            ->form([
+            ->schema([
                 self::getDatePickerCompoment('created_from'),
                 self::getDatePickerCompoment('created_until'),
             ])
@@ -343,7 +343,7 @@ class ActivitylogResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        $plugin = Filament::getCurrentPanel()?->getPlugin('rmsramos/activitylog');
+        $plugin = Filament::getCurrentOrDefaultPanel()?->getPlugin('rmsramos/activitylog');
 
         return $plugin?->getNavigationItem() ?? false;
     }
@@ -485,7 +485,7 @@ class ActivitylogResource extends Resource
         if ($user && method_exists($record->subject, 'exists')) {
             try {
                 return $user->can('restore', $record->subject);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return true;
             }
         }

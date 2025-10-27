@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'changes' => 'Izmaiņas',
     'fields' => [
         'log_name' => [
             'label' => 'Tips',

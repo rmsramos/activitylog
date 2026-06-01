@@ -18,11 +18,11 @@ class ActivitylogPlugin implements Plugin
 
     protected string|Closure|null $resourceActionLabel = null;
 
-    protected bool|Closure|null $isResourceActionHidden = null;
+    protected bool|Closure $isResourceActionHidden = false;
 
-    protected bool|Closure|null $isRestoreActionHidden = null;
+    protected bool|Closure $isRestoreActionHidden = false;
 
-    protected bool|Closure|null $isRestoreModelActionHidden = null;
+    protected bool|Closure $isRestoreModelActionHidden = true;
 
     protected Closure|bool $navigationItem = true;
 

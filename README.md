@@ -18,7 +18,7 @@ This package provides a Filament resource that shows you all of the activity log
 ## Requirements
 
 -   Laravel v12
--   Filament v3
+-   Filament v5
 -   Spatie/Laravel-activitylog v4
 
 ## Languages Supported

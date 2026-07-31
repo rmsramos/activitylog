@@ -6,13 +6,32 @@ This branch (`2.x`) tracks the Filament v4 compatibility line.
 
 ## [Unreleased]
 
-### Changed
-- Restructure for Filament v4 compatibility: move `ActivitylogResource` to subdirectory, add `Schemas/` directory
-- Styling fixes
+## [3.0.1] - 2026-07-31
 
 ### Chore
-- Remove `illuminate/contracts` requirement (already implicit via `filament/filament`)
-- Add explicit `filament/filament ^4.0` requirement
+- Add PHPStan (larastan) config with baseline for existing errors
+- Pin GitHub Actions to commit SHA, add `SECURITY.md` and Dependabot config
+
+### Docs
+- Add branch/Filament version support table to README
+
+### i18n
+- Complete Latvian translations (cherry-picked from community contribution)
+- Fill translation gaps across ar, de, fa, fr, he, id, it, nl, pl, pt_PT, tr (missing `notifications.php`/`infolists.php` and several keys, parity with the English base)
+
+## [3.0.0] - 2026-07-31
+
+### Breaking
+- Complete Filament v3→v4 API migration: `Filament\Forms\Form`/`Filament\Infolists\Infolist` → `Filament\Schemas\Schema`, `Filament\Tables\Actions\*` → `Filament\Actions\*` (`StaticAction` removed), table `->actions()` → `->recordActions()`, `Filament\Forms\Components\Split` → `Filament\Schemas\Components\Flex`
+- Renamed `Resources/ActivitylogResource/` to `Resources/Activitylog/` to match the Filament v4 convention
+- Restored the "changes" section (property diff view + restore/edit actions) that had been silently dropped
+- Fixed several broken bare `use` imports left over from the incomplete migration
+- Replaced removed Filament v3 Blade components (`x-filament::grid`, `x-filament-infolists::entries.placeholder`) with v4-native equivalents
+- `IconEntrySize` moved to `Filament\Support\Enums\IconSize`
+- `filament/filament` moved to `require` (was `require-dev`), `illuminate/contracts` requirement removed
+
+### Docs
+- Document the `@source` directive required in your panel's `theme.css` for Tailwind v4 to pick up this package's Blade views
 
 ## [2.0.0] - 2025-08-16
 

@@ -9,20 +9,10 @@ parameters:
 			path: src/Actions/ActivityLogTimelineSimpleAction.php
 
 		-
-			message: "#^Call to function is_bool\\(\\) with string will always evaluate to false\\.$#"
-			count: 1
-			path: src/Actions/ActivityLogTimelineSimpleAction.php
-
-		-
 			message: """
 				#^Call to deprecated method infolist\\(\\) of class Filament\\\\Actions\\\\Action\\:
 				Use `schema\\(\\) instead\\.$#
 			"""
-			count: 1
-			path: src/Actions/ActivityLogTimelineTableAction.php
-
-		-
-			message: "#^Call to function is_bool\\(\\) with string will always evaluate to false\\.$#"
 			count: 1
 			path: src/Actions/ActivityLogTimelineTableAction.php
 
@@ -71,11 +61,6 @@ parameters:
 				#^Call to deprecated method form\\(\\) of class Filament\\\\Tables\\\\Filters\\\\BaseFilter\\:
 				Use `schema\\(\\)` instead\\.$#
 			"""
-			count: 1
-			path: src/Resources/Activitylog/ActivitylogResource.php
-
-		-
-			message: "#^Call to function is_bool\\(\\) with string will always evaluate to false\\.$#"
 			count: 1
 			path: src/Resources/Activitylog/ActivitylogResource.php
 

@@ -1,0 +1,130 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '''
+				#^Call to deprecated method infolist\(\) of class Filament\\Actions\\Action\:
+				Use `schema\(\) instead\.$#
+			'''
+			identifier: method.deprecated
+			count: 1
+			path: src/Actions/ActivityLogTimelineSimpleAction.php
+
+		-
+			message: '''
+				#^Call to deprecated method infolist\(\) of class Filament\\Actions\\Action\:
+				Use `schema\(\) instead\.$#
+			'''
+			identifier: method.deprecated
+			count: 1
+			path: src/Actions/ActivityLogTimelineTableAction.php
+
+		-
+			message: '#^Method Rmsramos\\Activitylog\\ActivitylogPlugin\:\:get\(\) should return static\(Rmsramos\\Activitylog\\ActivitylogPlugin\) but returns Filament\\Contracts\\Plugin\|Filament\\FilamentManager\.$#'
+			identifier: return.type
+			count: 1
+			path: src/ActivitylogPlugin.php
+
+		-
+			message: '#^Access to an undefined property Rmsramos\\Activitylog\\Resources\\Activitylog\\ActivitylogResource\:\:\$modalDescription\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Resources/Activitylog/ActivitylogResource.php
+
+		-
+			message: '#^Access to an undefined property Rmsramos\\Activitylog\\Resources\\Activitylog\\ActivitylogResource\:\:\$modalHeading\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Resources/Activitylog/ActivitylogResource.php
+
+		-
+			message: '#^Call to an undefined method Filament\\Contracts\\Plugin\:\:getNavigationItem\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Resources/Activitylog/ActivitylogResource.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:restore\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Resources/Activitylog/ActivitylogResource.php
+
+		-
+			message: '#^Call to an undefined method Rmsramos\\Activitylog\\Resources\\Activitylog\\ActivitylogResource\:\:evaluate\(\)\.$#'
+			identifier: method.notFound
+			count: 7
+			path: src/Resources/Activitylog/ActivitylogResource.php
+
+		-
+			message: '#^Call to an undefined method Rmsramos\\Activitylog\\Resources\\Activitylog\\ActivitylogResource\:\:slideOver\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Resources/Activitylog/ActivitylogResource.php
+
+		-
+			message: '#^Call to an undefined static method Filament\\Resources\\Resource\<Illuminate\\Database\\Eloquent\\Model, Filament\\Resources\\ResourceConfiguration\>\:\:setUp\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Resources/Activitylog/ActivitylogResource.php
+
+		-
+			message: '''
+				#^Call to deprecated method form\(\) of class Filament\\Tables\\Filters\\BaseFilter\:
+				Use `schema\(\)` instead\.$#
+			'''
+			identifier: method.deprecated
+			count: 1
+			path: src/Resources/Activitylog/ActivitylogResource.php
+
+		-
+			message: '#^Call to function is_bool\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: src/Resources/Activitylog/ActivitylogResource.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: src/Resources/Activitylog/ActivitylogResource.php
+
+		-
+			message: '#^Parameter \#1 \$schema of method Filament\\Resources\\Resource\<Illuminate\\Database\\Eloquent\\Model,Filament\\Resources\\ResourceConfiguration\>\:\:infolist\(\) expects Filament\\Schemas\\Schema, Closure given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Resources/Activitylog/ActivitylogResource.php
+
+		-
+			message: '#^Parameter \#1 \$view of method Filament\\Support\\Components\\ViewComponent\:\:view\(\) expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Resources/Activitylog/ActivitylogResource.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$causer\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Resources/Activitylog/Schemas/ActivitylogForm.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$properties\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Resources/Activitylog/Schemas/ActivitylogForm.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: src/Resources/Activitylog/Schemas/ActivitylogForm.php
+
+		-
+			message: '#^Using nullsafe property access on non\-nullable type Spatie\\Activitylog\\Models\\Activity\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 4
+			path: src/Resources/Activitylog/Schemas/ActivitylogForm.php
+
+		-
+			message: '#^Trait Rmsramos\\Activitylog\\Traits\\HasCustomActivityResource is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Traits/HasCustomActivityResource.php

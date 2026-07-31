@@ -1,16 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Call to function is_bool\\(\\) with string will always evaluate to false\\.$#"
-			count: 1
-			path: src/Actions/ActivityLogTimelineSimpleAction.php
-
-		-
-			message: "#^Call to function is_bool\\(\\) with string will always evaluate to false\\.$#"
-			count: 1
-			path: src/Actions/ActivityLogTimelineTableAction.php
-
-		-
 			message: "#^Method Rmsramos\\\\Activitylog\\\\ActivitylogPlugin\\:\\:get\\(\\) should return static\\(Rmsramos\\\\Activitylog\\\\ActivitylogPlugin\\) but returns Filament\\\\Contracts\\\\Plugin\\|Filament\\\\FilamentManager\\.$#"
 			count: 1
 			path: src/ActivitylogPlugin.php
@@ -52,11 +42,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined static method Filament\\\\Resources\\\\Resource\\:\\:setUp\\(\\)\\.$#"
-			count: 1
-			path: src/Resources/ActivitylogResource.php
-
-		-
-			message: "#^Call to function is_bool\\(\\) with string will always evaluate to false\\.$#"
 			count: 1
 			path: src/Resources/ActivitylogResource.php
 

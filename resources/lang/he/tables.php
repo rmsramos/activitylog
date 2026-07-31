@@ -9,7 +9,9 @@ return [
             'label' => 'אירוע',
         ],
         'subject_type' => [
-            'label' => 'נושא',
+            'label'        => 'נושא',
+            'soft_deleted' => ' (נמחק רכות)',
+            'deleted'      => ' (נמחק)',
         ],
         'causer' => [
             'label' => 'משתמש',
@@ -23,12 +25,17 @@ return [
     ],
     'filters' => [
         'created_at' => [
-            'label'         => 'נוצר',
-            'created_from'  => 'נוצר מ',
-            'created_until' => 'נוצר עד',
+            'label'                   => 'נוצר',
+            'created_from'            => 'נוצר מ',
+            'created_from_indicator'  => 'נוצר מתאריך : :created_from',
+            'created_until'           => 'נוצר עד',
+            'created_until_indicator' => 'נוצר עד תאריך : :created_until',
         ],
         'event' => [
             'label' => 'אירוע',
+        ],
+        'log_name' => [
+            'label' => 'שם היומן',
         ],
     ],
 ];

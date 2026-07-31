@@ -9,7 +9,9 @@ return [
             'label' => 'Evento',
         ],
         'subject_type' => [
-            'label' => 'Soggetto',
+            'label'        => 'Soggetto',
+            'soft_deleted' => ' (Eliminazione soft)',
+            'deleted'      => ' (Eliminato)',
         ],
         'causer' => [
             'label' => 'Utente',
@@ -23,12 +25,17 @@ return [
     ],
     'filters' => [
         'created_at' => [
-            'label'         => 'Loggato il',
-            'created_from'  => 'Creato da ',
-            'created_until' => 'Creato fino al ',
+            'label'                   => 'Loggato il',
+            'created_from'            => 'Creato da ',
+            'created_from_indicator'  => 'Creato da : :created_from',
+            'created_until'           => 'Creato fino al ',
+            'created_until_indicator' => 'Creato fino al : :created_until',
         ],
         'event' => [
             'label' => 'Evento',
+        ],
+        'log_name' => [
+            'label' => 'Nome log',
         ],
     ],
 ];

@@ -9,7 +9,9 @@ return [
             'label' => 'Olay',
         ],
         'subject_type' => [
-            'label' => 'Konu',
+            'label'        => 'Konu',
+            'soft_deleted' => ' (Yumuşak Silindi)',
+            'deleted'      => ' (Silindi)',
         ],
         'causer' => [
             'label' => 'Kullanıcı',
@@ -23,12 +25,17 @@ return [
     ],
     'filters' => [
         'created_at' => [
-            'label'         => 'Kayıt Tarihi',
-            'created_from'  => 'Kayıt tarihinden ',
-            'created_until' => 'Kayıt tarihine ',
+            'label'                   => 'Kayıt Tarihi',
+            'created_from'            => 'Kayıt tarihinden ',
+            'created_from_indicator'  => 'Kayıt tarihinden : :created_from',
+            'created_until'           => 'Kayıt tarihine ',
+            'created_until_indicator' => 'Kayıt tarihine : :created_until',
         ],
         'event' => [
             'label' => 'Olay',
+        ],
+        'log_name' => [
+            'label' => 'Günlük Adı',
         ],
     ],
 ];

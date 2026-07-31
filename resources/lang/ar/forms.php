@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'fields' => [
+    'changes' => 'التغييرات',
+    'fields'  => [
         'log_name' => [
             'label' => 'النوع',
         ],

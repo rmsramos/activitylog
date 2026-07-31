@@ -9,7 +9,7 @@
 
 <div class="filament-hidden">
 
-![Screenshot of Application Feature](https://raw.githubusercontent.com/rmsramos/activitylog/main/arts/cover.jpeg)
+![Screenshot of Application Feature](https://raw.githubusercontent.com/rmsramos/activitylog/2.x/arts/cover.jpeg)
 
 </div>
 
@@ -150,7 +150,7 @@ class NewsItem extends Model
 
 ## Plugin usage
 
-![Screenshot of Application Feature](https://raw.githubusercontent.com/rmsramos/activitylog/main/arts/resource.png)
+![Screenshot of Application Feature](https://raw.githubusercontent.com/rmsramos/activitylog/2.x/arts/resource.png)
 
 In your Panel ServiceProvider `(App\Providers\Filament)` active the plugin
 
@@ -585,7 +585,7 @@ public function panel(Panel $panel): Panel
 ## Relationship manager
 
 If you have a model that uses the `Spatie\Activitylog\Traits\LogsActivity` trait, you can add the `Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager` relationship manager to your Filament resource to display all of the activity logs that are performed on your model.
-![Screenshot of Application Feature](https://raw.githubusercontent.com/rmsramos/activitylog/main/arts/relationManager.png)
+![Screenshot of Application Feature](https://raw.githubusercontent.com/rmsramos/activitylog/2.x/arts/relationManager.png)
 
 ```php
 use Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager;
@@ -600,7 +600,7 @@ public static function getRelations(): array
 
 ## Timeline Action
 
-![Screenshot of Application Feature](https://raw.githubusercontent.com/rmsramos/activitylog/main/arts/timeline.png)
+![Screenshot of Application Feature](https://raw.githubusercontent.com/rmsramos/activitylog/2.x/arts/timeline.png)
 
 To make viewing activity logs easier, you can use a custom action. In your UserResource in the table function, add the `ActivityLogTimelineTableAction`.
 

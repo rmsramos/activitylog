@@ -9,7 +9,9 @@ return [
             'label' => 'Evento',
         ],
         'subject_type' => [
-            'label' => 'Assunto',
+            'label'        => 'Assunto',
+            'soft_deleted' => ' (Eliminação suave)',
+            'deleted'      => ' (Eliminado)',
         ],
         'causer' => [
             'label' => 'Utilizador',
@@ -23,12 +25,17 @@ return [
     ],
     'filters' => [
         'created_at' => [
-            'label'         => 'Criado em',
-            'created_from'  => 'Criado a partir de ',
-            'created_until' => 'Criado até ',
+            'label'                   => 'Criado em',
+            'created_from'            => 'Criado a partir de ',
+            'created_from_indicator'  => 'Criado a partir de : :created_from',
+            'created_until'           => 'Criado até ',
+            'created_until_indicator' => 'Criado até : :created_until',
         ],
         'event' => [
             'label' => 'Eventos',
+        ],
+        'log_name' => [
+            'label' => 'Nome do registo',
         ],
     ],
 ];

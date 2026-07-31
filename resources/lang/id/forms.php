@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'fields' => [
+    'changes' => 'Perubahan',
+    'fields'  => [
         'log_name' => [
             'label' => 'Jenis',
         ],

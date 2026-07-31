@@ -9,7 +9,9 @@ return [
             'label' => 'Ereignis',
         ],
         'subject_type' => [
-            'label' => 'Betreff',
+            'label'        => 'Betreff',
+            'soft_deleted' => ' (Soft Gelöscht)',
+            'deleted'      => ' (Gelöscht)',
         ],
         'causer' => [
             'label' => 'Benutzer',
@@ -23,12 +25,17 @@ return [
     ],
     'filters' => [
         'created_at' => [
-            'label'         => 'Logzeitpunkt',
-            'created_from'  => 'Geloggt von ',
-            'created_until' => 'Geloggt bis',
+            'label'                   => 'Logzeitpunkt',
+            'created_from'            => 'Geloggt von ',
+            'created_from_indicator'  => 'Geloggt von : :created_from',
+            'created_until'           => 'Geloggt bis',
+            'created_until_indicator' => 'Geloggt bis : :created_until',
         ],
         'event' => [
             'label' => 'Ereignis',
+        ],
+        'log_name' => [
+            'label' => 'Protokollname',
         ],
     ],
 ];

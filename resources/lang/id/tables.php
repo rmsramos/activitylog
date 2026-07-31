@@ -9,7 +9,9 @@ return [
             'label' => 'Peristiwa',
         ],
         'subject_type' => [
-            'label' => 'Subjek',
+            'label'        => 'Subjek',
+            'soft_deleted' => ' (Dihapus Sementara)',
+            'deleted'      => ' (Dihapus)',
         ],
         'causer' => [
             'label' => 'Pengguna',
@@ -23,12 +25,17 @@ return [
     ],
     'filters' => [
         'created_at' => [
-            'label'         => 'Masuk di',
-            'created_from'  => 'Dibuat dari',
-            'created_until' => 'Dibuat sampai',
+            'label'                   => 'Masuk di',
+            'created_from'            => 'Dibuat dari',
+            'created_from_indicator'  => 'Dibuat dari : :created_from',
+            'created_until'           => 'Dibuat sampai',
+            'created_until_indicator' => 'Dibuat sampai : :created_until',
         ],
         'event' => [
             'label' => 'Peristiwa',
+        ],
+        'log_name' => [
+            'label' => 'Nama Log',
         ],
     ],
 ];

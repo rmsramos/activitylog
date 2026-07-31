@@ -9,7 +9,9 @@ return [
             'label' => 'رویداد',
         ],
         'subject_type' => [
-            'label' => 'مفعول',
+            'label'        => 'مفعول',
+            'soft_deleted' => ' (حذف نرم شده)',
+            'deleted'      => ' (حذف شده)',
         ],
         'causer' => [
             'label' => 'کاربر',

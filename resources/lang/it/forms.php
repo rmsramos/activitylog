@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'fields' => [
+    'changes' => 'Modifiche',
+    'fields'  => [
         'log_name' => [
             'label' => 'Tipo',
         ],

@@ -1,4 +1,5 @@
 <?php
+
 return [
     'columns' => [
         'log_name' => [
@@ -8,7 +9,9 @@ return [
             'label' => 'Événement',
         ],
         'subject_type' => [
-            'label' => 'Sujet',
+            'label'        => 'Sujet',
+            'soft_deleted' => ' (Suppression douce)',
+            'deleted'      => ' (Supprimé)',
         ],
         'causer' => [
             'label' => 'Utilisateur',
@@ -22,12 +25,17 @@ return [
     ],
     'filters' => [
         'created_at' => [
-            'label'         => 'Enregistré à',
-            'created_from'  => 'Créé à partir de ',
-            'created_until' => 'Créé jusqu\'à ',
+            'label'                   => 'Enregistré à',
+            'created_from'            => 'Créé à partir de ',
+            'created_from_indicator'  => 'Créé à partir de : :created_from',
+            'created_until'           => 'Créé jusqu\'à ',
+            'created_until_indicator' => 'Créé jusqu\'à : :created_until',
         ],
         'event' => [
             'label' => 'Événement',
+        ],
+        'log_name' => [
+            'label' => 'Nom du journal',
         ],
     ],
 ];

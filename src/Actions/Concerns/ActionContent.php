@@ -22,16 +22,16 @@ trait ActionContent
     protected ?array $withRelations = null;
 
     protected ?array $timelineIcons = [
-        'created' => 'heroicon-m-plus',
-        'updated' => 'heroicon-m-pencil-square',
-        'deleted' => 'heroicon-m-trash',
+        'created'  => 'heroicon-m-plus',
+        'updated'  => 'heroicon-m-pencil-square',
+        'deleted'  => 'heroicon-m-trash',
         'restored' => 'heroicon-m-arrow-uturn-left',
     ];
 
     protected ?array $timelineIconColors = [
-        'created' => 'success',
-        'updated' => 'warning',
-        'deleted' => 'danger',
+        'created'  => 'success',
+        'updated'  => 'warning',
+        'deleted'  => 'danger',
         'restored' => 'info',
     ];
 
@@ -58,12 +58,12 @@ trait ActionContent
 
         $this->configureInfolist();
         $this->configureModal();
-        $this->activitiesUsing = null;
-        $this->modifyTitleUsing = null;
+        $this->activitiesUsing        = null;
+        $this->modifyTitleUsing       = null;
         $this->shouldModifyTitleUsing = fn () => true;
-        $this->modifyQueryUsing = fn ($builder) => $builder;
-        $this->modalHeading = __('activitylog::action.modal.heading');
-        $this->modalDescription = __('activitylog::action.modal.description');
+        $this->modifyQueryUsing       = fn ($builder) => $builder;
+        $this->modalHeading           = __('activitylog::action.modal.heading');
+        $this->modalDescription       = __('activitylog::action.modal.description');
 
         $this->query = function (?Model $record) {
             if (! $record) {
@@ -91,7 +91,7 @@ trait ActionContent
 
                                     if ($relationInstance instanceof BelongsToMany) {
                                         $subjectType = $relationInstance->getPivotClass();
-                                        $relatedIds = $relationInstance->pluck($relationInstance->getTable().'.id')->toArray();
+                                        $relatedIds  = $relationInstance->pluck($relationInstance->getTable() . '.id')->toArray();
 
                                         if (! empty($relatedIds)) {
                                             $query->orWhere(function (Builder $q) use ($subjectType, $relatedIds) {
@@ -104,7 +104,7 @@ trait ActionContent
                                     }
 
                                     $relatedModel = $relationInstance->getRelated();
-                                    $relatedIds = $relationInstance->pluck('id')->toArray();
+                                    $relatedIds   = $relationInstance->pluck('id')->toArray();
 
                                     if (! empty($relatedIds)) {
                                         $query->orWhere(function (Builder $q) use ($relatedModel, $relatedIds) {
@@ -129,9 +129,9 @@ trait ActionContent
 
             $formattedActivities = $activities->map(function ($activity) {
                 return [
-                    'id' => $activity->id,
-                    'log_name' => $activity->log_name,
-                    'updated_at' => $activity->updated_at,
+                    'id'           => $activity->id,
+                    'log_name'     => $activity->log_name,
+                    'updated_at'   => $activity->updated_at,
                     'activityData' => $activity->activityData,
                 ];
             })->toArray();
@@ -325,14 +325,14 @@ trait ActionContent
         }
 
         return [
-            'log_name' => $activity->log_name,
+            'log_name'    => $activity->log_name,
             'description' => $activity->description,
-            'subject' => $activity->subject,
-            'event' => $activity->event,
-            'causer' => $activity->causer,
-            'properties' => $this->formatDateValues($properties),
-            'batch_uuid' => $activity->batch_uuid,
-            'update' => $activity->updated_at,
+            'subject'     => $activity->subject,
+            'event'       => $activity->event,
+            'causer'      => $activity->causer,
+            'properties'  => $this->formatDateValues($properties),
+            'batch_uuid'  => $activity->batch_uuid,
+            'update'      => $activity->updated_at,
         ];
     }
 

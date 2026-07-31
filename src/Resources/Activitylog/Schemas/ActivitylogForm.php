@@ -33,7 +33,7 @@ class ActivitylogForm
                         TextInput::make('subject_type')
                             ->afterStateHydrated(function ($component, ?Model $record, $state) {
                                 /** @var Activity $record */
-                                return $state ? $component->state(Str::of($state)->afterLast('\\')->headline().' # '.$record->subject_id) : $component->state('-');
+                                return $state ? $component->state(Str::of($state)->afterLast('\\')->headline() . ' # ' . $record->subject_id) : $component->state('-');
                             })
                             ->label(__('activitylog::forms.fields.subject_type.label')),
 
@@ -53,7 +53,7 @@ class ActivitylogForm
                         TextEntry::make('event')
                             ->state(function (?Model $record): string {
                                 /** @var Activity $record */
-                                return $record?->event ? ucwords(__('activitylog::action.event.'.$record->event)) : '-';
+                                return $record?->event ? ucwords(__('activitylog::action.event.' . $record->event)) : '-';
                             })
                             ->label(__('activitylog::forms.fields.event.label')),
 
@@ -120,7 +120,7 @@ class ActivitylogForm
                         }
 
                         $properties = $record->properties->except(['attributes', 'old']);
-                        $schema = [];
+                        $schema     = [];
 
                         if ($properties->count()) {
                             $schema[] = KeyValue::make('properties')

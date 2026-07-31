@@ -1,5 +1,7 @@
 <?php
 
+use Rmsramos\Activitylog\Resources\Activitylog\ActivitylogResource;
+
 return [
     'resources' => [
         'label'                     => 'Activity Log',
@@ -16,7 +18,7 @@ return [
         'default_sort_column'       => 'id',
         'default_sort_direction'    => 'desc',
         'navigation_count_badge'    => false,
-        'resource'                  => \Rmsramos\Activitylog\Resources\Activitylog\ActivitylogResource::class,
+        'resource'                  => ActivitylogResource::class,
     ],
     'date_format'     => 'd/m/Y',
     'datetime_format' => 'd/m/Y H:i:s',

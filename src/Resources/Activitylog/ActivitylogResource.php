@@ -88,16 +88,16 @@ class ActivitylogResource extends Resource
                 $model = app($record->subject_type);
 
                 if (ActivityLogHelper::classUsesTrait($model, HasCustomActivityResource::class)) {
-                    $resourceModel = $model->getFilamentActualResourceModel($record);
+                    $resourceModel      = $model->getFilamentActualResourceModel($record);
                     $resourcePluralName = ActivityLogHelper::getResourcePluralName($resourceModel);
 
-                    return route('filament.'.$panelID.'.resources.'.$resourcePluralName.'.edit', ['record' => $resourceModel->id]);
+                    return route('filament.' . $panelID . '.resources.' . $resourcePluralName . '.edit', ['record' => $resourceModel->id]);
                 }
 
                 // Fallback to a standard resource mapping
                 $resourcePluralName = ActivityLogHelper::getResourcePluralName($record->subject_type);
 
-                return route('filament.'.$panelID.'.resources.'.$resourcePluralName.'.edit', ['record' => $record->subject_id]);
+                return route('filament.' . $panelID . '.resources.' . $resourcePluralName . '.edit', ['record' => $record->subject_id]);
             } catch (Exception $e) {
                 // If there's any error generating the URL, return placeholder
                 return '#';
@@ -176,15 +176,15 @@ class ActivitylogResource extends Resource
     {
         return TextColumn::make('event')
             ->label(__('activitylog::tables.columns.event.label'))
-            ->formatStateUsing(fn ($state) => $state ? ucwords(__('activitylog::action.event.'.$state)) : '-')
+            ->formatStateUsing(fn ($state) => $state ? ucwords(__('activitylog::action.event.' . $state)) : '-')
             ->badge()
             ->color(fn (?string $state): string => match ($state) {
-                'draft' => 'gray',
-                'updated' => 'warning',
-                'created' => 'success',
-                'deleted' => 'danger',
+                'draft'    => 'gray',
+                'updated'  => 'warning',
+                'created'  => 'success',
+                'deleted'  => 'danger',
                 'restored' => 'info',
-                default => 'primary',
+                default    => 'primary',
             })
             ->searchable()
             ->sortable();
@@ -200,7 +200,7 @@ class ActivitylogResource extends Resource
                     return '-';
                 }
 
-                $subjectInfo = Str::of($state)->afterLast('\\')->headline().' # '.$record->subject_id;
+                $subjectInfo = Str::of($state)->afterLast('\\')->headline() . ' # ' . $record->subject_id;
 
                 if ($record->subject) {
                     if (method_exists($record->subject, 'trashed') && $record->subject->trashed()) {
@@ -262,7 +262,7 @@ class ActivitylogResource extends Resource
     {
         $field = DatePicker::make($label)
             ->format(ActivitylogPlugin::get()->getDateFormat())
-            ->label(__('activitylog::tables.filters.created_at.'.$label));
+            ->label(__('activitylog::tables.filters.created_at.' . $label));
 
         // Apply the custom callback if set
         $callback = ActivitylogPlugin::get()->getDatePickerCallback();
@@ -280,7 +280,7 @@ class ActivitylogResource extends Resource
             ->label(__('activitylog::tables.filters.created_at.label'))
             ->indicateUsing(function (array $data): array {
                 $indicators = [];
-                $parser = ActivitylogPlugin::get()->getDateParser();
+                $parser     = ActivitylogPlugin::get()->getDateParser();
 
                 if ($data['created_from'] ?? null) {
                     $indicators['created_from'] = __('activitylog::tables.filters.created_at.created_from_indicator', [
@@ -321,7 +321,7 @@ class ActivitylogResource extends Resource
             ->label(__('activitylog::tables.filters.event.label'))
             ->options(static::getModel()::distinct()
                 ->pluck('event', 'event')
-                ->mapWithKeys(fn ($value, $key) => [$key => __('activitylog::action.event.'.$value)])
+                ->mapWithKeys(fn ($value, $key) => [$key => __('activitylog::action.event.' . $value)])
             );
     }
 
@@ -336,7 +336,7 @@ class ActivitylogResource extends Resource
     {
         return [
             'index' => ListActivitylog::route('/'),
-            'view' => ViewActivitylog::route('/{record}'),
+            'view'  => ViewActivitylog::route('/{record}'),
         ];
     }
 
@@ -366,7 +366,7 @@ class ActivitylogResource extends Resource
 
                 if (ActivityLogHelper::classUsesTrait($model, HasCustomActivityResource::class)) {
                     $resourceModel = $model->getFilamentActualResourceModel($record);
-                    $user = auth()->user();
+                    $user          = auth()->user();
 
                     return $user && $user->can('update', $resourceModel);
                 }
@@ -431,7 +431,7 @@ class ActivitylogResource extends Resource
                     ->causedBy(auth()->user())
                     ->withProperties([
                         'attributes' => $oldProperties,
-                        'old' => $newProperties,
+                        'old'        => $newProperties,
                     ])
                     ->tap(function ($log) {
                         $log->event = 'restored';
@@ -522,12 +522,12 @@ class ActivitylogResource extends Resource
                     ->performedOn($subject)
                     ->causedBy(auth()->user())
                     ->withProperties([
-                        'attributes' => $afterRestore,
-                        'old' => $beforeRestore,
+                        'attributes'       => $afterRestore,
+                        'old'              => $beforeRestore,
                         'restore_metadata' => [
                             'restored_from_soft_delete' => true,
-                            'original_activity_id' => $record->id,
-                            'restore_type' => 'soft_delete',
+                            'original_activity_id'      => $record->id,
+                            'restore_type'              => 'soft_delete',
                         ],
                     ])
                     ->tap(function ($log) {
@@ -548,7 +548,7 @@ class ActivitylogResource extends Resource
 
             Notification::make()
                 ->title(__('activitylog::notifications.error_restoring_model'))
-                ->body('Erro: '.$e->getMessage())
+                ->body('Erro: ' . $e->getMessage())
                 ->danger()
                 ->send();
         }

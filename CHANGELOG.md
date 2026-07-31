@@ -6,14 +6,33 @@ This branch (`3.x`) tracks the Filament v5 compatibility line.
 
 ## [Unreleased]
 
-### Changed
-- Completed Filament v4/v5 compatibility: `Filament\Forms\Form`/`Filament\Infolists\Infolist` → `Filament\Schemas\Schema`, `Filament\Tables\Actions\*` → `Filament\Actions\*`, table `actions()` → `recordActions()`, `Filament\Forms\Components\Split` → `Filament\Schemas\Components\Flex`
-- Restored the "changes" section (property diff view + restore/edit actions) on `ActivitylogForm`, ported to v4/v5 API
-- Bumped dev dependencies for v5: `filament/filament ^5.0`, `larastan ^3.0`, `pest ^3.0`, `orchestra/testbench ^10.0||^11.0`
+## [4.0.1] - 2026-07-31
 
-### Known gaps (pre-existing, not introduced by this upgrade)
-- No test suite or `phpstan.neon` committed on any branch despite being referenced in composer scripts
-- Tailwind CSS still v3 (inherited from `2.x`)
+### Chore
+- Add PHPStan (larastan) config with baseline for existing errors
+- Pin GitHub Actions to commit SHA, add `SECURITY.md` and Dependabot config
+
+### Docs
+- Add branch/Filament version support table to README
+
+### i18n
+- Complete Latvian translations (cherry-picked from community contribution)
+- Fill translation gaps across ar, de, fa, fr, he, id, it, nl, pl, pt_PT, tr (missing `notifications.php`/`infolists.php` and several keys, parity with the English base)
+
+## [4.0.0] - 2026-07-31
+
+### Breaking
+- Filament v5 compatibility, verified against the real installed `filament/filament` v5.7.5
+- Same v3→v4 API migration as `v3.0.0` (Schemas unification, Actions unification, `StaticAction` removed, `->recordActions()`, `Split` → `Flex`) — nothing further changed between Filament v4 and v5 for this package's code
+- Renamed `Resources/ActivitylogResource/` to `Resources/Activitylog/` to match the Filament v4/v5 convention
+- Restored the "changes" section (property diff view + restore/edit actions), which had been silently dropped
+- Fixed several broken bare `use` imports left over from the incomplete migration
+- Replaced removed Filament v3 Blade components (`x-filament::grid`, `x-filament-infolists::entries.placeholder`) with v4/v5-native equivalents
+- `IconEntrySize` moved to `Filament\Support\Enums\IconSize`
+- `filament/filament` moved to `require` (was `require-dev`), `illuminate/contracts` requirement removed
+
+### Docs
+- Document the `@source` directive required in your panel's `theme.css` for Tailwind v4 to pick up this package's Blade views
 
 ## [2.0.0] - 2025-08-16
 

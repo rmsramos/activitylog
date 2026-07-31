@@ -16,7 +16,7 @@ This branch (`2.x`) tracks the Filament v4 compatibility line.
 - Add branch/Filament version support table to README
 
 ### i18n
-- Complete Latvian translations (cherry-picked from community contribution)
+- Complete Latvian translations (#128) — @denissceluiko
 - Fill translation gaps across ar, de, fa, fr, he, id, it, nl, pl, pt_PT, tr (missing `notifications.php`/`infolists.php` and several keys, parity with the English base)
 
 ## [3.0.0] - 2026-07-31

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rmsramos\Activitylog\Resources\ActivitylogResource;
+namespace Rmsramos\Activitylog\Resources\Activitylog;
 
 use Exception;
 use Filament\Facades\Filament;
@@ -26,9 +26,9 @@ use Rmsramos\Activitylog\Actions\Concerns\ActionContent;
 use Rmsramos\Activitylog\ActivitylogPlugin;
 use Rmsramos\Activitylog\Helpers\ActivityLogHelper;
 use Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager;
-use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ListActivitylog;
-use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ViewActivitylog;
-use Rmsramos\Activitylog\Resources\ActivitylogResource\Schemas\ActivitylogForm;
+use Rmsramos\Activitylog\Resources\Activitylog\Pages\ListActivitylog;
+use Rmsramos\Activitylog\Resources\Activitylog\Pages\ViewActivitylog;
+use Rmsramos\Activitylog\Resources\Activitylog\Schemas\ActivitylogForm;
 use Rmsramos\Activitylog\Traits\HasCustomActivityResource;
 use Spatie\Activitylog\Models\Activity;
 

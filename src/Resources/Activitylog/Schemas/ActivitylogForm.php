@@ -1,6 +1,6 @@
 <?php
 
-namespace Rmsramos\Activitylog\Resources\ActivitylogResource\Schemas;
+namespace Rmsramos\Activitylog\Resources\Activitylog\Schemas;
 
 use Filament\Actions\Action;
 use Filament\Forms\Components\KeyValue;
@@ -13,7 +13,7 @@ use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Rmsramos\Activitylog\ActivitylogPlugin;
-use Rmsramos\Activitylog\Resources\ActivitylogResource\ActivitylogResource;
+use Rmsramos\Activitylog\Resources\Activitylog\ActivitylogResource;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivitylogForm

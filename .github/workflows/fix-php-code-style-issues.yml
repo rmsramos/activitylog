@@ -19,7 +19,7 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Fix PHP code style issues
-        uses: aglipanci/laravel-pint-action@859b17cfd0845ebdae0ef9cf7a843dba2a431aa2 # 2.3.0
+        uses: aglipanci/laravel-pint-action@61f2bc4f4d5da076029d370fa2f268fd6b298041 # 2.3.1
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@3ea6ae190baf489ba007f7c92608f33ce20ef04a # v4.16.0

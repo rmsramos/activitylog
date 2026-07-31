@@ -18,14 +18,18 @@
     >
         @if (count($childComponentContainers = $getChildComponentContainers()))
             <ol class="relative border-gray-200 border-s dark:border-gray-700">
-                <x-filament::grid
-                    :default="$getGridColumns('default')"
-                    :sm="$getGridColumns('sm')"
-                    :md="$getGridColumns('md')"
-                    :lg="$getGridColumns('lg')"
-                    :xl="$getGridColumns('xl')"
-                    :two-xl="$getGridColumns('2xl')"
-                    class="gap-2"
+                <div
+                    {{
+                        (new \Illuminate\View\ComponentAttributeBag(['class' => 'gap-2']))
+                            ->grid([
+                                'default' => $getGridColumns('default'),
+                                'sm' => $getGridColumns('sm'),
+                                'md' => $getGridColumns('md'),
+                                'lg' => $getGridColumns('lg'),
+                                'xl' => $getGridColumns('xl'),
+                                '2xl' => $getGridColumns('2xl'),
+                            ])
+                    }}
                 >
                     @foreach ($childComponentContainers as $container)
                         <li
@@ -38,12 +42,12 @@
                             {{ $container }}
                         </li>
                     @endforeach
-                </x-filament::grid>
+                </div>
             </ol>
         @elseif (($placeholder = $getPlaceholder()) !== null)
-            <x-filament-infolists::entries.placeholder>
+            <p class="fi-in-placeholder">
                 {{ $placeholder }}
-            </x-filament-infolists::entries.placeholder>
+            </p>
         @endif
     </div>
 </x-dynamic-component>

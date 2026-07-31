@@ -1,0 +1,96 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to function is_bool\\(\\) with string will always evaluate to false\\.$#"
+			count: 1
+			path: src/Actions/ActivityLogTimelineSimpleAction.php
+
+		-
+			message: "#^Call to function is_bool\\(\\) with string will always evaluate to false\\.$#"
+			count: 1
+			path: src/Actions/ActivityLogTimelineTableAction.php
+
+		-
+			message: "#^Method Rmsramos\\\\Activitylog\\\\ActivitylogPlugin\\:\\:get\\(\\) should return static\\(Rmsramos\\\\Activitylog\\\\ActivitylogPlugin\\) but returns Filament\\\\Contracts\\\\Plugin\\|Filament\\\\FilamentManager\\.$#"
+			count: 1
+			path: src/ActivitylogPlugin.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$properties\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Access to an undefined property Rmsramos\\\\Activitylog\\\\Resources\\\\ActivitylogResource\\:\\:\\$modalDescription\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Access to an undefined property Rmsramos\\\\Activitylog\\\\Resources\\\\ActivitylogResource\\:\\:\\$modalHeading\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Call to an undefined method Filament\\\\Contracts\\\\Plugin\\:\\:getNavigationItem\\(\\)\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:restore\\(\\)\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Call to an undefined method Rmsramos\\\\Activitylog\\\\Resources\\\\ActivitylogResource\\:\\:evaluate\\(\\)\\.$#"
+			count: 7
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Call to an undefined method Rmsramos\\\\Activitylog\\\\Resources\\\\ActivitylogResource\\:\\:slideOver\\(\\)\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Call to an undefined static method Filament\\\\Resources\\\\Resource\\:\\:setUp\\(\\)\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Call to function is_bool\\(\\) with string will always evaluate to false\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Method Rmsramos\\\\Activitylog\\\\Resources\\\\ActivitylogResource\\:\\:limit\\(\\) should return Filament\\\\Actions\\\\StaticAction\\|null but returns \\$this\\(Rmsramos\\\\Activitylog\\\\Resources\\\\ActivitylogResource\\)\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Method Rmsramos\\\\Activitylog\\\\Resources\\\\ActivitylogResource\\:\\:timelineIconColors\\(\\) should return Filament\\\\Actions\\\\StaticAction\\|null but returns \\$this\\(Rmsramos\\\\Activitylog\\\\Resources\\\\ActivitylogResource\\)\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Method Rmsramos\\\\Activitylog\\\\Resources\\\\ActivitylogResource\\:\\:timelineIcons\\(\\) should return Filament\\\\Actions\\\\StaticAction\\|null but returns \\$this\\(Rmsramos\\\\Activitylog\\\\Resources\\\\ActivitylogResource\\)\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Method Rmsramos\\\\Activitylog\\\\Resources\\\\ActivitylogResource\\:\\:withRelations\\(\\) should return Filament\\\\Actions\\\\StaticAction\\|null but returns \\$this\\(Rmsramos\\\\Activitylog\\\\Resources\\\\ActivitylogResource\\)\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Parameter \\#1 \\$infolist of method Filament\\\\Resources\\\\Resource\\:\\:infolist\\(\\) expects Filament\\\\Infolists\\\\Infolist, Closure given\\.$#"
+			count: 1
+			path: src/Resources/ActivitylogResource.php
+
+		-
+			message: "#^Using nullsafe property access on non\\-nullable type Spatie\\\\Activitylog\\\\Models\\\\Activity\\. Use \\-\\> instead\\.$#"
+			count: 4
+			path: src/Resources/ActivitylogResource.php

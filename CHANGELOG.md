@@ -6,6 +6,16 @@ This branch (`1.x`) tracks the Filament v3 compatibility line.
 
 ## [Unreleased]
 
+## [2.0.3] - 2026-07-31
+
+### Fixed
+- Ambiguous SQL `id` column when using `hasManyThrough`/similar relations with `withRelations()` (#99)
+- Subject model failing to load in the timeline when it has a restrictive global scope (#111)
+- `formatDateValues()` heuristic misfiring on large decimal/numeric values, rendering them as dates (#75, partial mitigation — narrowed to exact 10/13-digit unix timestamp lengths)
+- Missing German `infolists.php` translation, plus gaps found across 10 other languages (#123)
+- `ActivitylogPlugin` getters returning `null` against a non-nullable type when the published config is stale/missing a key (#124)
+- Incorrect boolean-to-date type coercion in `formatDateValues()` (#120)
+
 ## [2.0.2] - 2026-07-31
 
 ### Chore

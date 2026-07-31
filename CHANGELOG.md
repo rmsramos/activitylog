@@ -6,6 +6,11 @@ This branch (`2.x`) tracks the Filament v4 compatibility line.
 
 ## [Unreleased]
 
+## [3.0.3] - 2026-07-31
+
+### Fixed
+- README screenshots pointed to the deleted `main` branch (`raw.githubusercontent.com/.../main/arts/...`), now point to `2.x`
+
 ## [3.0.2] - 2026-07-31
 
 ### Fixed

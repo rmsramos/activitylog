@@ -4,9 +4,8 @@ namespace Rmsramos\Activitylog\Actions\Concerns;
 
 use Carbon\Exceptions\InvalidFormatException;
 use Closure;
-use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
+use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -23,16 +22,16 @@ trait ActionContent
     protected ?array $withRelations = null;
 
     protected ?array $timelineIcons = [
-        'created'  => 'heroicon-m-plus',
-        'updated'  => 'heroicon-m-pencil-square',
-        'deleted'  => 'heroicon-m-trash',
+        'created' => 'heroicon-m-plus',
+        'updated' => 'heroicon-m-pencil-square',
+        'deleted' => 'heroicon-m-trash',
         'restored' => 'heroicon-m-arrow-uturn-left',
     ];
 
     protected ?array $timelineIconColors = [
-        'created'  => 'success',
-        'updated'  => 'warning',
-        'deleted'  => 'danger',
+        'created' => 'success',
+        'updated' => 'warning',
+        'deleted' => 'danger',
         'restored' => 'info',
     ];
 
@@ -59,12 +58,12 @@ trait ActionContent
 
         $this->configureInfolist();
         $this->configureModal();
-        $this->activitiesUsing        = null;
-        $this->modifyTitleUsing       = null;
+        $this->activitiesUsing = null;
+        $this->modifyTitleUsing = null;
         $this->shouldModifyTitleUsing = fn () => true;
-        $this->modifyQueryUsing       = fn ($builder) => $builder;
-        $this->modalHeading           = __('activitylog::action.modal.heading');
-        $this->modalDescription       = __('activitylog::action.modal.description');
+        $this->modifyQueryUsing = fn ($builder) => $builder;
+        $this->modalHeading = __('activitylog::action.modal.heading');
+        $this->modalDescription = __('activitylog::action.modal.description');
 
         $this->query = function (?Model $record) {
             if (! $record) {
@@ -92,7 +91,7 @@ trait ActionContent
 
                                     if ($relationInstance instanceof BelongsToMany) {
                                         $subjectType = $relationInstance->getPivotClass();
-                                        $relatedIds  = $relationInstance->pluck($relationInstance->getTable() . '.id')->toArray();
+                                        $relatedIds = $relationInstance->pluck($relationInstance->getTable().'.id')->toArray();
 
                                         if (! empty($relatedIds)) {
                                             $query->orWhere(function (Builder $q) use ($subjectType, $relatedIds) {
@@ -105,7 +104,7 @@ trait ActionContent
                                     }
 
                                     $relatedModel = $relationInstance->getRelated();
-                                    $relatedIds   = $relationInstance->pluck('id')->toArray();
+                                    $relatedIds = $relationInstance->pluck('id')->toArray();
 
                                     if (! empty($relatedIds)) {
                                         $query->orWhere(function (Builder $q) use ($relatedModel, $relatedIds) {
@@ -122,23 +121,24 @@ trait ActionContent
                 });
         };
     }
+
     protected function configureInfolist(): void
     {
-        $this->infolist(function (?Model $record, Infolist $infolist) {
+        $this->infolist(function (?Model $record, Schema $infolist) {
             $activities = $this->getActivityLogRecord($record, $this->getWithRelations());
 
             $formattedActivities = $activities->map(function ($activity) {
                 return [
-                    'id'           => $activity->id,
-                    'log_name'     => $activity->log_name,
-                    'updated_at'   => $activity->updated_at,
+                    'id' => $activity->id,
+                    'log_name' => $activity->log_name,
+                    'updated_at' => $activity->updated_at,
                     'activityData' => $activity->activityData,
                 ];
             })->toArray();
 
             return $infolist
                 ->state(['activities' => $formattedActivities])
-                ->schema($this->getSchema());
+                ->schema($this->getTimelineSchema());
         });
     }
 
@@ -151,7 +151,7 @@ trait ActionContent
             ->icon('heroicon-o-bell-alert');
     }
 
-    protected function getSchema(): array
+    protected function getTimelineSchema(): array
     {
         return [
             TimeLineRepeatableEntry::make('activities')
@@ -178,28 +178,28 @@ trait ActionContent
         ];
     }
 
-    public function withRelations(?array $relations = null): ?StaticAction
+    public function withRelations(?array $relations = null): static
     {
         $this->withRelations = $relations;
 
         return $this;
     }
 
-    public function timelineIcons(?array $timelineIcons = null): ?StaticAction
+    public function timelineIcons(?array $timelineIcons = null): static
     {
         $this->timelineIcons = $timelineIcons;
 
         return $this;
     }
 
-    public function timelineIconColors(?array $timelineIconColors = null): ?StaticAction
+    public function timelineIconColors(?array $timelineIconColors = null): static
     {
         $this->timelineIconColors = $timelineIconColors;
 
         return $this;
     }
 
-    public function limit(?int $limit = 10): ?StaticAction
+    public function limit(?int $limit = 10): static
     {
         $this->limit = $limit;
 
@@ -325,14 +325,14 @@ trait ActionContent
         }
 
         return [
-            'log_name'    => $activity->log_name,
+            'log_name' => $activity->log_name,
             'description' => $activity->description,
-            'subject'     => $activity->subject,
-            'event'       => $activity->event,
-            'causer'      => $activity->causer,
-            'properties'  => $this->formatDateValues($properties),
-            'batch_uuid'  => $activity->batch_uuid,
-            'update'      => $activity->updated_at,
+            'subject' => $activity->subject,
+            'event' => $activity->event,
+            'causer' => $activity->causer,
+            'properties' => $this->formatDateValues($properties),
+            'batch_uuid' => $activity->batch_uuid,
+            'update' => $activity->updated_at,
         ];
     }
 

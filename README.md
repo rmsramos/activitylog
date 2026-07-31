@@ -18,7 +18,7 @@ This package provides a Filament resource that shows you all of the activity log
 ## Requirements
 
 -   Laravel v12
--   Filament v3
+-   Filament v5
 -   Spatie/Laravel-activitylog v4
 
 ## Languages Supported
@@ -95,6 +95,22 @@ Optionally, you can publish the views using
 
 ```bash
 php artisan vendor:publish --tag="activitylog-views"
+```
+
+### Styling (Filament v4/v5 + Tailwind v4)
+
+Tailwind v4 only generates CSS for classes it can find by scanning your own project files. Since this package's Blade views live in `vendor/`, your panel's Tailwind build won't see them unless you tell it to. Without this step, the Timeline Action modal will render without its icon badges, timeline line, and spacing.
+
+Add this `@source` directive to your panel's `theme.css` (e.g. `resources/css/filament/admin/theme.css`), alongside any other vendor package sources:
+
+```css
+@source '../../../../vendor/rmsramos/activitylog/resources/**/*';
+```
+
+Then rebuild your assets:
+
+```bash
+npm run build
 ```
 
 ## Usage

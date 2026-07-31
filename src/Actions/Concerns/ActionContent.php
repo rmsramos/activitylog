@@ -92,7 +92,7 @@ trait ActionContent
 
                                     if ($relationInstance instanceof BelongsToMany) {
                                         $subjectType = $relationInstance->getPivotClass();
-                                        $relatedIds  = $relationInstance->pluck($relationInstance->getTable().'.id')->toArray();
+                                        $relatedIds  = $relationInstance->pluck($relationInstance->getTable() . '.id')->toArray();
 
                                         if (! empty($relatedIds)) {
                                             $query->orWhere(function (Builder $q) use ($subjectType, $relatedIds) {
@@ -104,8 +104,8 @@ trait ActionContent
                                         continue;
                                     }
 
-                                    $relatedModel     = $relationInstance->getRelated();
-                                    $relatedIds       = $relationInstance->pluck('id')->toArray();
+                                    $relatedModel = $relationInstance->getRelated();
+                                    $relatedIds   = $relationInstance->pluck('id')->toArray();
 
                                     if (! empty($relatedIds)) {
                                         $query->orWhere(function (Builder $q) use ($relatedModel, $relatedIds) {
@@ -335,7 +335,6 @@ trait ActionContent
             'update'      => $activity->updated_at,
         ];
     }
-
 
     protected static function formatDateValues(array|string|null $value): array|string|null
     {

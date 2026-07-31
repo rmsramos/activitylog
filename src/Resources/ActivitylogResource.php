@@ -625,7 +625,7 @@ class ActivitylogResource extends Resource
         if ($user && method_exists($record->subject, 'exists')) {
             try {
                 return $user->can('restore', $record->subject);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return true;
             }
         }

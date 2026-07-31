@@ -15,6 +15,14 @@
 
 This package provides a Filament resource that shows you all of the activity logs and detailed view of each log created using the `spatie/laravel-activitylog` package. It also provides a relationship manager for related models.
 
+## Branches
+
+| Branch | Filament |
+| --- | --- |
+| [`1.x`](https://github.com/rmsramos/activitylog/tree/1.x) | v3 |
+| [`2.x`](https://github.com/rmsramos/activitylog/tree/2.x) | v4 |
+| **`3.x`** (this branch) | **v5** |
+
 ## Requirements
 
 -   Laravel v12

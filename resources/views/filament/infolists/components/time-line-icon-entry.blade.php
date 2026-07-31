@@ -1,5 +1,5 @@
 @php
-    use Filament\Infolists\Components\IconEntry\IconEntrySize;
+    use Filament\Support\Enums\IconSize as IconEntrySize;
 @endphp
 
 <x-dynamic-component :component="$getEntryWrapperView()" :entry="$entry">

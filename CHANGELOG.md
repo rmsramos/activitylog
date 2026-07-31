@@ -6,8 +6,24 @@ This branch (`1.x`) tracks the Filament v3 compatibility line.
 
 ## [Unreleased]
 
+## [2.0.2] - 2026-07-31
+
+### Chore
+- Add PHPStan (larastan) config with baseline for existing errors
+- Pin GitHub Actions to commit SHA, add `SECURITY.md` and Dependabot config
+
+### Docs
+- Add branch/Filament version support table to README
+
+### i18n
+- Complete Latvian translations (cherry-picked from community contribution)
+- Fill translation gaps across ar, de, fa, fr, he, id, it, nl, pl, pt_PT, tr (missing `notifications.php`/`infolists.php` and several keys, parity with the English base)
+
+## [2.0.1] - 2026-07-31
+
 ### Chore
 - Remove `illuminate/contracts` requirement (already implicit via `filament/filament`)
+- Move `filament/filament` to `require` (was `require-dev`)
 
 ## [2.0.0] - 2025-08-16
 

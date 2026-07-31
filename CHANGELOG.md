@@ -1,0 +1,100 @@
+# Changelog
+
+All notable changes to `rmsramos/activitylog` are documented here. Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versioning follows [SemVer](https://semver.org/).
+
+This branch (`1.x`) tracks the Filament v3 compatibility line.
+
+## [Unreleased]
+
+### Chore
+- Remove `illuminate/contracts` requirement (already implicit via `filament/filament`)
+
+## [2.0.0] - 2025-08-16
+
+### Breaking
+- Classes made more extendable: private properties/methods changed to protected (#113) — @Muffinman
+
+### Added
+- 'log name' filter on ActivitylogResource (#100) — @morris14
+- Handle BelongsToMany relations in ActionContent (#114) — @paulohenriquesg
+- Support for translating activity log key names (#115) — @paulohenriquesg
+
+## [1.0.13] - 2025-07-06
+- Update Spanish translations, add new keys (#109) — @edeoliv
+- Fix README (#110) — @rmsramos
+
+## [1.0.12] - 2025-07-04
+- Soft delete support (#108) — @rmsramos
+
+## [1.0.11] - 2025-07-03
+- Restore action + date/datetime/icon customization (#71) — @phpust
+- Fix and code style (#106) — @rmsramos
+- Fix dark mode classes (#94) — @webard
+- Activity model configuration (#96) — @othyn
+- Fix `modifyTitleUsing()` incorrect state (#105) — @Muffinman
+- Fix Arabic timeline (#98) — @patrickwebsdev
+- Custom activity title name in model (#86) — @patrickwebsdev
+- Dutch translations (#91) — @makkinga
+- Fix code style (#107) — @rmsramos
+
+## [1.0.10] - 2025-05-02
+- Latvian translations (#90) — @HungryBus
+- German translation, bugfix (#92) — @CyberLine
+
+## [1.0.9] - 2025-03-31
+- Support for Laravel 12.* (#87) — @milon
+
+## [1.0.8] - 2025-03-14
+- Minor fixes.
+
+## [1.0.7] - 2024-09-30
+- Fix CSS not loading correctly (#54) — @Orphail
+- Portuguese language support (#53) — @kidiatoliny
+- Italian translations (#55) — @marcogermani87
+
+## [1.0.6] - 2024-09-22
+- Fix date format (#52) — @rmsramos
+
+## [1.0.5] - 2024-09-22
+- Fix documentation (#39) — @rmsramos
+- Fix Simple action extension class (#42) — @GeoSot
+- Fix dates format, issue #46 (#47) — @Orphail
+- Enable/disable navigation item (#45) — @Orphail
+- Indonesian language (#49) — @adereksisusanto
+- Remove unnecessary/typo single quote (#43) — @alexpgates
+- Lazy loading activitylog.css to prevent conflicts/overload (#48) — @abdulmejid-assistentry
+- Fix code style (#51) — @rmsramos
+
+## [1.0.4] - 2024-07-23
+- Persian language (#36) — @alisalehi1380
+- Arabic translation (#34) — @KaramNassar
+- Fix typo (#32) — @GeoSot
+- `defaultSort` feature (#37) — @sugin223pl
+- Introduce simple-action (#33) — @GeoSot
+
+## [1.0.3] - 2024-06-19
+- Updated issue templates (#26, #27) — @rmsramos
+- French language (#28) — @tbcy
+- Customization closures (#29) — @ainesophaur
+- Fixes and documentation (#30) — @rmsramos
+
+## [1.0.2] - 2024-06-12
+- Fix documentation (#19) — @rmsramos
+- Fix configuration file collision and `getEventColumnComponent` (#23) — @rmsramos
+
+## [1.0.1] - 2024-06-04
+- Update README (#16, #17) — @rmsramos
+- Spanish translations (#14) — @edeoliv
+- Fix code styling (#18) — @rmsramos
+
+## [1.0.0] - 2024-06-04
+- Add Timeline Action.
+
+## [0.2.0] - 2024-05-30
+## [0.1.5] - 2024-05-15
+## [0.1.4] - 2024-04-06
+## [0.1.3] - 2023-09-09
+## [0.1.2] - 2023-09-09
+## [0.1.1] - 2023-09-09
+## [0.1.0] - 2023-09-08
+- Initial releases.

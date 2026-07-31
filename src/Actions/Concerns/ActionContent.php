@@ -76,6 +76,8 @@ trait ActionContent
                         if (method_exists($query, 'withTrashed')) {
                             $query->withTrashed();
                         }
+
+                        $query->withoutGlobalScopes();
                     },
                     'causer',
                 ])
@@ -104,7 +106,7 @@ trait ActionContent
                                     }
 
                                     $relatedModel = $relationInstance->getRelated();
-                                    $relatedIds   = $relationInstance->pluck('id')->toArray();
+                                    $relatedIds   = $relationInstance->pluck($relatedModel->getTable() . '.id')->toArray();
 
                                     if (! empty($relatedIds)) {
                                         $query->orWhere(function (Builder $q) use ($relatedModel, $relatedIds) {
@@ -349,7 +351,7 @@ trait ActionContent
             return $value;
         }
 
-        if (is_numeric($value) && ! preg_match('/^\d{10,}$/', $value)) {
+        if (is_numeric($value) && ! preg_match('/^\d{10}$|^\d{13}$/', $value)) {
             return $value;
         }
 

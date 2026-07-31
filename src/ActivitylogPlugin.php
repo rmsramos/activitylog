@@ -7,6 +7,7 @@ use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
 use Illuminate\Support\Carbon;
+use Rmsramos\Activitylog\Resources\Activitylog\ActivitylogResource;
 
 class ActivitylogPlugin implements Plugin
 {
@@ -82,42 +83,42 @@ class ActivitylogPlugin implements Plugin
 
     public function getResource(): string
     {
-        return $this->resource ?? config('filament-activitylog.resources.resource');
+        return $this->resource ?? config('filament-activitylog.resources.resource', ActivitylogResource::class);
     }
 
     public function getLabel(): string
     {
-        return $this->evaluate($this->label) ?? config('filament-activitylog.resources.label');
+        return $this->evaluate($this->label) ?? config('filament-activitylog.resources.label', 'Activity Log');
     }
 
     public function getResourceActionLabel(): string
     {
-        return $this->evaluate($this->resourceActionLabel) ?? config('filament-activitylog.resources.resource_action_label');
+        return $this->evaluate($this->resourceActionLabel) ?? config('filament-activitylog.resources.resource_action_label', 'View');
     }
 
     public function getIsResourceActionHidden(): bool
     {
-        return $this->evaluate($this->isResourceActionHidden) ?? config('filament-activitylog.resources.hide_resource_action');
+        return $this->evaluate($this->isResourceActionHidden) ?? config('filament-activitylog.resources.hide_resource_action', false);
     }
 
     public function getIsRestoreActionHidden(): bool
     {
-        return $this->evaluate($this->isRestoreActionHidden) ?? config('filament-activitylog.resources.hide_restore_action');
+        return $this->evaluate($this->isRestoreActionHidden) ?? config('filament-activitylog.resources.hide_restore_action', false);
     }
 
     public function getIsRestoreModelActionHidden(): bool
     {
-        return $this->evaluate($this->isRestoreModelActionHidden) ?? config('filament-activitylog.resources.hide_restore_model_action');
+        return $this->evaluate($this->isRestoreModelActionHidden) ?? config('filament-activitylog.resources.hide_restore_model_action', true);
     }
 
     public function getPluralLabel(): string
     {
-        return $this->evaluate($this->pluralLabel) ?? config('filament-activitylog.resources.plural_label');
+        return $this->evaluate($this->pluralLabel) ?? config('filament-activitylog.resources.plural_label', 'Activity Logs');
     }
 
     public function getNavigationItem(): bool
     {
-        return $this->evaluate($this->navigationItem) ?? config('filament-activitylog.resources.navigation_item');
+        return $this->evaluate($this->navigationItem) ?? config('filament-activitylog.resources.navigation_item', true);
     }
 
     public function getNavigationGroup(): ?string

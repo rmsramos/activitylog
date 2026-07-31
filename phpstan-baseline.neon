@@ -76,12 +76,6 @@ parameters:
 			path: src/Resources/Activitylog/ActivitylogResource.php
 
 		-
-			message: '#^Call to function is_bool\(\) with string will always evaluate to false\.$#'
-			identifier: function.impossibleType
-			count: 1
-			path: src/Resources/Activitylog/ActivitylogResource.php
-
-		-
 			message: '#^Expression on left side of \?\? is not nullable\.$#'
 			identifier: nullCoalesce.expr
 			count: 1

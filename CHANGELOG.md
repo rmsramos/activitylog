@@ -6,6 +6,12 @@ This branch (`3.x`) tracks the Filament v5 compatibility line.
 
 ## [Unreleased]
 
+## [4.0.4] - 2026-08-01
+
+### Fixed
+- `formatDateValues()` now detects date values via the subject model's actual attribute casts instead of a digit-count heuristic, fully resolving #75 (previously only mitigated) — verified locally against a seeded `decimal(15,2)` price field
+- Code style badge/link in README pointed to the deleted `main` branch, now points to `3.x`
+
 ## [4.0.3] - 2026-07-31
 
 ### Fixed

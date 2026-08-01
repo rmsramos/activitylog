@@ -326,38 +326,43 @@ trait ActionContent
             }
         }
 
+        $casts = $activity->subject instanceof Model ? $activity->subject->getCasts() : [];
+
         return [
             'log_name'    => $activity->log_name,
             'description' => $activity->description,
             'subject'     => $activity->subject,
             'event'       => $activity->event,
             'causer'      => $activity->causer,
-            'properties'  => $this->formatDateValues($properties),
+            'properties'  => $this->formatDateValues($properties, $casts),
             'batch_uuid'  => $activity->batch_uuid,
             'update'      => $activity->updated_at,
         ];
     }
 
-    protected static function formatDateValues(mixed $value): mixed
+    /**
+     * @param  array<string, string>  $casts  the subject model's attribute casts, keyed by attribute name
+     */
+    protected static function formatDateValues(mixed $value, array $casts = [], ?string $key = null): mixed
     {
         if (is_null($value)) {
             return $value;
         }
 
         if (is_array($value)) {
-            foreach ($value as &$item) {
-                $item = self::formatDateValues($item);
+            foreach ($value as $itemKey => &$item) {
+                $item = self::formatDateValues($item, $casts, is_string($itemKey) ? $itemKey : $key);
             }
 
             return $value;
         }
 
-        if (is_numeric($value) && ! preg_match('/^\d{10}$|^\d{13}$/', $value)) {
-            return $value;
-        }
-
         if (is_bool($value)) {
             return $value ? 'true' : 'false';
+        }
+
+        if (! self::isDateCast($casts[$key] ?? null)) {
+            return $value;
         }
 
         try {
@@ -369,5 +374,18 @@ trait ActionContent
         } catch (\Exception $e) {
             return $value;
         }
+    }
+
+    protected static function isDateCast(mixed $cast): bool
+    {
+        if (! is_string($cast)) {
+            return false;
+        }
+
+        return in_array($cast, ['date', 'datetime', 'immutable_date', 'immutable_datetime', 'timestamp'], true)
+            || str_starts_with($cast, 'date:')
+            || str_starts_with($cast, 'datetime:')
+            || str_starts_with($cast, 'immutable_date:')
+            || str_starts_with($cast, 'immutable_datetime:');
     }
 }

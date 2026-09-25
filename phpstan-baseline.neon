@@ -88,19 +88,7 @@ parameters:
 			path: src/Resources/Activitylog/ActivitylogResource.php
 
 		-
-			message: '#^Parameter \#1 \$view of method Filament\\Support\\Components\\ViewComponent\:\:view\(\) expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Resources/Activitylog/ActivitylogResource.php
-
-		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$causer\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Resources/Activitylog/Schemas/ActivitylogForm.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$properties\.$#'
 			identifier: property.notFound
 			count: 1
 			path: src/Resources/Activitylog/Schemas/ActivitylogForm.php
@@ -114,7 +102,7 @@ parameters:
 		-
 			message: '#^Using nullsafe property access on non\-nullable type Spatie\\Activitylog\\Models\\Activity\. Use \-\> instead\.$#'
 			identifier: nullsafe.neverNull
-			count: 4
+			count: 3
 			path: src/Resources/Activitylog/Schemas/ActivitylogForm.php
 
 		-

@@ -6,6 +6,9 @@ This branch (`3.x`) tracks the Filament v5 compatibility line.
 
 ## [Unreleased]
 
+### Added
+- Support for `spatie/laravel-activitylog` v5. Attribute diffs are read from `attribute_changes`, falling back to `properties.old` / `properties.attributes` so v4 logs still render. Restore actions call `withoutLogging()` and `withChanges()` when those methods exist.
+
 ## [4.0.4] - 2026-08-01
 
 ### Fixed

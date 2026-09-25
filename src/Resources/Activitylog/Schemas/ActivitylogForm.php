@@ -13,6 +13,7 @@ use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Rmsramos\Activitylog\ActivitylogPlugin;
+use Rmsramos\Activitylog\Helpers\ActivityChanges;
 use Rmsramos\Activitylog\Resources\Activitylog\ActivitylogResource;
 use Spatie\Activitylog\Models\Activity;
 
@@ -81,9 +82,10 @@ class ActivitylogForm
                             ->color('primary')
                             ->action(fn (Activity $record) => ActivitylogResource::restoreActivity($record->id))
                             ->visible(function (Activity $record): bool {
-                                return ! ActivitylogPlugin::get()->getIsRestoreActionHidden() && $record->properties &&
-                                    data_get($record->properties, 'old') !== null &&
-                                    $record->subject !== null && $record->event !== 'deleted';
+                                return ! ActivitylogPlugin::get()->getIsRestoreActionHidden()
+                                    && ActivityChanges::changes($record)['old'] !== null
+                                    && $record->subject !== null
+                                    && $record->event !== 'deleted';
                             })
                             ->authorize(fn () => auth()->user()?->can('restore_activitylog') ?? false)
                             ->requiresConfirmation(),
@@ -112,41 +114,40 @@ class ActivitylogForm
                             ->modalDescription(__('activitylog::action.restore_soft_delete.modal_description')),
                     ])
                     ->columns()
-                    ->visible(fn (?Model $record) => $record?->properties?->count() > 0)
+                    ->visible(fn (?Model $record): bool => $record instanceof Activity && ActivityChanges::hasVisibleDetails($record))
                     ->schema(function (?Model $record) {
-                        /** @var Activity $record */
-                        if (! $record?->properties) {
+                        /** @var Activity|null $record */
+                        if (! $record instanceof Activity || ! ActivityChanges::hasVisibleDetails($record)) {
                             return [];
                         }
 
-                        $properties = $record->properties->except(['attributes', 'old']);
+                        $properties = ActivityChanges::customProperties($record);
+                        $changes    = ActivityChanges::changes($record);
                         $schema     = [];
 
-                        if ($properties->count()) {
+                        if ($properties !== []) {
                             $schema[] = KeyValue::make('properties')
                                 ->afterStateHydrated(function (KeyValue $component) use ($properties) {
-                                    $component->state(ActivitylogResource::flattenArrayForKeyValue($properties->toArray()));
+                                    $component->state(ActivitylogResource::flattenArrayForKeyValue($properties));
                                 })
                                 ->label(__('activitylog::forms.fields.properties.label'))
                                 ->columnSpan('full')
                                 ->disabled();
                         }
 
-                        if ($old = $record->properties->get('old')) {
+                        if ($old = $changes['old']) {
                             $schema[] = KeyValue::make('old')
                                 ->afterStateHydrated(function (KeyValue $component) use ($old) {
-                                    $oldArray = is_array($old) ? $old : [];
-                                    $component->state(ActivitylogResource::flattenArrayForKeyValue($oldArray));
+                                    $component->state(ActivitylogResource::flattenArrayForKeyValue($old));
                                 })
                                 ->label(__('activitylog::forms.fields.old.label'))
                                 ->disabled();
                         }
 
-                        if ($attributes = $record->properties->get('attributes')) {
+                        if ($attributes = $changes['attributes']) {
                             $schema[] = KeyValue::make('attributes')
                                 ->afterStateHydrated(function (KeyValue $component) use ($attributes) {
-                                    $attributesArray = is_array($attributes) ? $attributes : [];
-                                    $component->state(ActivitylogResource::flattenArrayForKeyValue($attributesArray));
+                                    $component->state(ActivitylogResource::flattenArrayForKeyValue($attributes));
                                 })
                                 ->label(__('activitylog::forms.fields.attributes.label'))
                                 ->disabled();

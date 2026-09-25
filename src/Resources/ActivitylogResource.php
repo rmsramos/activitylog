@@ -31,6 +31,7 @@ use Illuminate\Support\Str;
 use Livewire\Component as Livewire;
 use Rmsramos\Activitylog\Actions\Concerns\ActionContent;
 use Rmsramos\Activitylog\ActivitylogPlugin;
+use Rmsramos\Activitylog\Helpers\ActivityChanges;
 use Rmsramos\Activitylog\Helpers\ActivityLogHelper;
 use Rmsramos\Activitylog\RelationManagers\ActivitylogRelationManager;
 use Rmsramos\Activitylog\Resources\ActivitylogResource\Pages\ListActivitylog;
@@ -177,9 +178,10 @@ class ActivitylogResource extends Resource
                             ->color('primary')
                             ->action(fn (Activity $record) => self::restoreActivity($record->id))
                             ->visible(function (Activity $record): bool {
-                                return ! ActivitylogPlugin::get()->getIsRestoreActionHidden() && $record->properties &&
-                                    data_get($record->properties, 'old') !== null &&
-                                    $record->subject !== null && $record->event !== 'deleted';
+                                return ! ActivitylogPlugin::get()->getIsRestoreActionHidden()
+                                    && ActivityChanges::changes($record)['old'] !== null
+                                    && $record->subject !== null
+                                    && $record->event !== 'deleted';
                             })
                             ->authorize(fn () => auth()->user()?->can('restore_activitylog') ?? false)
                             ->requiresConfirmation(),
@@ -208,41 +210,40 @@ class ActivitylogResource extends Resource
                             ->modalDescription(__('activitylog::action.restore_soft_delete.modal_description')),
                     ])
                     ->columns()
-                    ->visible(fn (?Model $record) => $record?->properties?->count() > 0)
+                    ->visible(fn (?Model $record): bool => $record instanceof Activity && ActivityChanges::hasVisibleDetails($record))
                     ->schema(function (?Model $record) {
-                        /** @var Activity $record */
-                        if (! $record?->properties) {
+                        /** @var Activity|null $record */
+                        if (! $record instanceof Activity || ! ActivityChanges::hasVisibleDetails($record)) {
                             return [];
                         }
 
-                        $properties = $record->properties->except(['attributes', 'old']);
+                        $properties = ActivityChanges::customProperties($record);
+                        $changes    = ActivityChanges::changes($record);
                         $schema     = [];
 
-                        if ($properties->count()) {
+                        if ($properties !== []) {
                             $schema[] = KeyValue::make('properties')
                                 ->afterStateHydrated(function (KeyValue $component) use ($properties) {
-                                    $component->state(static::flattenArrayForKeyValue($properties->toArray()));
+                                    $component->state(static::flattenArrayForKeyValue($properties));
                                 })
                                 ->label(__('activitylog::forms.fields.properties.label'))
                                 ->columnSpan('full')
                                 ->disabled();
                         }
 
-                        if ($old = $record->properties->get('old')) {
+                        if ($old = $changes['old']) {
                             $schema[] = KeyValue::make('old')
                                 ->afterStateHydrated(function (KeyValue $component) use ($old) {
-                                    $oldArray = is_array($old) ? $old : [];
-                                    $component->state(static::flattenArrayForKeyValue($oldArray));
+                                    $component->state(static::flattenArrayForKeyValue($old));
                                 })
                                 ->label(__('activitylog::forms.fields.old.label'))
                                 ->disabled();
                         }
 
-                        if ($attributes = $record->properties->get('attributes')) {
+                        if ($attributes = $changes['attributes']) {
                             $schema[] = KeyValue::make('attributes')
                                 ->afterStateHydrated(function (KeyValue $component) use ($attributes) {
-                                    $attributesArray = is_array($attributes) ? $attributes : [];
-                                    $component->state(static::flattenArrayForKeyValue($attributesArray));
+                                    $component->state(static::flattenArrayForKeyValue($attributes));
                                 })
                                 ->label(__('activitylog::forms.fields.attributes.label'))
                                 ->disabled();
@@ -378,6 +379,7 @@ class ActivitylogResource extends Resource
             ->searchable()
             ->label(__('activitylog::tables.columns.properties.label'))
             ->view('activitylog::filament.tables.columns.activity-logs-properties')
+            ->getStateUsing(fn (Model $record): array => ActivityChanges::timelineProperties($record))
             ->toggleable(isToggledHiddenByDefault: true);
     }
 
@@ -537,8 +539,9 @@ class ActivitylogResource extends Resource
             return;
         }
 
-        $oldProperties = data_get($activity, 'properties.old');
-        $newProperties = data_get($activity, 'properties.attributes');
+        $changes       = ActivityChanges::changes($activity);
+        $oldProperties = $changes['old'];
+        $newProperties = $changes['attributes'];
 
         if ($oldProperties === null) {
             Notification::make()
@@ -562,22 +565,15 @@ class ActivitylogResource extends Resource
             }
 
             // Temporarily disable activity logging to prevent updated log
-            activity()->withoutLogs(function () use ($record, $oldProperties) {
+            ActivityChanges::withoutLogging(function () use ($record, $oldProperties) {
                 $record->update($oldProperties);
             });
 
-            if (auth()->user()) {
-                activity()
-                    ->performedOn($record)
-                    ->causedBy(auth()->user())
-                    ->withProperties([
-                        'attributes' => $oldProperties,
-                        'old'        => $newProperties,
-                    ])
-                    ->tap(function ($log) {
-                        $log->event = 'restored';
-                    })
-                    ->log('restored');
+            if ($causer = auth()->user()) {
+                ActivityChanges::logRestored($record, $causer, [
+                    'attributes' => $oldProperties,
+                    'old'        => $newProperties,
+                ]);
             }
 
             Notification::make()
@@ -651,30 +647,24 @@ class ActivitylogResource extends Resource
 
             $beforeRestore = $subject->toArray();
 
-            activity()->withoutLogs(function () use ($subject) {
+            ActivityChanges::withoutLogging(function () use ($subject) {
                 $subject->restore();
             });
 
             $subject->refresh();
             $afterRestore = $subject->toArray();
 
-            if (auth()->user()) {
-                activity()
-                    ->performedOn($subject)
-                    ->causedBy(auth()->user())
-                    ->withProperties([
-                        'attributes'       => $afterRestore,
-                        'old'              => $beforeRestore,
-                        'restore_metadata' => [
-                            'restored_from_soft_delete' => true,
-                            'original_activity_id'      => $record->id,
-                            'restore_type'              => 'soft_delete',
-                        ],
-                    ])
-                    ->tap(function ($log) {
-                        $log->event = 'restored';
-                    })
-                    ->log('restored');
+            if ($causer = auth()->user()) {
+                ActivityChanges::logRestored($subject, $causer, [
+                    'attributes' => $afterRestore,
+                    'old'        => $beforeRestore,
+                ], [
+                    'restore_metadata' => [
+                        'restored_from_soft_delete' => true,
+                        'original_activity_id'      => $record->id,
+                        'restore_type'              => 'soft_delete',
+                    ],
+                ]);
             }
 
             DB::commit();

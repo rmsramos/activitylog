@@ -27,7 +27,7 @@ This package provides a Filament resource that shows you all of the activity log
 
 -   Laravel v12
 -   Filament v3
--   Spatie/Laravel-activitylog v4
+-   Spatie/Laravel-activitylog v4 or v5
 
 ## Languages Supported
 
@@ -111,7 +111,7 @@ php artisan vendor:publish --tag="activitylog-views"
 
 In you `Model` add `Spatie\Activitylog\Traits\LogsActivity` trait, and configure `getActivitylogOption` function
 
-For more configuration, Please review [Spatie Docs](https://spatie.be/docs/laravel-activitylog/v4)
+For more configuration, please review the [Spatie docs](https://spatie.be/docs/laravel-activitylog/v5) (v4 docs are at [/v4](https://spatie.be/docs/laravel-activitylog/v4)).
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -476,8 +476,12 @@ In the `laravel-activitylog` configuration file `config/activitylog.php`:
 
 ```php
 return [
+    // v4
     'subject_returns_soft_deleted_models' => true,
-]
+
+    // v5
+    'include_soft_deleted_subjects' => true,
+];
 ```
 
 To globally display the restore (soft delete) action of a resource within the `ActivitylogPlugin`, you can use the `isRestoreModelActionHidden` method. This is particularly useful in scenarios where you do not want users to have the ability to restore activity log entries:

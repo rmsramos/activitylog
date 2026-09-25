@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 use Rmsramos\Activitylog\ActivitylogPlugin;
+use Rmsramos\Activitylog\Helpers\ActivityChanges;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineIconEntry;
 use Rmsramos\Activitylog\Infolists\Components\TimeLinePropertiesEntry;
 use Rmsramos\Activitylog\Infolists\Components\TimeLineRepeatableEntry;
@@ -308,17 +309,7 @@ trait ActionContent
 
     protected function formatActivityData($activity): array
     {
-        $properties = [];
-
-        if ($activity->properties) {
-            if (is_string($activity->properties)) {
-                $properties = json_decode($activity->properties, true) ?? [];
-            } elseif (is_array($activity->properties)) {
-                $properties = $activity->properties;
-            } elseif (is_object($activity->properties) && method_exists($activity->properties, 'toArray')) {
-                $properties = $activity->properties->toArray();
-            }
-        }
+        $properties = ActivityChanges::timelineProperties($activity);
 
         if ($activity->event === 'restored') {
             if (empty($properties) && $activity->description !== 'restored') {
@@ -335,7 +326,7 @@ trait ActionContent
             'event'       => $activity->event,
             'causer'      => $activity->causer,
             'properties'  => $this->formatDateValues($properties, $casts),
-            'batch_uuid'  => $activity->batch_uuid,
+            'batch_uuid'  => $activity->batch_uuid ?? null, // column dropped in spatie/laravel-activitylog v5
             'update'      => $activity->updated_at,
         ];
     }

@@ -8,3 +8,20 @@ parameters:
     level: 5
 
     tmpDir: build/phpstan
+
+    # ActivityChanges branches on the installed spatie/laravel-activitylog major (v4 vs v5),
+    # so one side of each method_exists() check is always "impossible" for PHPStan.
+    ignoreErrors:
+        -
+            identifier: function.alreadyNarrowedType
+            path: src/Helpers/ActivityChanges.php
+            reportUnmatched: false
+        -
+            identifier: function.impossibleType
+            path: src/Helpers/ActivityChanges.php
+            reportUnmatched: false
+        -
+            message: '#withoutLogs\(\)#'
+            identifier: method.notFound
+            path: src/Helpers/ActivityChanges.php
+            reportUnmatched: false

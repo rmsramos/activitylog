@@ -75,11 +75,6 @@ parameters:
 			path: src/Resources/Activitylog/ActivitylogResource.php
 
 		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$properties\\.$#"
-			count: 1
-			path: src/Resources/Activitylog/Schemas/ActivitylogForm.php
-
-		-
 			message: "#^Using nullsafe property access on non\\-nullable type Spatie\\\\Activitylog\\\\Models\\\\Activity\\. Use \\-\\> instead\\.$#"
-			count: 4
+			count: 3
 			path: src/Resources/Activitylog/Schemas/ActivitylogForm.php

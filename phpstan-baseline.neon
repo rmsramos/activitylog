@@ -6,11 +6,6 @@ parameters:
 			path: src/ActivitylogPlugin.php
 
 		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$properties\\.$#"
-			count: 1
-			path: src/Resources/ActivitylogResource.php
-
-		-
 			message: "#^Access to an undefined property Rmsramos\\\\Activitylog\\\\Resources\\\\ActivitylogResource\\:\\:\\$modalDescription\\.$#"
 			count: 1
 			path: src/Resources/ActivitylogResource.php
@@ -77,5 +72,5 @@ parameters:
 
 		-
 			message: "#^Using nullsafe property access on non\\-nullable type Spatie\\\\Activitylog\\\\Models\\\\Activity\\. Use \\-\\> instead\\.$#"
-			count: 4
+			count: 3
 			path: src/Resources/ActivitylogResource.php

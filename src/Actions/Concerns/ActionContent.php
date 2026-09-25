@@ -326,7 +326,7 @@ trait ActionContent
             'event'       => $activity->event,
             'causer'      => $activity->causer,
             'properties'  => $this->formatDateValues($properties, $casts),
-            'batch_uuid'  => $activity->batch_uuid,
+            'batch_uuid'  => $activity->batch_uuid ?? null, // column dropped in spatie/laravel-activitylog v5
             'update'      => $activity->updated_at,
         ];
     }

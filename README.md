@@ -109,14 +109,18 @@ php artisan vendor:publish --tag="activitylog-views"
 
 ### Basic Spatie ActivityLog usage
 
-In you `Model` add `Spatie\Activitylog\Traits\LogsActivity` trait, and configure `getActivitylogOption` function
+In your `Model` add the `LogsActivity` trait, and configure the `getActivitylogOptions` function
 
 For more configuration, please review the [Spatie docs](https://spatie.be/docs/laravel-activitylog/v5) (v4 docs are at [/v4](https://spatie.be/docs/laravel-activitylog/v4)).
 
 ```php
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
+// v5
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
+// v4
+// use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\LogOptions;
 
 class NewsItem extends Model
 {

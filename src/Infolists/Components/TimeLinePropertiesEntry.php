@@ -37,7 +37,7 @@ class TimeLinePropertiesEntry extends Entry
 
             return new HtmlString(trans('activitylog::infolists.components.updater_updated', [
                 'causer'  => htmlspecialchars($causerName),
-                'event'   => __('activitylog::action.event.' . $state['event']),
+                'event'   => $this->getEventLabel($state['event']),
                 'changes' => implode('<br>', $changes),
             ]));
         }
@@ -71,14 +71,14 @@ class TimeLinePropertiesEntry extends Entry
             if (isset($oldValues[$key]) && $oldValues[$key] != $newValue) {
                 $changes[] = trans('activitylog::infolists.components.from_oldvalue_to_newvalue',
                     [
-                        'key'       => ActivitylogPlugin::get()->getTranslateLogKey($key),
+                        'key'       => $this->getLogKeyLabel($key),
                         'old_value' => htmlspecialchars($oldValue),
                         'new_value' => htmlspecialchars($newValue),
                     ]);
             } else {
                 $changes[] = trans('activitylog::infolists.components.to_newvalue',
                     [
-                        'key'       => ActivitylogPlugin::get()->getTranslateLogKey($key),
+                        'key'       => $this->getLogKeyLabel($key),
                         'new_value' => htmlspecialchars($newValue),
                     ]);
             }
@@ -92,12 +92,17 @@ class TimeLinePropertiesEntry extends Entry
         return array_map(
             fn ($key, $value) => sprintf(
                 __('activitylog::timeline.properties.getNewValues'),
-                ActivitylogPlugin::get()->getTranslateLogKey($key),
+                $this->getLogKeyLabel($key),
                 htmlspecialchars($this->formatNewValue($value))
             ),
             array_keys($newValues),
             $newValues
         );
+    }
+
+    protected function getLogKeyLabel(string|int $key): string
+    {
+        return htmlspecialchars((string) ActivitylogPlugin::get()->getTranslateLogKey($key));
     }
 
     protected function formatNewValue($value): string

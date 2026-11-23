@@ -6,6 +6,16 @@ This branch (`1.x`) tracks the Filament v3 compatibility line.
 
 ## [Unreleased]
 
+### Security
+- Stored XSS in the activity timeline: the causer name was placed into the timeline sentences without escaping, so a user able to set their own display name could run script in the browser of whoever opened the timeline. The causer name is now escaped (reported and fixed by @iefken)
+- Attribute keys and event names without a translation are now escaped in the timeline as well
+
+### Changed
+- Causer names, attribute keys and event names containing `&`, `<`, `>` or quotes are shown literally in the timeline instead of being parsed as HTML. A `translateLogKey()` callback that returned markup will now have that markup displayed as text
+
+### Added
+- Pest test suite covering the escaping of the timeline entries
+
 ## [2.1.0] - 2026-09-25
 
 ### Added

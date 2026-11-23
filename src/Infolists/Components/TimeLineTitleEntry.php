@@ -69,7 +69,7 @@ class TimeLineTitleEntry extends Entry
                     __('activitylog::infolists.components.created_by_at',
                         [
                             'subject'   => ActivitylogPlugin::get()->getTranslateSubject($className),
-                            'event'     => __('activitylog::action.event.' . $state['event']),
+                            'event'     => $this->getEventLabel($state['event']),
                             'causer'    => htmlspecialchars($causerName),
                             'update_at' => $update_at,
                         ]),

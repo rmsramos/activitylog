@@ -70,7 +70,7 @@ class TimeLineTitleEntry extends Entry
                         [
                             'subject'   => ActivitylogPlugin::get()->getTranslateSubject($className),
                             'event'     => __('activitylog::action.event.' . $state['event']),
-                            'causer'    => $causerName,
+                            'causer'    => htmlspecialchars($causerName),
                             'update_at' => $update_at,
                         ]),
                 );
